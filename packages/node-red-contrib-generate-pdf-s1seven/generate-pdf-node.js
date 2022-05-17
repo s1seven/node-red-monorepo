@@ -3,7 +3,7 @@ module.exports = function (RED) {
 
 	function generatePdfNode(config) {
 		RED.nodes.createNode(this, config);
-		var node = this;
+		const node = this;
 		node.on("input", async function (msg) {
 			const certificate = msg.payload;
 			try {
@@ -16,4 +16,6 @@ module.exports = function (RED) {
 		});
 	}
 	RED.nodes.registerType("generate-pdf-node", generatePdfNode);
+
+	// add a second flow here?
 };

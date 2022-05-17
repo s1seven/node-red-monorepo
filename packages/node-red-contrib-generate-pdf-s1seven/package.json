@@ -1,5 +1,5 @@
 {
-	"name": "node-red-contrib-generate-pdf-node",
+	"name": "@s1seven/node-red-generate-pdf-node",
 	"version": "1.0.0",
 	"description": "",
 	"main": "generate-pdf-node.js",
