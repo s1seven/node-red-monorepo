@@ -1,0 +1,19 @@
+{
+	"name": "node-red-chartjs",
+	"version": "1.0.0",
+	"description": "",
+	"main": "chartjs.js",
+	"node-red": {
+		"nodes": {
+			"node-red-chartjs": "chartjs.js"
+		}
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"chart.js": "^3.7.1",
+		"chartjs-plugin-annotation": "^1.4.0",
+		"node-red-node-test-helper": "^0.2.7"
+	}
+}
