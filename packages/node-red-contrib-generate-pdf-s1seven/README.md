@@ -8,4 +8,4 @@ Until this module is published, it needs to be installed locally. Pull the repo,
 
 # Sample flow
 
-image.png
+<img width="939" alt="Screenshot 2022-05-19 at 16 32 55" src="https://user-images.githubusercontent.com/21305201/169474693-623da5d4-5330-4506-a4f0-840f4ae94658.png">
