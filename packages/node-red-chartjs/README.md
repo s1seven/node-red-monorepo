@@ -1,5 +1,3 @@
-# new-node-red-example
-
 This node serves `chart.js` and `chartjs-plugin-annotation` to node-red. To use it, use a `node-red-dashboard: ui_template` node and add the following 2 lines:
 
 ```html
