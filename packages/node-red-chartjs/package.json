@@ -1,14 +1,15 @@
 {
-	"name": "node-red-chartjs",
+	"name": "@s1seven/node-red-chartjs",
 	"version": "1.0.0",
 	"description": "",
 	"main": "chartjs.js",
 	"node-red": {
 		"nodes": {
+			"version": ">=2.0.0",
 			"node-red-chartjs": "chartjs.js"
 		}
 	},
-	"keywords": [],
+    "keywords": [ "node-red" ],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
