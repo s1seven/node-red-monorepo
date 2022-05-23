@@ -1,7 +1,7 @@
 {
 	"name": "@s1seven/node-red-chartjs",
 	"version": "1.0.0",
-	"description": "",
+	"description": "A simple custom node-red module that wraps chartjs and chartjs-plugin-annotation and serves it for use in node-red.",
 	"main": "chartjs.js",
 	"node-red": {
 		"nodes": {
@@ -10,8 +10,8 @@
 		}
 	},
     "keywords": [ "node-red" ],
-	"author": "",
-	"license": "ISC",
+	"author": "eamon0989@gmail.com",
+	"license": "Apache 2.0",
 	"dependencies": {
 		"chart.js": "^3.7.1",
 		"chartjs-plugin-annotation": "^1.4.0",
