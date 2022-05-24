@@ -1,6 +1,6 @@
 {
 	"name": "@s1seven/node-red-generate-pdf",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A simple node-red module that wraps the S1Seven generatePdf module and allows it to be used in node-red.",
 	"main": "generate-pdf-node.js",
 	"scripts": {
