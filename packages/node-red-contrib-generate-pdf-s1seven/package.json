@@ -8,7 +8,6 @@
 	},
 	"node-red": {
 		"nodes": {
-			"version": ">=2.0.0",
 			"generate-pdf-node": "generate-pdf-node.js"
 		}
 	},
