@@ -16,6 +16,4 @@ module.exports = function (RED) {
 		});
 	}
 	RED.nodes.registerType("generate-pdf-node", generatePdfNode);
-
-	// add a second flow here?
 };
