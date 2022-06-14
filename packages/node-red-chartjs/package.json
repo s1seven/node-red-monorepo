@@ -5,10 +5,12 @@
 	"main": "chartjs.js",
 	"node-red": {
 		"nodes": {
-			"node-red-chartjs": "chartjs.js"
+			"generate chart": "chartjs.js"
 		}
 	},
-    "keywords": [ "node-red" ],
+	"keywords": [
+		"node-red"
+	],
 	"author": "eamon0989@gmail.com",
 	"license": "Apache 2.0",
 	"dependencies": {

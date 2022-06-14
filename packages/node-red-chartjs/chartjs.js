@@ -6,5 +6,5 @@ module.exports = function (RED) {
 			node.send(msg);
 		});
 	}
-	RED.nodes.registerType("node-red-chartjs", chartJs);
+	RED.nodes.registerType("generate chart", chartJs);
 };
