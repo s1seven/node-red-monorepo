@@ -15,5 +15,5 @@ module.exports = function (RED) {
 			}
 		});
 	}
-	RED.nodes.registerType("generate-pdf-node", generatePdfNode);
+	RED.nodes.registerType("generate pdf", generatePdfNode);
 };
