@@ -4,7 +4,7 @@
 	"description": "A simple node-red module that wraps the S1Seven generatePdf module and allows it to be used in node-red.",
 	"main": "generate-pdf-node.js",
 	"scripts": {
-		"test": "mocha \"test/**/*_spec.js\""
+		"test": "jest"
 	},
 	"node-red": {
 		"nodes": {
@@ -20,5 +20,11 @@
 		"node-red"
 	],
 	"author": "eamon0989@gmail.com",
-	"license": "Apache 2.0"
+	"license": "Apache 2.0",
+	"devDependencies": {
+		"handlebars": "^4.7.7",
+		"jest": "^29.3.0",
+		"node-red": "^3.0.2",
+		"node-red-node-test-helper": "^0.3.0"
+	}
 }
