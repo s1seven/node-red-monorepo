@@ -6,7 +6,7 @@ on:
       - 'README.md'
       - 'package-lock.json'
     branches:
-      - main
+      - master
   pull_request:
     types:
       - opened
@@ -17,7 +17,7 @@ on:
       - 'README.md'
       - 'package-lock.json'
     branches:
-      - main
+      - master
 
 jobs:
   setup-and-test:
