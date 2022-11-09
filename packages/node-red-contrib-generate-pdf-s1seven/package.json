@@ -13,8 +13,7 @@
     }
   },
   "dependencies": {
-    "@s1seven/schema-tools-generate-pdf": "^0.2.3",
-    "lodash": "^4.17.21"
+    "@s1seven/schema-tools-generate-pdf": "^0.2.4"
   },
   "devDependencies": {
     "handlebars": "^4.7.7",
