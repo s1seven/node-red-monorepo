@@ -25,6 +25,7 @@
 		"handlebars": "^4.7.7",
 		"jest": "^29.3.0",
 		"node-red": "^3.0.2",
-		"node-red-node-test-helper": "^0.3.0"
+		"node-red-node-test-helper": "^0.3.0",
+		"pdf2pic": "^2.1.4"
 	}
 }
