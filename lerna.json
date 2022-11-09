@@ -1,0 +1,14 @@
+{
+	"npmClient": "npm",
+	"$schema": "node_modules/lerna/schemas/lerna-schema.json",
+	"useNx": true,
+	"version": "independent",
+	"packages": ["packages/*"],
+	"command": {
+		"publish": {
+			"ignoreChanges": ["**/package-lock.json", "*.md", "**/*.spec.ts"],
+			"conventionalCommits": true,
+			"message": "chore(release): publish"
+		}
+	}
+}

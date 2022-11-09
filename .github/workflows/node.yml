@@ -1,0 +1,111 @@
+name: node-red-monorepo CI
+
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+      - 'renovate.json'
+      - '**/package-lock.json'
+      - 'utils/**'
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    paths-ignore:
+      - 'README.md'
+      - 'renovate.json'
+      - 'openapi.json'
+      - '**/package-lock.json'
+      - 'utils/**'
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NX_CLOUD_DISTRIBUTED_EXECUTION: false
+  NX_DISTRIBUTED_TASK_EXECUTION: false
+
+jobs:
+  setup-and-test:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || !github.event.pull_request.draft }}
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.OS }}-node--${{ matrix.node-version }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.OS }}-node-${{ matrix.node-version }}-npm
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: set-sha
+        uses: nrwl/nx-set-shas@v2
+
+      # - name: Install GraphicsMagick
+      #   run: sudo apt-get install -y ghostscript graphicsmagick
+
+      - name: Install dependencies
+        run: npm run bootstrap
+
+      # - name: Scan dependencies
+      #   run: npm run scan:deps
+
+      - name: Build packages
+        run: npm run build:affected
+
+      - name: Run Jest tests
+        run: npm run test:cov:affected
+        env:
+          CI: true
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: ./coverage
+          retention-days: 2
+
+  # scan:
+  #   needs: setup-and-test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out repository code
+  #       uses: actions/checkout@v3
+
+  #     - name: Retrieve coverage
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: coverage
+  #         path: ./coverage
+
+  #     - name: SonarCloud Scan
+  #       uses: sonarsource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         SONAR_URL: ${{ secrets.SONAR_URL }}
+  #         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
