@@ -1,21 +1,28 @@
 {
-	"name": "@s1seven/node-red-chartjs",
-	"version": "0.0.2",
-	"description": "A simple custom node-red module that wraps chartjs and chartjs-plugin-annotation and serves it for use in node-red.",
-	"main": "chartjs.js",
-	"node-red": {
-		"nodes": {
-			"generate chart": "chartjs.js"
-		}
-	},
-	"keywords": [
-		"node-red"
-	],
-	"author": "eamon0989@gmail.com",
-	"license": "Apache 2.0",
-	"dependencies": {
-		"chart.js": "^3.7.1",
-		"chartjs-plugin-annotation": "^1.4.0",
-		"node-red-node-test-helper": "^0.2.7"
-	}
+  "name": "@s1seven/node-red-chartjs",
+  "version": "0.0.2",
+  "description": "A simple custom node-red module that wraps chartjs and chartjs-plugin-annotation and serves it for use in node-red.",
+  "main": "chartjs.js",
+  "scripts": {
+    "test": "jest",
+    "prettier": "npx prettier --write ."
+  },
+  "node-red": {
+    "nodes": {
+      "generate chart": "chartjs.js"
+    }
+  },
+  "keywords": [
+    "node-red"
+  ],
+  "author": "eamon0989@gmail.com",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "chart.js": "^3.7.1",
+    "chartjs-plugin-annotation": "^1.4.0",
+    "node-red-node-test-helper": "^0.2.7"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
 }

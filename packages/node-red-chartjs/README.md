@@ -29,81 +29,82 @@ Here is an example of the data format that should be passed in as `msg.payload`:
 For more information, check out the Chart.js documentation [here](https://www.chartjs.org/docs/latest/) and the chartjs-plugin-annotation docs [here](https://www.chartjs.org/chartjs-plugin-annotation/latest/).
 
 Here is an example of how to create a chart passing in certificate data as `msg.payload`:
+
 ```html
 <div>
   <canvas id="myChartScatter" height="1" width="1"></canvas>
 </div>
 <script>
 
-new Chart(document.getElementById('myChartScatter'), {
-    type: 'scatter',
-    data: {
-        datasets: [{
-            label: '{{{payload.legend}}}',
-            data: '{{{payload.data}}}',
-            showLine: false,
-            backgroundColor: 'rgb(255, 99, 132)',
-        }],
-    },
-    options: {
-        title: {
-            display: true,
-            text: '{{{payload.title}}} Content',
-        }, 
-        
-        plugins: {
-            autocolors: false,
-            annotation: {
-                annotations: {
-                    minLine: {
-                        type: 'line',
-                        borderColor: 'red',
-                        borderWidth: 1,
-                        label: {
-                            enabled: true,
-                            backgroundColor: 'red',
-                            borderColor: 'red',
-                            borderRadius: 10,
-                            borderWidth: 1,
-                            content: 'min',
-                            rotation: 'auto'
-                        },
-                        scaleID: 'y',
-                        value: {{{min}}}
-                    },
-                    maxLine: {
-                        type: 'line',
-                        borderColor: 'red',
-                        borderWidth: 1,
-                        label: {
-                            enabled: true,
-                            backgroundColor: 'red',
-                            borderColor: 'red',
-                            borderRadius: 10,
-                            borderWidth: 1,
-                            content: 'max',
-                            rotation: 'auto'
-                        },
-                        scaleID: 'y',
-                        value: {{{max}}}
-                    },
-                }
-            }
-        },
+  new Chart(document.getElementById('myChartScatter'), {
+      type: 'scatter',
+      data: {
+          datasets: [{
+              label: '{{{payload.legend}}}',
+              data: '{{{payload.data}}}',
+              showLine: false,
+              backgroundColor: 'rgb(255, 99, 132)',
+          }],
+      },
+      options: {
+          title: {
+              display: true,
+              text: '{{{payload.title}}} Content',
+          },
 
-        scales: {
-            y: {
-                beginAtZero: true,
-                suggestedMax: {{{max}}} * 1.5,
-            },
-            x: {
-                grid: {
-                    display: false,
-                },
-            }
-        }
-    }
-});
+          plugins: {
+              autocolors: false,
+              annotation: {
+                  annotations: {
+                      minLine: {
+                          type: 'line',
+                          borderColor: 'red',
+                          borderWidth: 1,
+                          label: {
+                              enabled: true,
+                              backgroundColor: 'red',
+                              borderColor: 'red',
+                              borderRadius: 10,
+                              borderWidth: 1,
+                              content: 'min',
+                              rotation: 'auto'
+                          },
+                          scaleID: 'y',
+                          value: {{{min}}}
+                      },
+                      maxLine: {
+                          type: 'line',
+                          borderColor: 'red',
+                          borderWidth: 1,
+                          label: {
+                              enabled: true,
+                              backgroundColor: 'red',
+                              borderColor: 'red',
+                              borderRadius: 10,
+                              borderWidth: 1,
+                              content: 'max',
+                              rotation: 'auto'
+                          },
+                          scaleID: 'y',
+                          value: {{{max}}}
+                      },
+                  }
+              }
+          },
+
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  suggestedMax: {{{max}}} * 1.5,
+              },
+              x: {
+                  grid: {
+                      display: false,
+                  },
+              }
+          }
+      }
+  });
 </script>
 ```
 
