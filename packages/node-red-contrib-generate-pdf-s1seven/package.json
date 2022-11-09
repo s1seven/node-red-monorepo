@@ -13,19 +13,18 @@
 	},
 	"dependencies": {
 		"@s1seven/schema-tools-generate-pdf": "^0.2.3",
-		"lato-font": "^3.0.0",
 		"lodash": "^4.17.21"
 	},
-	"keywords": [
-		"node-red"
-	],
-	"author": "eamon0989@gmail.com",
-	"license": "Apache 2.0",
 	"devDependencies": {
 		"handlebars": "^4.7.7",
 		"jest": "^29.3.0",
 		"node-red": "^3.0.2",
 		"node-red-node-test-helper": "^0.3.0",
 		"pdf2pic": "^2.1.4"
-	}
+	},
+	"keywords": [
+		"node-red"
+	],
+	"author": "eamon0989@gmail.com",
+	"license": "Apache 2.0"
 }
