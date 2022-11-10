@@ -5,8 +5,6 @@
     "bootstrap": "npm install lerna && lerna bootstrap && npm install",
     "format": "nx format",
     "format:all": "prettier --write \"packages/**/*.{js,ts,json}\"",
-    "build": "nx run-many --target=build --all",
-    "build:affected": "nx affected --target=build",
     "lint": "nx run-many --target=lint --all",
     "lint:affected": "nx affected --target=lint",
     "lint:staged": "npx lint-staged",
