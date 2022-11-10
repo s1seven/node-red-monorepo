@@ -66,17 +66,8 @@ jobs:
         id: set-sha
         uses: nrwl/nx-set-shas@v2
 
-      # - name: Install GraphicsMagick
-      #   run: sudo apt-get install -y ghostscript graphicsmagick
-
       - name: Install dependencies
         run: npm run bootstrap
-
-      # - name: Scan dependencies
-      #   run: npm run scan:deps
-
-      - name: Build packages
-        run: npm run build:affected
 
       - name: Run Jest tests
         run: npm run test:cov:affected
