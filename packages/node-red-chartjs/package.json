@@ -5,7 +5,8 @@
   "main": "chartjs.js",
   "scripts": {
     "test": "jest",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
   },
   "node-red": {
     "nodes": {

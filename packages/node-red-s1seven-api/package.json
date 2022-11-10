@@ -4,7 +4,8 @@
   "description": "Nodes that interact with S1Seven's API",
   "scripts": {
     "test": "jest",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
   },
   "keywords": [
     "node-red",
