@@ -1,11 +1,11 @@
 {
-    "config": {
-        "label": {
-            "environment": " Environment",
-            "name": " Name",
-            "mode": " Mode",
-            "accessToken": " Access Token",
-            "companyId": " Company Id"
-        }
+  "config": {
+    "label": {
+      "environment": " Environment",
+      "name": " Name",
+      "mode": " Mode",
+      "accessToken": " Access Token",
+      "companyId": " Company Id"
     }
+  }
 }

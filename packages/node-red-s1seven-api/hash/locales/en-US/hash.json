@@ -1,16 +1,16 @@
 {
-    "hash": {
-        "label": {
-            "apiConfig": " api config",
-            "name": " Name",
-            "algorithm": " Algorithm",
-            "encoding": " Encoding"
-        },
-        "errors": {
-            "accessToken": "Please add an access token",
-            "algorithm": "Please choose a valid algorithm option",
-            "encoding": "Please choose a valid encoding option",
-            "validCertificate": "Please add a valid JSON certificate to msg.payload or global.certificate"
-        }
+  "hash": {
+    "label": {
+      "apiConfig": " api config",
+      "name": " Name",
+      "algorithm": " Algorithm",
+      "encoding": " Encoding"
+    },
+    "errors": {
+      "accessToken": "Please add an access token",
+      "algorithm": "Please choose a valid algorithm option",
+      "encoding": "Please choose a valid encoding option",
+      "validCertificate": "Please add a valid JSON certificate to msg.payload or global.certificate"
     }
+  }
 }

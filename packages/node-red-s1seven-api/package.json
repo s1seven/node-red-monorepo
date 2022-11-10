@@ -1,40 +1,40 @@
 {
-    "name": "@s1seven/node-red-s1seven-api",
-    "version": "1.0.1",
-    "description": "Nodes that interact with S1Seven's API",
-    "scripts": {
-        "test": "jest",
-        "prettier": "npx prettier --write ."
-    },
-    "keywords": [
-        "node-red",
-        "s1seven"
-    ],
-    "author": "eamon0989@gmail.com",
-    "license": "Apache 2.0",
-    "node-red": {
-        "version": ">=2.0.0",
-        "nodes": {
-            "hash": "hash/hash.js",
-            "verify": "verify/verify.js",
-            "notarize": "notarize/notarize.js",
-            "identities": "identities/identities.js",
-            "company": "company/company.js",
-            "api-config": "config/api-config.js"
-        }
-    },
-    "dependencies": {
-        "axios": "^0.27.2",
-        "dotenv": "^16.0.1"
-    },
-    "devDependencies": {
-        "eslint": "^8.16.0",
-        "eslint-config-airbnb-base": "^15.0.0",
-        "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-import": "^2.26.0",
-        "jest": "^28.1.1",
-        "node-red": "^2.2.2",
-        "node-red-node-test-helper": "^0.2.7",
-        "prettier": "2.6.2"
+  "name": "@s1seven/node-red-s1seven-api",
+  "version": "1.0.1",
+  "description": "Nodes that interact with S1Seven's API",
+  "scripts": {
+    "test": "jest",
+    "prettier": "npx prettier --write ."
+  },
+  "keywords": [
+    "node-red",
+    "s1seven"
+  ],
+  "author": "eamon0989@gmail.com",
+  "license": "Apache 2.0",
+  "node-red": {
+    "version": ">=2.0.0",
+    "nodes": {
+      "hash": "hash/hash.js",
+      "verify": "verify/verify.js",
+      "notarize": "notarize/notarize.js",
+      "identities": "identities/identities.js",
+      "company": "company/company.js",
+      "api-config": "config/api-config.js"
     }
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "jest": "^28.1.1",
+    "node-red": "^2.2.2",
+    "node-red-node-test-helper": "^0.2.7",
+    "prettier": "2.6.2"
+  }
 }
