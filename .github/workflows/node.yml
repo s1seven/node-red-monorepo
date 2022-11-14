@@ -81,22 +81,22 @@ jobs:
           path: ./coverage
           retention-days: 2
 
-  # scan:
-  #   needs: setup-and-test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check out repository code
-  #       uses: actions/checkout@v3
+  scan:
+    needs: setup-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-  #     - name: Retrieve coverage
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: coverage
-  #         path: ./coverage
+      - name: Retrieve coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage
+          path: ./coverage
 
-  #     - name: SonarCloud Scan
-  #       uses: sonarsource/sonarcloud-github-action@master
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         SONAR_URL: ${{ secrets.SONAR_URL }}
-  #         SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_URL: ${{ secrets.SONAR_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
