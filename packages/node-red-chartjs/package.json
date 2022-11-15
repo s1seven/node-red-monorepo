@@ -5,7 +5,7 @@
   "main": "chartjs.js",
   "scripts": {
     "test": "jest",
-    "prettier": "npx prettier --write .",
+    "prettier": "prettier --write .",
     "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
   },
   "node-red": {
@@ -23,9 +23,7 @@
     "chartjs-plugin-annotation": "^1.4.0"
   },
   "devDependencies": {
-    "jest": "^29.3.1",
     "node-red": "^3.0.2",
-    "node-red-node-test-helper": "^0.3.0",
-    "prettier": "^2.7.1"
+    "node-red-node-test-helper": "^0.3.0"
   }
 }
