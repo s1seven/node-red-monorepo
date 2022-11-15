@@ -55,7 +55,7 @@ describe('notarize Node', function () {
 
       try {
         expect(axios.post).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/certificates/notarize`,
+          `${URL_TO_ENV_MAP['production']}/api/certificates/notarize`,
           certificate,
           {
             headers: {
