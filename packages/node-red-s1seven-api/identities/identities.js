@@ -21,7 +21,7 @@ module.exports = function (RED) {
         msg.companyId || apiConfig?.companyId || globalContext.get('companyId');
       const mode = msg.mode || apiConfig?.mode || 'test';
       const environment =
-        msg.environment || apiConfig?.environment || 'staging';
+        msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const coinType = msg.coinType || config.coinType || null;
       const status = msg.status || config.status || null;

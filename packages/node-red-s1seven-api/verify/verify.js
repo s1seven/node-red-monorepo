@@ -21,7 +21,7 @@ module.exports = function (RED) {
       let certificate = msg.payload || globalContext.get('certificate');
       const mode = msg.mode || apiConfig?.mode || 'test';
       const environment =
-        msg.environment || apiConfig?.environment || 'staging';
+        msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${
         DEV_URL ? DEV_URL : BASE_URL

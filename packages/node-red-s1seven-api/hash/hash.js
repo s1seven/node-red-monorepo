@@ -24,7 +24,7 @@ module.exports = function (RED) {
         apiConfig?.accessToken ||
         globalContext.get('accessToken');
       const environment =
-        msg.environment || apiConfig?.environment || 'staging';
+        msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${DEV_URL ? DEV_URL : BASE_URL}/api/certificates/hash`;
       const algorithm = msg.algorithm || config.algorithm || 'sha256';

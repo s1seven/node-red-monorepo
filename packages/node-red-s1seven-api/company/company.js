@@ -14,7 +14,7 @@ module.exports = function (RED) {
     node.on('input', async (msg, send, done) => {
       const accessToken = msg.accessToken || apiConfig?.accessToken;
       const environment =
-        msg.environment || apiConfig?.environment || 'staging';
+        msg.environment || apiConfig?.environment || 'production';
       const companyId = msg.companyId || apiConfig?.companyId;
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${DEV_URL ? DEV_URL : BASE_URL}/api/companies/${companyId}`;
