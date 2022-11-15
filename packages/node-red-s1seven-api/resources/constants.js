@@ -1,7 +1,6 @@
 const URL_TO_ENV_MAP = {
-  development: 'https://app.s1seven.ovh',
   staging: 'https://app.s1seven.dev',
-  // production: 'https://app.s1seven.com',
+  production: 'https://app.s1seven.com',
 };
 const ALGORITHM_OPTIONS = [
   'sha256',

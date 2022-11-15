@@ -24,7 +24,7 @@ module.exports = function (RED) {
       const identity =
         msg.identity || config.identity || globalContext.get('identity');
       const environment =
-        msg.environment || apiConfig?.environment || 'staging';
+        msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${DEV_URL ? DEV_URL : BASE_URL}/api/certificates/notarize`;
       let certificate = msg.payload || globalContext.get('certificate');

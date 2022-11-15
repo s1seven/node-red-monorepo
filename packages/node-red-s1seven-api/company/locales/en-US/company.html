@@ -7,8 +7,8 @@
         <dd>the access token to use to authenticate the request.</dd>
         <dt class="message-properties">companyId <span class="property-type">string</span></dt>
         <dd>the id of the company to associate with the notarization.</dd>
-        <dt class="optional">environment <span class="property-type">staging | development</span></dt>
-        <dd>choose the environment that you want to use - app.s1seven.ovh or app.s1seven.dev. Defaults to staging</dd>
+        <dt class="optional">environment <span class="property-type">staging | production</span></dt>
+        <dd>choose the environment that you want to use - app.s1seven.ovh or app.s1seven.com. Defaults to production</dd>
     </dl>
 
     <h3>Outputs</h3>
@@ -47,6 +47,6 @@
 
     <p>
         <code>msg.environment</code> allows you to pass in the string value <code>staging</code> or
-        <code>development</code> to choose which server you wish to use.
+        <code>production</code> to choose which server you wish to use.
     </p>
 </script>
