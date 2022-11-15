@@ -4,7 +4,7 @@ module.exports = function (RED) {
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
   const axios = require('axios');
   const { URL_TO_ENV_MAP } = require('../resources/constants');
-  const DEV_URL = process.env.DEV_URL;
+  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   function getIdentities(config) {
@@ -28,7 +28,9 @@ module.exports = function (RED) {
       const status = msg.status || config.status || null;
       const BIP44Account = msg.BIP44Account || config.BIP44Account || null;
       const BIP44Index = msg.BIP44Index || config.BIP44Index || null;
-      const url = `${DEV_URL ? DEV_URL : BASE_URL}/api/identities`;
+      const url = `${
+        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
+      }/api/identities`;
 
       if (!accessToken) {
         node.warn(RED._('identity.errors.accessToken'));

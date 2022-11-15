@@ -5,7 +5,7 @@ module.exports = function (RED) {
   const axios = require('axios');
   const { URL_TO_ENV_MAP } = require('../resources/constants');
   const validateCertificate = require('../utils/validateCertificate');
-  const DEV_URL = process.env.DEV_URL;
+  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   function notarize(config) {
@@ -27,7 +27,9 @@ module.exports = function (RED) {
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${DEV_URL ? DEV_URL : BASE_URL}/api/certificates/notarize`;
+      const url = `${
+        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
+      }/api/certificates/notarize`;
       let certificate = msg.payload || globalContext.get('certificate');
 
       if (!accessToken) {

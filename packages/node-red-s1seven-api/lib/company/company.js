@@ -4,7 +4,7 @@ module.exports = function (RED) {
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
   const axios = require('axios');
   const { URL_TO_ENV_MAP } = require('../resources/constants');
-  const DEV_URL = process.env.DEV_URL;
+  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   function getCompany(config) {
@@ -18,7 +18,9 @@ module.exports = function (RED) {
         msg.environment || apiConfig?.environment || 'production';
       const companyId = msg.companyId || apiConfig?.companyId;
       const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${DEV_URL ? DEV_URL : BASE_URL}/api/companies/${companyId}`;
+      const url = `${
+        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
+      }/api/companies/${companyId}`;
 
       if (!accessToken) {
         node.warn(RED._('company.errors.accessToken'));
