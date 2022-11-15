@@ -6,6 +6,7 @@ module.exports = function (RED) {
   const { URL_TO_ENV_MAP } = require('../resources/constants');
   const DEV_URL = process.env.DEV_URL;
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   function getIdentities(config) {
     RED.nodes.createNode(this, config);
     const node = this;

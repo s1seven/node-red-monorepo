@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
 const verifyNode = require('../verify/verify.js');
 const certificate = require('../cert.json');

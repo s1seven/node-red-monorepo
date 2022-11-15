@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
 const identitiesNode = require('../identities/identities.js');
 const axios = require('axios');

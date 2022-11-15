@@ -1,5 +1,9 @@
 {
-  "extends": ["prettier"],
+  "extends": [
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:sonarjs/recommended"
+  ],
   "env": {
     "browser": true,
     "commonjs": true,
@@ -11,5 +15,13 @@
   "rules": {
     "indent": ["error", 2]
   },
+  "plugins": [
+    "@typescript-eslint/eslint-plugin",
+    "unused-imports",
+    "import",
+    "prettier",
+    "simple-import-sort",
+    "sonarjs"
+  ],
   "ignorePatterns": ["*.min.js"]
 }

@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 require('dotenv').config();
 const helper = require('node-red-node-test-helper');
 const notarizeNode = require('../notarize/notarize.js');
