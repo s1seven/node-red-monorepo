@@ -14,6 +14,10 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, done) => {
       const apiConfig = RED.nodes.getNode(config.apiConfig);
+      const accessToken =
+        msg.accessToken ||
+        apiConfig?.accessToken ||
+        globalContext.get('accessToken');
       let certificate = msg.payload || globalContext.get('certificate');
       const mode = msg.mode || apiConfig?.mode || 'test';
       const environment =
@@ -25,10 +29,20 @@ module.exports = function (RED) {
 
       if (certificate) {
         try {
+          const headers = {
+            'Content-Type': 'application/json',
+          };
+          if (accessToken) {
+            headers['Authentication'] = `bearer ${accessToken}`;
+          }
+
           certificate = validateCertificate(certificate);
           const response = await axios.post(url, certificate, {
             headers: {
               'Content-Type': 'application/json',
+              ...(accessToken
+                ? { Authentication: `bearer ${accessToken}` }
+                : {}),
             },
           });
           msg.payload = response.data;

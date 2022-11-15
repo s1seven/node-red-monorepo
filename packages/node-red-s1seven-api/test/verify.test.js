@@ -63,6 +63,40 @@ describe('verify Node', function () {
           {
             headers: {
               'Content-Type': 'application/json',
+              Authentication: 'bearer test',
+            },
+          }
+        );
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+  });
+
+  it('authentication header should not be present if access token is not present', function (done) {
+    const flow = [
+      {
+        id: 'n1',
+        type: 'verify certificate',
+        name: 'verify certificate',
+      },
+      { id: 'n2', type: 'helper' },
+    ];
+    axios.post.mockResolvedValue({ data: { isValid: true } });
+
+    helper.load(verifyNode, flow, function () {
+      const n1 = helper.getNode('n1');
+      n1.receive({
+        payload: certificate,
+      });
+      try {
+        expect(axios.post).toHaveBeenCalledWith(
+          `${URL_TO_ENV_MAP['staging']}/api/certificates/verify/?mode=test`,
+          certificate,
+          {
+            headers: {
+              'Content-Type': 'application/json',
             },
           }
         );
