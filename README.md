@@ -15,9 +15,9 @@ npm run bootstrap
 
 `node-red-contrib-generate-pdf-s1seven` needs to be kept up to date, when `@s1seven/schema-tools-generate-pdf` is updated, this package should be updated.
 
-`node-red-chartjs` should not be updated to keep compatability with older charts.
+`node-red-chartjs` - When this package is updated, if we want to keep the charts rendering correctly, the user should pin the correct version of @s1seven/node-red-chartjs in their package.json.
 
-`node-red-s1seven-api` only needs to be updated if the implementation of one of the endpoints changes.
+`node-red-s1seven-api` only needs to be updated if the implementation of one of the endpoints changes, or if a dependency has a security vunerability.
 
 ## More details
 
