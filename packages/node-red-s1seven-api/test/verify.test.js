@@ -58,7 +58,7 @@ describe('verify Node', function () {
       });
       try {
         expect(axios.post).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/certificates/verify/?mode=test`,
+          `${URL_TO_ENV_MAP['production']}/api/certificates/verify/?mode=test`,
           certificate,
           {
             headers: {
@@ -92,7 +92,7 @@ describe('verify Node', function () {
       });
       try {
         expect(axios.post).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/certificates/verify/?mode=test`,
+          `${URL_TO_ENV_MAP['production']}/api/certificates/verify/?mode=test`,
           certificate,
           {
             headers: {

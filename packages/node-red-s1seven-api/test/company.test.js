@@ -47,7 +47,7 @@ describe('get company by id Node', function () {
       });
       try {
         expect(axios.get).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/companies/${fakeCompanyId}`,
+          `${URL_TO_ENV_MAP['production']}/api/companies/${fakeCompanyId}`,
           {
             headers: {
               Authorization: `Bearer ${fakeAccessToken}`,

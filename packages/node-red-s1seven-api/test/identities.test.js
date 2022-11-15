@@ -46,7 +46,7 @@ describe('get identities Node', function () {
       });
       try {
         expect(axios.get).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/identities`,
+          `${URL_TO_ENV_MAP['production']}/api/identities`,
           {
             headers: {
               Authorization: `Bearer ${fakeAccessToken}`,
@@ -92,7 +92,7 @@ describe('get identities Node', function () {
       });
       try {
         expect(axios.get).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/identities`,
+          `${URL_TO_ENV_MAP['production']}/api/identities`,
           {
             headers: {
               Authorization: `Bearer ${fakeAccessToken}`,
@@ -138,7 +138,7 @@ describe('get identities Node', function () {
       });
       try {
         expect(axios.get).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/identities`,
+          `${URL_TO_ENV_MAP['production']}/api/identities`,
           {
             headers: {
               Authorization: `Bearer ${fakeAccessToken}`,

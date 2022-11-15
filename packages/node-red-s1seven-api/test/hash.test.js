@@ -45,7 +45,7 @@ describe('hashing Node', function () {
       });
 
       expect(axios.post).toHaveBeenCalledWith(
-        `${URL_TO_ENV_MAP['staging']}/api/certificates/hash`,
+        `${URL_TO_ENV_MAP['production']}/api/certificates/hash`,
         {
           algorithm: 'sha256',
           encoding: 'hex',
@@ -81,7 +81,7 @@ describe('hashing Node', function () {
 
       try {
         expect(axios.post).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/certificates/hash`,
+          `${URL_TO_ENV_MAP['production']}/api/certificates/hash`,
           {
             algorithm: algorithm,
             encoding: encoding,
@@ -127,7 +127,7 @@ describe('hashing Node', function () {
 
       try {
         expect(axios.post).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['staging']}/api/certificates/hash`,
+          `${URL_TO_ENV_MAP['production']}/api/certificates/hash`,
           {
             algorithm: algorithm,
             encoding: encoding,
