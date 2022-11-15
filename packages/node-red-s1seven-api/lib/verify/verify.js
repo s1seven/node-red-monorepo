@@ -1,7 +1,7 @@
 module.exports = function (RED) {
   'use strict';
   const path = require('path');
-  require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
   const axios = require('axios');
   const { URL_TO_ENV_MAP } = require('../resources/constants');
   const validateCertificate = require('../utils/validateCertificate');

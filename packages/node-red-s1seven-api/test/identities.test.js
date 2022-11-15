@@ -1,8 +1,8 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
-const identitiesNode = require('../identities/identities.js');
+const identitiesNode = require('../lib/identities/identities.js');
 const axios = require('axios');
-const { URL_TO_ENV_MAP } = require('../resources/constants');
+const { URL_TO_ENV_MAP } = require('../lib/resources/constants');
 const fakeAccessToken = 'test';
 const fakeCompanyId = 'test';
 

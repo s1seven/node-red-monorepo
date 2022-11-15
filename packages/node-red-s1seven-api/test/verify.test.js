@@ -1,9 +1,9 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
-const verifyNode = require('../verify/verify.js');
-const certificate = require('../cert.json');
+const verifyNode = require('../lib/verify/verify.js');
+const certificate = require('../fixtures/cert.json');
 const axios = require('axios');
-const { URL_TO_ENV_MAP } = require('../resources/constants');
+const { URL_TO_ENV_MAP } = require('../lib/resources/constants');
 const fakeAccessToken = 'test';
 
 jest.mock('axios');

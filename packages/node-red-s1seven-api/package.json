@@ -1,6 +1,6 @@
 {
   "name": "@s1seven/node-red-s1seven-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Nodes that interact with S1Seven's API",
   "scripts": {
     "test": "jest",
@@ -27,5 +27,8 @@
   "dependencies": {
     "axios": "^0.27.2",
     "dotenv": "^16.0.1"
-  }
+  },
+  "files": [
+    "/lib"
+  ]
 }
