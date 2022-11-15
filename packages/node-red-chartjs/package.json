@@ -21,5 +21,11 @@
   "dependencies": {
     "chart.js": "^3.7.1",
     "chartjs-plugin-annotation": "^1.4.0"
-  }
+  },
+  "files": [
+    "/icons",
+    "/resources",
+    "/chartjs.js",
+    "/chartjs.html"
+  ]
 }

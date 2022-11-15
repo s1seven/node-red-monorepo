@@ -23,6 +23,12 @@
   "keywords": [
     "node-red"
   ],
+  "files": [
+    "/icons",
+    "/resources",
+    "/generate-pdf-node.js",
+    "/generate-pdf-node.html"
+  ],
   "author": "eamon0989@gmail.com",
   "license": "Apache 2.0"
 }
