@@ -3,7 +3,7 @@ module.exports = function (RED) {
   const path = require('path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
   const axios = require('axios');
-  const { URL_TO_ENV_MAP } = require('../resources/constants');
+  const { URL_TO_ENV_MAP } = require('../../resources/constants');
   const validateCertificate = require('../utils/validateCertificate');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 

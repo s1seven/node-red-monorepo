@@ -7,7 +7,7 @@ module.exports = function (RED) {
     URL_TO_ENV_MAP,
     ALGORITHM_OPTIONS,
     ENCODING_OPTIONS,
-  } = require('../resources/constants');
+  } = require('../../resources/constants');
   const validateCertificate = require('../utils/validateCertificate');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
