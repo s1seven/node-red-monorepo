@@ -48,8 +48,8 @@ module.exports = function (RED) {
           const response = await axios.post(
             url,
             {
-              algorithm: algorithm,
-              encoding: encoding,
+              algorithm,
+              encoding,
               source: certificate,
             },
             {

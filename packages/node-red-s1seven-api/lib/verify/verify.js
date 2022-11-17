@@ -30,13 +30,6 @@ module.exports = function (RED) {
 
       if (certificate) {
         try {
-          const headers = {
-            'Content-Type': 'application/json',
-          };
-          if (accessToken) {
-            headers['Authentication'] = `bearer ${accessToken}`;
-          }
-
           certificate = validateCertificate(certificate);
           const response = await axios.post(url, certificate, {
             headers: {
