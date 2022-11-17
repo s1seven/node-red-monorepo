@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
 const generatePdfNode = require('../generate-pdf-node.js');
 const certificate = require('../fixtures/valid_certificate_1.json');

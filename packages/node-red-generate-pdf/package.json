@@ -5,12 +5,12 @@
   "main": "generate-pdf-node.js",
   "scripts": {
     "test": "jest",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
   },
   "node-red": {
     "nodes": {
-      "generate pdf": "generate-pdf-node.js",
-      "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
+      "generate pdf": "generate-pdf-node.js"
     }
   },
   "dependencies": {
