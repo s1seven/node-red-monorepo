@@ -17,7 +17,6 @@
     "@s1seven/schema-tools-generate-pdf": "^0.2.4"
   },
   "devDependencies": {
-    "handlebars": "^4.7.7",
     "pdf2pic": "^2.1.4"
   },
   "keywords": [
