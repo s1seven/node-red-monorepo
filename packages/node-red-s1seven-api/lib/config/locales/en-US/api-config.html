@@ -1,0 +1,54 @@
+<script type="text/html" data-help-name="api-config">
+  <h1>S1Seven API configuration node</h1>
+  <p>
+    A simple node that allows you to configure the variables necessary to
+    interact with the S1Seven UI.
+  </p>
+  <p>
+    By setting the variables once here, they are automatically made available to
+    all the S1Seven API nodes.
+  </p>
+
+  <h2>Details</h2>
+  <p>
+    <code>accessToken</code> is used to authenticate the HTTP request. To find
+    out how to generate an access token, look at the documentation at
+    <a>https://manual.s1seven.com</a> under the developers section.
+  </p>
+
+  <p>
+    <code>companyId</code> is the id of the company to be associated with the
+    notarization. To find out how to get a company id, look at the documentation
+    at <a>https://manual.s1seven.com</a> under the developers section.
+  </p>
+
+  <p>
+    <code>mode</code> allows you to select <code>test</code> or
+    <code>live</code> to choose which choose mode you want to use - test mode or
+    live mode. Defaults to <code>test</code>.
+  </p>
+
+  <p>
+    <code>environment</code> allows you to select <code>staging</code> or
+    <code>production</code> to choose which environment you wish to use.
+    Defaults to <code>production</code>. Learn more about our environments here:
+    <a>https://developers.s1seven.com/docs/environments/</a>.
+  </p>
+
+  <p>
+    Name allows you to customise the name of your configuration, allowing you to
+    have multiple configurations.
+  </p>
+
+  <h3>Overridding</h3>
+  <p>
+    The admin ui can be found by double-clicking on any S1Seven API node,
+    selecting the option "Add new api-config" and clicking on the edit button.
+    Any variables passed in via the <code>msg</code> object will have priority
+    over the values found in the admin ui. This allows the values to be
+    overridden dynamically if necessary. For example, if both
+    <code>msg.accessToken</code> and an access token added via the admin ui are
+    present, <code>msg.accessToken</code> will be used instead of the admin ui
+    access token.
+  </p>
+</script>

@@ -1,0 +1,66 @@
+<script
+  type="text/javascript"
+  src="/resources/@s1seven/node-red-s1seven-api/constants.js"
+></script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('api-config', {
+    category: 'config',
+    defaults: {
+      mode: {
+        value: '',
+        required: false,
+        validate: (input) => {
+          if (!input) return true;
+          return MODE.includes(input);
+        },
+      },
+      environment: {
+        value: '',
+        required: false,
+        validate: (input) => {
+          if (!input) return true;
+          return Object.keys(URL_TO_ENV_MAP).includes(input);
+        },
+      },
+      accessToken: { value: '', required: false },
+      companyId: { value: '', required: false },
+      name: { value: '', required: false },
+    },
+    label: function () {
+      return this.name || 'API configuration';
+    },
+    icon: 's_icon_logo.svg',
+  });
+</script>
+
+<script type="text/html" data-template-name="api-config">
+  <div class="form-row">
+      <label for="node-config-input-mode"><i class="fa fa-bookmark"></i><span data-i18n="config.label.mode"></label>
+      <select id="node-config-input-mode">
+          <option value="">--</option>
+          <option selected value="test">test</option>
+          <option value="live">live</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-config-input-environment"><i class="fa fa-bookmark"></i><span data-i18n="config.label.environment"></span></label>
+      <select id="node-config-input-environment">
+          <option value="">--</option>
+          <option value="staging">staging</option>
+          <option selected value="production">production</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-config-input-accessToken"><i class="fa fa-bookmark"></i><span data-i18n="config.label.accessToken"></label>
+      <input type="text" id="node-config-input-accessToken" />
+  </div>
+  <div class="form-row">
+      <label for="node-config-input-companyId"><i class="fa fa-bookmark"></i><span data-i18n="config.label.companyId"></label>
+      <input type="text" id="node-config-input-companyId" />
+  </div>
+  <div class="form-row">
+      <label for="node-config-input-name"><i class="fa fa-bookmark"></i><span data-i18n="config.label.name"></label>
+      <input type="text" id="node-config-input-name" />
+  </div>
+</script>

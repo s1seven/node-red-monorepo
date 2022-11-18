@@ -1,0 +1,32 @@
+{
+  "name": "@s1seven/node-red-chartjs",
+  "version": "0.0.2",
+  "description": "A simple custom node-red module that wraps chartjs and chartjs-plugin-annotation and serves it for use in node-red.",
+  "main": "chartjs.js",
+  "scripts": {
+    "test": "jest",
+    "test:cov": "rimraf -rf ./coverage && jest --ci --coverage",
+    "prettier": "prettier --write .",
+    "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
+  },
+  "node-red": {
+    "nodes": {
+      "generate chart": "chartjs.js"
+    }
+  },
+  "keywords": [
+    "node-red"
+  ],
+  "author": "eamon0989@gmail.com",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "chart.js": "^3.7.1",
+    "chartjs-plugin-annotation": "^1.4.0"
+  },
+  "files": [
+    "/icons",
+    "/resources",
+    "/chartjs.js",
+    "/chartjs.html"
+  ]
+}

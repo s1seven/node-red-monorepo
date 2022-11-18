@@ -1,0 +1,36 @@
+{
+  "name": "@s1seven/node-red-s1seven-api",
+  "version": "1.0.2",
+  "description": "Nodes that interact with S1Seven's API",
+  "scripts": {
+    "test": "jest",
+    "test:cov": "rimraf -rf ./coverage && jest --ci --coverage",
+    "prettier": "prettier --write .",
+    "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
+  },
+  "keywords": [
+    "node-red",
+    "s1seven"
+  ],
+  "author": "eamon0989@gmail.com",
+  "license": "Apache 2.0",
+  "node-red": {
+    "version": ">=2.0.0",
+    "nodes": {
+      "hash": "lib/hash/hash.js",
+      "verify": "lib/verify/verify.js",
+      "notarize": "lib/notarize/notarize.js",
+      "identities": "lib/identities/identities.js",
+      "company": "lib/company/company.js",
+      "api-config": "lib/config/api-config.js"
+    }
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1"
+  },
+  "files": [
+    "/lib",
+    "/resources"
+  ]
+}

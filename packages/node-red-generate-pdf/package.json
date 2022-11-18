@@ -1,0 +1,34 @@
+{
+  "name": "@s1seven/node-red-generate-pdf",
+  "version": "0.0.6",
+  "description": "A simple node-red module that wraps the S1Seven generatePdf module and allows it to be used in node-red.",
+  "main": "generate-pdf-node.js",
+  "scripts": {
+    "test": "jest",
+    "test:cov": "rimraf -rf ./coverage && jest --ci --coverage",
+    "prettier": "prettier --write .",
+    "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
+  },
+  "node-red": {
+    "nodes": {
+      "generate pdf": "generate-pdf-node.js"
+    }
+  },
+  "dependencies": {
+    "@s1seven/schema-tools-generate-pdf": "^0.2.4"
+  },
+  "devDependencies": {
+    "pdf2pic": "^2.1.4"
+  },
+  "keywords": [
+    "node-red"
+  ],
+  "files": [
+    "/icons",
+    "/resources",
+    "/generate-pdf-node.js",
+    "/generate-pdf-node.html"
+  ],
+  "author": "eamon0989@gmail.com",
+  "license": "Apache 2.0"
+}

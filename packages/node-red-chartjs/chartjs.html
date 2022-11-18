@@ -1,0 +1,70 @@
+<script
+  type="text/javascript"
+  src="/resources/@s1seven/node-red-chartjs/chart.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="/resources/@s1seven/node-red-chartjs/chartjs-plugin-annotation.min.js"
+></script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('generate chart', {
+    category: 'S1Seven',
+    color: '#BAD3FB',
+    defaults: {
+      name: { value: '' },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 's_icon_logo.svg',
+    label: function () {
+      return this.name || 'generate chart';
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="generate chart">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+</script>
+
+<script type="text/html" data-help-name="generate chart">
+  <p>
+    A simple node that allows access to chartjs and chartjs-annotation-plugin
+  </p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>
+      payload
+      <span class="property-type">object</span>
+    </dt>
+    <dd>
+      An object containing a <code>title</code> property, a
+      <code>legend</code> property and a <code>data</code> property.
+    </dd>
+  </dl>
+
+  <h3>Details</h3>
+  <p>
+    This node uses Chart.js v3.7.1 and chartjs-plugin-annotation v1.4.0. It
+    serves `chart.js` and `chartjs-plugin-annotation` to node-red. To use it,
+    use a `node-red-dashboard: ui_template` node and add the following 2 lines:
+  </p>
+  <p>
+    The node has to be installed to the <code>node-palette</code>, but the node
+    does not have to be used in a flow. Just installing the node will make the
+    scripts available for use.
+  </p>
+
+  <p>
+    An example of a data object that can be passed in is
+    <code
+      >{ "title": "Si", "legend": "Si Content", "data": [ { "x": 1, "y": 0.188
+      }, { "x": 2, "y": 0.192 } ] }</code
+    >
+  </p>
+  <p>For more details, check out the project's README</p>
+</script>

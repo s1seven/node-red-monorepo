@@ -1,0 +1,28 @@
+<script type="text/javascript">
+  RED.nodes.registerType('generate pdf', {
+    category: 'S1Seven',
+    color: '#BAD3FB',
+    defaults: {
+      name: { value: '' },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 's_icon_logo.svg',
+    label: function () {
+      return this.name || 'generate pdf';
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="generate pdf">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+</script>
+
+<script type="text/html" data-help-name="generate pdf">
+  <p>
+    A simple node that takes a JSON certificate as msg.payload and outputs a PDF
+  </p>
+</script>

@@ -1,0 +1,96 @@
+<script type="text/html" data-help-name="get identities">
+  <p>Returns a list of all identities for the company specified in header.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="message-properties">
+      accessToken <span class="property-type">string</span>
+    </dt>
+    <dd>the access token to use to authenticate the request.</dd>
+    <dt class="message-properties">
+      companyId <span class="property-type">string</span>
+    </dt>
+    <dd>the id of the company to associate with the notarization.</dd>
+    <dt class="message-properties">
+      mode <span class="property-type">test | live</span>
+    </dt>
+    <dd>
+      choose the mode that you want to use - test mode or live mode. Defaults to
+      test
+    </dd>
+    <dt class="optional">
+      environment <span class="property-type">staging | production</span>
+    </dt>
+    <dd>
+      choose the environment that you want to use - app.s1seven.dev or
+      app.s1seven.com. Defaults to production (app.s1seven.com).
+    </dd>
+    <dt class="optional">
+      BIP44 Account number<span class="property-type">number</span>
+    </dt>
+    <dd>filter by BIP44 Account number.</dd>
+    <dt class="optional">
+      BIP44 Index <span class="property-type">number</span>
+    </dt>
+    <dd>filter by BIP44 Index.</dd>
+    <dt class="optional">
+      coinType <span class="property-type">822 / 100000000</span>
+    </dt>
+    <dd>filter by coin type.</dd>
+    <dt class="optional">
+      status <span class="property-type">valid | obsolete</span>
+    </dt>
+    <dd>filter by identity status.</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+    <li>
+      Standard output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>
+          the response from the HTTP request containing an array of identity
+          objects.
+        </dd>
+      </dl>
+    </li>
+  </ol>
+
+  <h3>Details</h3>
+  <p>
+    The following properties can be added via the admin ui, found by
+    double-clicking on the hash node, or by passing them in using the
+    <code>msg</code> object. If they are passed in via the
+    <code>msg</code> object, they will have priority over the values found in
+    the admin ui. This allows the values to be overridden dynamically if
+    necessary. For example, if both <code>msg.accessToken</code> and an access
+    token added via the admin ui are present, <code>msg.accessToken</code> will
+    be used instead of the admin ui access token.
+  </p>
+
+  <p>
+    <code>accessToken</code> is used to authenticate the HTTP request. To find
+    out how to generate an access token, look at the documentation at
+    <a>https://manual.s1seven.com</a> under the developers section.
+  </p>
+
+  <p>
+    <code>companyId</code> is the id of the company to be associated with the
+    notarization. To find out how to get a company id, look at the documentation
+    at <a>https://manual.s1seven.com</a> under the developers section.
+  </p>
+
+  <p>
+    <code>msg.mode</code> allows you to pass in the string value
+    <code>test</code> or <code>live</code> to choose which choose mode you want
+    to use - test mode or live mode.
+  </p>
+
+  <p>
+    <code>msg.environment</code> allows you to pass in the string value
+    <code>staging</code> or <code>production</code> to choose which server you
+    wish to use. Learn more about our environments here:
+    <a>https://developers.s1seven.com/docs/environments/</a>.
+  </p>
+</script>
