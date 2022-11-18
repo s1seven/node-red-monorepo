@@ -5,6 +5,7 @@
   "main": "chartjs.js",
   "scripts": {
     "test": "jest",
+    "test:cov": "rimraf -rf ./coverage && jest --ci --coverage",
     "prettier": "prettier --write .",
     "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
   },
