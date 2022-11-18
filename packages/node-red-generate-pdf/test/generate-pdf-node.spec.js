@@ -73,5 +73,5 @@ describe('generate pdf Node', function () {
       });
       n1.receive({ payload: certificate });
     });
-  }, 10000);
+  }, 15000);
 });
