@@ -4,11 +4,7 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "test",
-          "prettier",
-          "lint"
-        ],
+        "cacheableOperations": ["test", "prettier", "lint"],
         "accessToken": "NTBiNjIzNTQtY2NkNi00MDVlLWJiOTItM2RmMjEwOWQwZjkyfHJlYWQtd3JpdGU="
       }
     }
@@ -16,5 +12,6 @@
   "targetDefaults": {},
   "affected": {
     "defaultBase": "main"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }
