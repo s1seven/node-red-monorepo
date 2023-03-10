@@ -63,6 +63,7 @@ describe('notarize Node', function () {
               Authorization: `Bearer ${fakeAccessToken}`,
               'Content-Type': 'application/json',
               company: fakeCompanyId,
+              'x-version': '1',
             },
             params: {
               identity: fakeIdentity,

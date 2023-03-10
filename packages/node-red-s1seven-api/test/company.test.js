@@ -53,6 +53,7 @@ describe('get company by id Node', function () {
             headers: {
               Authorization: `Bearer ${fakeAccessToken}`,
               'Content-Type': 'application/json',
+              'x-version': '1',
             },
           }
         );

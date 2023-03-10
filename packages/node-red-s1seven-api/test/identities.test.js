@@ -53,6 +53,7 @@ describe('get identities Node', function () {
               Authorization: `Bearer ${fakeAccessToken}`,
               'Content-Type': 'application/json',
               company: fakeCompanyId,
+              'x-version': '1',
             },
             params: {
               coinType: null,
@@ -99,6 +100,7 @@ describe('get identities Node', function () {
               Authorization: `Bearer ${fakeAccessToken}`,
               'Content-Type': 'application/json',
               company: fakeCompanyId,
+              'x-version': '1',
             },
             params: {
               coinType,
@@ -145,6 +147,7 @@ describe('get identities Node', function () {
               Authorization: `Bearer ${fakeAccessToken}`,
               'Content-Type': 'application/json',
               company: fakeCompanyId,
+              'x-version': '1',
             },
             params: {
               coinType: null,

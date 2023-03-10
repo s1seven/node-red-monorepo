@@ -56,6 +56,7 @@ describe('hashing Node', function () {
           headers: {
             Authorization: `Bearer ${fakeAccessToken}`,
             'Content-Type': 'application/json',
+            'x-version': '1',
           },
         }
       );
@@ -84,14 +85,15 @@ describe('hashing Node', function () {
         expect(axios.post).toHaveBeenCalledWith(
           `${URL_TO_ENV_MAP['production']}/api/certificates/hash`,
           {
-            algorithm: algorithm,
-            encoding: encoding,
+            algorithm,
+            encoding,
             source: certificate,
           },
           {
             headers: {
               Authorization: `Bearer ${fakeAccessToken}`,
               'Content-Type': 'application/json',
+              'x-version': '1',
             },
           }
         );
@@ -138,6 +140,7 @@ describe('hashing Node', function () {
             headers: {
               Authorization: `Bearer ${fakeAccessToken}`,
               'Content-Type': 'application/json',
+              'x-version': '1',
             },
           }
         );
