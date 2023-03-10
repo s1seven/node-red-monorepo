@@ -6,8 +6,10 @@
     <dt class="message-properties">
       accessToken <span class="property-type">string</span>
     </dt>
-    <dd>the access token to use to authenticate the request. This must be
-      generated using the <code>get access token</code> node.</dd>
+    <dd>
+      the access token to use to authenticate the request. This must be
+      generated using the <code>get access token</code> node.
+    </dd>
     <dt class="message-properties">
       companyId <span class="property-type">string</span>
     </dt>
@@ -20,7 +22,10 @@
       app.s1seven.com. Defaults to production (app.s1seven.com).
     </dd>
     <dt class="optional">version <span class="property-type">1</span></dt>
-    <dd>choose the version of the api to use. It can be set in the config node. Defaults to <code>1</code></dd>
+    <dd>
+      choose the version of the api to use. It can be set in the config node.
+      Defaults to <code>1</code>
+    </dd>
   </dl>
 
   <h3>Outputs</h3>
@@ -41,18 +46,17 @@
     <code>msg</code> object. If they are passed in via the
     <code>msg</code> object, they will have priority over the values found in
     the admin ui. This allows the values to be overridden dynamically if
-    necessary. For example, if both <code>msg.accessToken</code> and an access
-    token added via the admin ui are present, <code>msg.accessToken</code> will
-    be used instead of the admin ui access token.
+    necessary. For example, if both <code>msg.companyId</code> and a companyId
+    added via the admin ui are present, <code>msg.companyId</code> will be used
+    instead of the admin ui access token.
   </p>
 
   <p>
     <code>accessToken</code> is used to authenticate the HTTP request. To find
     out how to generate an access token, look at the documentation at
     <a>https://manual.s1seven.com</a> under the developers section. It can be
-    input via <code>msg.accessToken</code>, via the ui which can be found by
-    double-clicking on the <code>get company</code> node, or via
-    <code>global.accessToken</code>, in that order of priority.
+    input via <code>msg.accessToken</code>, or via
+    <code>global.s1sevenAccessToken</code>, in that order of priority.
   </p>
 
   <p>
