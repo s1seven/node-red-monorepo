@@ -24,52 +24,10 @@ In the screenshot, each api node has 2 outputs, the first labeled `success`, and
 
 ![example](./images/switch.png)
 
-The above workflow can be imported using the following JSON file:
+A minimal example of the above workflow can be imported using the following JSON file:
 
 ```json
 [
-    {
-        "id": "4e8475bd9d88ccaf",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "json",
-        "x": 90,
-        "y": 160,
-        "wires": [
-            [
-                "c45debacc2a6a70b"
-            ]
-        ]
-    },
-    {
-        "id": "c45debacc2a6a70b",
-        "type": "generate pdf",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "x": 270,
-        "y": 160,
-        "wires": [
-            [
-                "f4e5f3e835b0632a"
-            ]
-        ]
-    },
     {
         "id": "e2b2aaef3e997b7b",
         "type": "hash",
@@ -78,260 +36,19 @@ The above workflow can be imported using the following JSON file:
         "apiConfig": "16bd3e4db46db980",
         "algorithm": "sha256",
         "encoding": "hex",
-        "x": 250,
-        "y": 220,
-        "wires": [
-            [
-                "f4e5f3e835b0632a"
-            ],
-            [
-                "bde10a89215b14f9"
-            ]
-        ]
-    },
-    {
-        "id": "b9aa8a443bc11d6a",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "json",
-        "x": 90,
-        "y": 220,
-        "wires": [
-            [
-                "e2b2aaef3e997b7b"
-            ]
-        ]
-    },
-    {
-        "id": "f4e5f3e835b0632a",
-        "type": "debug",
-        "z": "155da1287ae6504d",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 740,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "bf244ddf9e6921e1",
-        "type": "verify certificate",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "mode": "test",
-        "x": 280,
-        "y": 280,
-        "wires": [
-            [
-                "f4e5f3e835b0632a"
-            ],
-            [
-                "bde10a89215b14f9"
-            ]
-        ]
-    },
-    {
-        "id": "9698e29aaaaa4348",
-        "type": "notarize certificate",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "identity": "",
         "x": 290,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
-                "f4e5f3e835b0632a"
+                "6befa51db92df9f8"
             ],
             [
-                "bde10a89215b14f9"
+                "290656f39a923100"
             ]
         ]
     },
     {
-        "id": "5c6b42a2f30f1b60",
-        "type": "get identities",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "coinType": "",
-        "status": "",
-        "BIP44Account": "",
-        "BIP44Index": "",
-        "x": 270,
-        "y": 400,
-        "wires": [
-            [
-                "f4e5f3e835b0632a"
-            ],
-            [
-                "bde10a89215b14f9"
-            ]
-        ]
-    },
-    {
-        "id": "e68a61e1d99aa19b",
-        "type": "get company",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "x": 270,
-        "y": 460,
-        "wires": [
-            [
-                "f4e5f3e835b0632a"
-            ],
-            [
-                "bde10a89215b14f9"
-            ]
-        ]
-    },
-    {
-        "id": "52e91865d7b24a47",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "json",
-        "x": 90,
-        "y": 340,
-        "wires": [
-            [
-                "9698e29aaaaa4348"
-            ]
-        ]
-    },
-    {
-        "id": "65458115caa044ab",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "json",
-        "x": 90,
-        "y": 280,
-        "wires": [
-            [
-                "bf244ddf9e6921e1"
-            ]
-        ]
-    },
-    {
-        "id": "6354eeaa4378fbd6",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 100,
-        "y": 400,
-        "wires": [
-            [
-                "5c6b42a2f30f1b60"
-            ]
-        ]
-    },
-    {
-        "id": "5e5d581b5cb4f9e6",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 100,
-        "y": 460,
-        "wires": [
-            [
-                "e68a61e1d99aa19b"
-            ]
-        ]
-    },
-    {
-        "id": "d2dec5e7fe05263b",
-        "type": "get access token",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "x": 310,
-        "y": 520,
-        "wires": [
-            [
-                "f4e5f3e835b0632a"
-            ],
-            [
-                "bde10a89215b14f9"
-            ]
-        ]
-    },
-    {
-        "id": "63d67d150defcd23",
+        "id": "1f69af6a87ecfb24",
         "type": "inject",
         "z": "155da1287ae6504d",
         "name": "",
@@ -351,19 +68,19 @@ The above workflow can be imported using the following JSON file:
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 520,
+        "x": 130,
+        "y": 380,
         "wires": [
             [
-                "d2dec5e7fe05263b"
+                "e2b2aaef3e997b7b"
             ]
         ]
     },
     {
-        "id": "cc4b8b332ebe310d",
+        "id": "6befa51db92df9f8",
         "type": "debug",
         "z": "155da1287ae6504d",
-        "name": "debug 4",
+        "name": "debug 3",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -373,40 +90,11 @@ The above workflow can be imported using the following JSON file:
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
-        "y": 640,
-        "wires": []
-    },
-    {
-        "id": "bde10a89215b14f9",
-        "type": "link out",
-        "z": "155da1287ae6504d",
-        "name": "link out 1",
-        "mode": "link",
-        "links": [
-            "21347b23f66aebe3"
-        ],
-        "x": 715,
         "y": 380,
         "wires": []
     },
     {
-        "id": "21347b23f66aebe3",
-        "type": "link in",
-        "z": "155da1287ae6504d",
-        "name": "Global error handler",
-        "links": [
-            "bde10a89215b14f9"
-        ],
-        "x": 235,
-        "y": 640,
-        "wires": [
-            [
-                "8bf581ead2d78998"
-            ]
-        ]
-    },
-    {
-        "id": "8bf581ead2d78998",
+        "id": "290656f39a923100",
         "type": "switch",
         "z": "155da1287ae6504d",
         "name": "",
@@ -417,50 +105,59 @@ The above workflow can be imported using the following JSON file:
                 "t": "eq",
                 "v": "401",
                 "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "429",
+                "vt": "num"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 1,
-        "x": 350,
-        "y": 640,
+        "outputs": 2,
+        "x": 470,
+        "y": 460,
         "wires": [
             [
-                "d17dfbc84481cb5e"
+                "fd323fdf31455b44"
+            ],
+            [
+                "6befa51db92df9f8"
             ]
         ],
         "outputLabels": [
-            "401"
+            "401",
+            "429"
         ]
     },
     {
-        "id": "eeddf96a0ce10b79",
+        "id": "fd323fdf31455b44",
+        "type": "get access token",
+        "z": "155da1287ae6504d",
+        "name": "",
+        "apiConfig": "16bd3e4db46db980",
+        "x": 630,
+        "y": 280,
+        "wires": [
+            [
+                "6befa51db92df9f8"
+            ],
+            [
+                "6befa51db92df9f8"
+            ]
+        ]
+    },
+    {
+        "id": "7ff5a6d4faf5af58",
         "type": "catch",
         "z": "155da1287ae6504d",
         "name": "",
         "scope": null,
         "uncaught": false,
-        "x": 80,
-        "y": 580,
+        "x": 100,
+        "y": 440,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "d17dfbc84481cb5e",
-        "type": "get access token",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "x": 550,
-        "y": 600,
-        "wires": [
-            [
-                "cc4b8b332ebe310d"
-            ],
-            [
-                "cc4b8b332ebe310d"
-            ]
         ]
     },
     {
@@ -468,7 +165,7 @@ The above workflow can be imported using the following JSON file:
         "type": "api-config",
         "environment": "staging",
         "companyId": "",
-        "name": "",
+        "name": "Staging",
         "clientId": "",
         "clientSecret": "",
         "apiVersion": "1"
