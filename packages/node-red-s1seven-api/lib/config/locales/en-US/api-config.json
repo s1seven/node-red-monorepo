@@ -5,7 +5,10 @@
       "name": " Name",
       "mode": " Mode",
       "accessToken": " Access Token",
-      "companyId": " Company Id"
+      "companyId": " Company Id",
+      "clientId": " Client Id",
+      "clientSecret": " Client Secret",
+      "apiVersion": " API Version"
     }
   }
 }

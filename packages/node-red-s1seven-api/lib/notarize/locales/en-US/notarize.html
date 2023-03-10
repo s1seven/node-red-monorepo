@@ -11,7 +11,10 @@
     <dt class="message-properties">
       accessToken <span class="property-type">string</span>
     </dt>
-    <dd>the access token to use to authenticate the request.</dd>
+    <dd>
+      the access token to use to authenticate the request. This must be
+      generated using the <code>get access token</code> node.
+    </dd>
     <dt class="message-properties">
       companyId <span class="property-type">string</span>
     </dt>
@@ -33,6 +36,11 @@
     <dd>
       choose the environment that you want to use - app.s1seven.dev or
       app.s1seven.com. Defaults to production (app.s1seven.dev).
+    </dd>
+    <dt class="optional">version <span class="property-type">1</span></dt>
+    <dd>
+      choose the version of the api to use. It can be set in the config node.
+      Defaults to <code>1</code>
     </dd>
   </dl>
 
@@ -105,7 +113,8 @@
   <p>
     <code>msg.mode</code> allows you to pass in the string value
     <code>test</code> or <code>live</code> to choose which choose mode you want
-    to use - test mode or live mode.
+    to use - test mode or live mode. When requesting an access token, the mode
+    in the config node will be updated automatically.
   </p>
 
   <p>

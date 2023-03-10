@@ -6,7 +6,8 @@
     <dt class="message-properties">
       accessToken <span class="property-type">string</span>
     </dt>
-    <dd>the access token to use to authenticate the request.</dd>
+    <dd>the access token to use to authenticate the request. This must be
+      generated using the <code>get access token</code> node.</dd>
     <dt class="message-properties">
       companyId <span class="property-type">string</span>
     </dt>
@@ -18,6 +19,8 @@
       choose the environment that you want to use - app.s1seven.dev or
       app.s1seven.com. Defaults to production (app.s1seven.com).
     </dd>
+    <dt class="optional">version <span class="property-type">1</span></dt>
+    <dd>choose the version of the api to use. It can be set in the config node. Defaults to <code>1</code></dd>
   </dl>
 
   <h3>Outputs</h3>

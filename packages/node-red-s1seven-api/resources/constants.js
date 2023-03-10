@@ -15,6 +15,7 @@ const COIN_TYPES = [822, 100000000];
 const IDENTITY_STATUS = ['valid', 'obsolete'];
 const ACCOUNT_INDEX_MIN = 0;
 const ACCOUNT_INDEX_MAX = 2147483647;
+const DEFAULT_API_VERSION = 1;
 
 module.exports = {
   ALGORITHM_OPTIONS,
@@ -25,4 +26,5 @@ module.exports = {
   IDENTITY_STATUS,
   ACCOUNT_INDEX_MIN,
   ACCOUNT_INDEX_MAX,
+  DEFAULT_API_VERSION,
 };

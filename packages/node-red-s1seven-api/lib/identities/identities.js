@@ -2,8 +2,12 @@ module.exports = function (RED) {
   'use strict';
   const path = require('path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const axios = require('axios');
-  const { URL_TO_ENV_MAP } = require('../../resources/constants');
+  const { get } = require('axios');
+  const requestHandler = require('../utils/requestHandler');
+  const {
+    URL_TO_ENV_MAP,
+    DEFAULT_API_VERSION,
+  } = require('../../resources/constants');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -31,6 +35,7 @@ module.exports = function (RED) {
       const url = `${
         S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
       }/api/identities`;
+      const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!accessToken) {
         node.warn(RED._('identity.errors.accessToken'));
@@ -39,12 +44,13 @@ module.exports = function (RED) {
         node.warn(RED._('identity.errors.companyId'));
         done();
       } else {
-        try {
-          const response = await axios.get(url, {
+        const { success, data } = await requestHandler(
+          get(url, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               'Content-Type': 'application/json',
               company: companyId,
+              'x-version': `${version}`,
             },
             params: {
               coinType,
@@ -53,18 +59,16 @@ module.exports = function (RED) {
               index: BIP44Index,
               mode,
             },
-          });
-          msg.payload = response.data;
-          send(msg);
+          }),
+          send,
+          msg
+        );
+
+        if (success) {
           done();
-        } catch (error) {
-          if (error instanceof axios.AxiosError) {
-            node.error(error.response);
-            done(error.response);
-          } else {
-            node.error(error);
-            done(error);
-          }
+        } else {
+          node.error(data);
+          done(data);
         }
       }
     });

@@ -26,6 +26,12 @@
       accessToken: { value: '', required: false },
       companyId: { value: '', required: false },
       name: { value: '', required: false },
+      clientId: { value: '', required: false },
+      clientSecret: { value: '', required: false },
+      apiVersion: {
+        value: '',
+        required: false,
+      },
     },
     label: function () {
       return this.name || 'API configuration';
@@ -35,32 +41,35 @@
 </script>
 
 <script type="text/html" data-template-name="api-config">
-  <div class="form-row">
-      <label for="node-config-input-mode"><i class="fa fa-bookmark"></i><span data-i18n="config.label.mode"></label>
-      <select id="node-config-input-mode">
-          <option value="">--</option>
-          <option selected value="test">test</option>
-          <option value="live">live</option>
-      </select>
-  </div>
-  <div class="form-row">
-      <label for="node-config-input-environment"><i class="fa fa-bookmark"></i><span data-i18n="config.label.environment"></span></label>
-      <select id="node-config-input-environment">
-          <option value="">--</option>
-          <option value="staging">staging</option>
-          <option selected value="production">production</option>
-      </select>
-  </div>
-  <div class="form-row">
-      <label for="node-config-input-accessToken"><i class="fa fa-bookmark"></i><span data-i18n="config.label.accessToken"></label>
-      <input type="text" id="node-config-input-accessToken" />
-  </div>
-  <div class="form-row">
-      <label for="node-config-input-companyId"><i class="fa fa-bookmark"></i><span data-i18n="config.label.companyId"></label>
-      <input type="text" id="node-config-input-companyId" />
-  </div>
-  <div class="form-row">
-      <label for="node-config-input-name"><i class="fa fa-bookmark"></i><span data-i18n="config.label.name"></label>
-      <input type="text" id="node-config-input-name" />
+    <div class="form-row">
+        <label for="node-config-input-environment"><i class="fa fa-bookmark"></i><span data-i18n="config.label.environment"></span></label>
+        <select id="node-config-input-environment">
+            <option value="">--</option>
+            <option value="staging">staging</option>
+            <option selected value="production">production</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-companyId"><i class="fa fa-bookmark"></i><span data-i18n="config.label.companyId"></label>
+        <input type="text" id="node-config-input-companyId" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-bookmark"></i><span data-i18n="config.label.name"></label>
+        <input type="text" id="node-config-input-name" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-clientId"><i class="fa fa-bookmark"></i><span data-i18n="config.label.clientId"></label>
+        <input type="text" id="node-config-input-clientId" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-clientSecret"><i class="fa fa-bookmark"></i><span data-i18n="config.label.clientSecret"></label>
+        <input type="password" id="node-config-input-clientSecret" />
+    </div>
+    <div class="form-row">
+    <label for="node-config-input-apiVersion"><i class="fa fa-bookmark"></i><span data-i18n="config.label.apiVersion"></span></label>
+    <select id="node-config-input-apiVersion">
+        <option selected value="1">1</option>
+        <!-- <option value="2">v2</option> -->
+    </select>
   </div>
 </script>
