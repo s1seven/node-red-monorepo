@@ -15,7 +15,7 @@
     }
   },
   "dependencies": {
-    "@s1seven/schema-tools-generate-pdf": "^0.2.5"
+    "@s1seven/schema-tools-generate-pdf": "^0.2.6"
   },
   "devDependencies": {
     "pdf2pic": "^2.1.4"

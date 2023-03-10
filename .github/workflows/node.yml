@@ -67,7 +67,7 @@ jobs:
         uses: nrwl/nx-set-shas@v3
 
       - name: Install dependencies
-        run: npm run bootstrap
+        run: npm install && npm run bootstrap
 
       - name: Run Jest tests
         run: npm run test:cov:affected
