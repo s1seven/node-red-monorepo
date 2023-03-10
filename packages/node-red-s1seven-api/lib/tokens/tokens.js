@@ -17,8 +17,9 @@ module.exports = function (RED) {
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
     node.on('input', async (msg, send, done) => {
-      const clientId = msg.clientId || apiConfig?.clientId;
-      const clientSecret = msg.clientSecret || apiConfig?.clientSecret;
+      const clientId = msg.clientId || apiConfig?.credentials.clientId;
+      const clientSecret =
+        msg.clientSecret || apiConfig?.credentials.clientSecret;
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];

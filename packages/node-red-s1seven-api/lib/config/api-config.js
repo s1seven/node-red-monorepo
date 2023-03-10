@@ -4,9 +4,12 @@ module.exports = function (RED) {
     this.companyId = n.companyId;
     this.environment = n.environment;
     this.name = n.name;
-    this.clientId = n.clientId;
-    this.clientSecret = n.clientSecret;
     this.apiVersion = n.apiVersion;
   }
-  RED.nodes.registerType('api-config', RemoteServerNode);
+  RED.nodes.registerType('api-config', RemoteServerNode, {
+    credentials: {
+      clientId: { type: 'text' },
+      clientSecret: { type: 'password' },
+    },
+  });
 };

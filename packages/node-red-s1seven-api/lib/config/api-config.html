@@ -17,12 +17,14 @@
       },
       companyId: { value: '', required: false },
       name: { value: '', required: false },
-      clientId: { value: '', required: false },
-      clientSecret: { value: '', required: false },
       apiVersion: {
         value: '',
         required: false,
       },
+    },
+    credentials: {
+      clientId: { type: 'text' },
+      clientSecret: { type: 'password' },
     },
     label: function () {
       return this.name || 'API configuration';
