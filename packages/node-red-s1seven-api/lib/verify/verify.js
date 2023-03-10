@@ -20,11 +20,9 @@ module.exports = function (RED) {
     node.on('input', async (msg, send, done) => {
       const apiConfig = RED.nodes.getNode(config.apiConfig);
       const accessToken =
-        msg.accessToken ||
-        apiConfig?.accessToken ||
-        globalContext.get('accessToken');
+        msg.accessToken || globalContext.get('s1sevenAccessToken');
       let certificate = msg.payload || globalContext.get('certificate');
-      const mode = msg.mode || config?.mode || 'test';
+      const mode = msg.mode || globalContext.get('s1sevenMode') || 'test';
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];

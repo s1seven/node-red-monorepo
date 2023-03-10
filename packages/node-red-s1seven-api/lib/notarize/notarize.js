@@ -20,12 +20,10 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, done) => {
       const accessToken =
-        msg.accessToken ||
-        apiConfig?.accessToken ||
-        globalContext.get('accessToken');
+        msg.accessToken || globalContext.get('s1sevenAccessToken');
       const companyId =
         msg.companyId || apiConfig?.companyId || globalContext.get('companyId');
-      const mode = msg.mode || apiConfig?.mode || 'test';
+      const mode = msg.mode || globalContext.get('s1sevenMode') || 'test';
       const identity =
         msg.identity || config.identity || globalContext.get('identity');
       const environment =

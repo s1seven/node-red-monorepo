@@ -7,14 +7,6 @@
   RED.nodes.registerType('api-config', {
     category: 'config',
     defaults: {
-      mode: {
-        value: '',
-        required: false,
-        validate: (input) => {
-          if (!input) return true;
-          return MODE.includes(input);
-        },
-      },
       environment: {
         value: '',
         required: false,
@@ -23,7 +15,6 @@
           return Object.keys(URL_TO_ENV_MAP).includes(input);
         },
       },
-      accessToken: { value: '', required: false },
       companyId: { value: '', required: false },
       name: { value: '', required: false },
       clientId: { value: '', required: false },

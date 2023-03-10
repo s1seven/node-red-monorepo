@@ -23,9 +23,7 @@ module.exports = function (RED) {
     node.on('input', async (msg, send, done) => {
       let certificate = msg.payload || globalContext.get('certificate');
       const accessToken =
-        msg.accessToken ||
-        apiConfig?.accessToken ||
-        globalContext.get('accessToken');
+        msg.accessToken || globalContext.get('s1sevenAccessToken');
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];

@@ -10,14 +10,15 @@ module.exports = function (RED) {
   } = require('../../resources/constants');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   function getCompany(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    const globalContext = this.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
     node.on('input', async (msg, send, done) => {
-      const accessToken = msg.accessToken || apiConfig?.accessToken;
+      const accessToken =
+        msg.accessToken || globalContext.get('s1sevenAccessToken');
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const companyId = msg.companyId || apiConfig?.companyId;

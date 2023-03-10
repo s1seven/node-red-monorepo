@@ -10,10 +10,10 @@ module.exports = function (RED) {
   } = require('../../resources/constants');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   function getAccessToken(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    const globalContext = node.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
     node.on('input', async (msg, send, done) => {
@@ -47,8 +47,8 @@ module.exports = function (RED) {
         );
 
         if (success) {
-          apiConfig.accessToken = data.accessToken;
-          apiConfig.mode = data.application.mode;
+          globalContext.set('s1sevenAccessToken', data.accessToken);
+          globalContext.set('s1sevenMode', data.application.mode);
           node.warn('Access token fetched successfully');
           done();
         } else {
