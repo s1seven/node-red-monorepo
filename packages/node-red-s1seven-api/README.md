@@ -20,7 +20,7 @@ Access tokens expire after 24 hours. There are several ways to automate the rene
 
 ![example](./images/example_auth.png)
 
-In the screenshot, each api node has 2 outputs, the first labeled `success`, and the second `fail`. The `fail` output is linked to a `switch` node. The `switch` looks at the property `msg.payload.statusCode` and checks to see if the code is `401`, which means the request is unauthorized. If the code is `401`, it sends the payload to the `get access token` node, which automatically request a new access token and makes available in the global context, along with the `mode`.
+In the screenshot, the `hash` node has 2 outputs, the first labeled `success`, and the second `fail`. The `fail` output is linked to a `switch` node. The `switch` looks at the property `msg.payload.statusCode` and checks to see if the code is `401`, which means the request is unauthorized. If the code is `401`, it sends the payload to the `get access token` node, which automatically requests a new access token and makes available in the global context, along with the `mode`.
 
 ![example](./images/switch.png)
 
@@ -61,14 +61,14 @@ A minimal example of the above workflow can be imported using the following JSON
                 "vt": "str"
             }
         ],
-        "repeat": "3600",
+        "repeat": "",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 130,
+        "payload": "{}",
+        "payloadType": "json",
+        "x": 110,
         "y": 380,
         "wires": [
             [
@@ -80,7 +80,7 @@ A minimal example of the above workflow can be imported using the following JSON
         "id": "6befa51db92df9f8",
         "type": "debug",
         "z": "155da1287ae6504d",
-        "name": "debug 3",
+        "name": "debug",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -89,7 +89,7 @@ A minimal example of the above workflow can be imported using the following JSON
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 740,
+        "x": 730,
         "y": 380,
         "wires": []
     },
@@ -105,29 +105,20 @@ A minimal example of the above workflow can be imported using the following JSON
                 "t": "eq",
                 "v": "401",
                 "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "429",
-                "vt": "num"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 2,
+        "outputs": 1,
         "x": 470,
         "y": 460,
         "wires": [
             [
                 "fd323fdf31455b44"
-            ],
-            [
-                "6befa51db92df9f8"
             ]
         ],
         "outputLabels": [
-            "401",
-            "429"
+            "401"
         ]
     },
     {
@@ -161,13 +152,40 @@ A minimal example of the above workflow can be imported using the following JSON
         ]
     },
     {
+        "id": "68825bef95c36270",
+        "type": "inject",
+        "z": "155da1287ae6504d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "fd323fdf31455b44"
+            ]
+        ]
+    },
+    {
         "id": "16bd3e4db46db980",
         "type": "api-config",
         "environment": "staging",
         "companyId": "",
         "name": "Staging",
-        "clientId": "",
-        "clientSecret": "",
         "apiVersion": "1"
     }
 ]
