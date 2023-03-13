@@ -38,10 +38,10 @@ module.exports = function (RED) {
       const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!accessToken) {
-        node.warn(RED._('identity.errors.accessToken'));
+        node.warn(RED._('identities.errors.accessToken'));
         done();
       } else if (!companyId) {
-        node.warn(RED._('identity.errors.companyId'));
+        node.warn(RED._('identities.errors.companyId'));
         done();
       } else {
         const { success, data } = await requestHandler(
