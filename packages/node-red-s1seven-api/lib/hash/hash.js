@@ -9,6 +9,7 @@ module.exports = function (RED) {
     ALGORITHM_OPTIONS,
     ENCODING_OPTIONS,
     DEFAULT_API_VERSION,
+    GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
   const validateCertificate = require('../utils/validateCertificate');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
@@ -23,7 +24,7 @@ module.exports = function (RED) {
     node.on('input', async (msg, send, done) => {
       let certificate = msg.payload || globalContext.get('certificate');
       const accessToken =
-        msg.accessToken || globalContext.get('s1sevenAccessToken');
+        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];

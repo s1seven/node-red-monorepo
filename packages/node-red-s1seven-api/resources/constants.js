@@ -16,6 +16,9 @@ const IDENTITY_STATUS = ['valid', 'obsolete'];
 const ACCOUNT_INDEX_MIN = 0;
 const ACCOUNT_INDEX_MAX = 2147483647;
 const DEFAULT_API_VERSION = 1;
+const OUTPUT_LABELS = ['success', 'failure'];
+const GLOBAL_MODE_KEY = 's1sevenMode';
+const GLOBAL_ACCESS_TOKEN_KEY = 's1sevenAccessToken';
 
 module.exports = {
   ALGORITHM_OPTIONS,
@@ -27,4 +30,7 @@ module.exports = {
   ACCOUNT_INDEX_MIN,
   ACCOUNT_INDEX_MAX,
   DEFAULT_API_VERSION,
+  OUTPUT_LABELS,
+  GLOBAL_MODE_KEY,
+  GLOBAL_ACCESS_TOKEN_KEY,
 };

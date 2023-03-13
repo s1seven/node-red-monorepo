@@ -7,6 +7,8 @@ module.exports = function (RED) {
   const {
     URL_TO_ENV_MAP,
     DEFAULT_API_VERSION,
+    GLOBAL_MODE_KEY,
+    GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
@@ -19,10 +21,10 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, done) => {
       const accessToken =
-        msg.accessToken || globalContext.get('s1sevenAccessToken');
+        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
       const companyId =
         msg.companyId || apiConfig?.companyId || globalContext.get('companyId');
-      const mode = msg.mode || globalContext.get('s1sevenMode') || 'test';
+      const mode = msg.mode || globalContext.get(GLOBAL_MODE_KEY) || 'test';
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];

@@ -7,6 +7,8 @@ module.exports = function (RED) {
   const {
     URL_TO_ENV_MAP,
     DEFAULT_API_VERSION,
+    GLOBAL_MODE_KEY,
+    GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
@@ -48,8 +50,8 @@ module.exports = function (RED) {
         );
 
         if (success) {
-          globalContext.set('s1sevenAccessToken', data.accessToken);
-          globalContext.set('s1sevenMode', data.application.mode);
+          globalContext.set(GLOBAL_ACCESS_TOKEN_KEY, data.accessToken);
+          globalContext.set(GLOBAL_MODE_KEY, data.application.mode);
           node.warn('Access token fetched successfully');
           done();
         } else {
