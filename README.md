@@ -19,6 +19,10 @@ npm run bootstrap
 
 `node-red-s1seven-api` only needs to be updated if the implementation of one of the endpoints changes, or if a dependency has a security vunerability.
 
+### Releasing the new packages
+
+Once a release has been made on Github and the node has been updated on npm, the Node Red Flow Library needs to be informed of the update. To do so, go to https://flows.nodered.org/add/node and use the form `3 Add your node to the Flow Library`. Submit the package name, e.g. `@s1seven/node-red<package-name>`, and click `add node`. The update should be detected, and should be made available under the `Install` section of the `Palette` within 30 minutes. 
+
 ## More details
 
 For more information on each project, see the README.md file in each package.
