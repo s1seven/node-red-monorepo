@@ -28,9 +28,7 @@ module.exports = function (RED) {
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${
-        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
-      }/api/certificates/hash`;
+      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/certificates/hash`;
       const algorithm = msg.algorithm || config.algorithm || 'sha256';
       const encoding = msg.encoding || config.encoding || 'hex';
       const version = apiConfig?.version || DEFAULT_API_VERSION;

@@ -32,9 +32,7 @@ module.exports = function (RED) {
       const status = msg.status || config.status || null;
       const BIP44Account = msg.BIP44Account || config.BIP44Account || null;
       const BIP44Index = msg.BIP44Index || config.BIP44Index || null;
-      const url = `${
-        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
-      }/api/identities`;
+      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/identities`;
       const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!accessToken) {

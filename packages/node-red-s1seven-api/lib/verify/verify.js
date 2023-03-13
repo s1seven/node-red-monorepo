@@ -29,7 +29,7 @@ module.exports = function (RED) {
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${
-        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
+        S1SEVEN_BASE_URL || BASE_URL
       }/api/certificates/verify/?mode=${mode}`;
       const version = apiConfig?.version || DEFAULT_API_VERSION;
 
