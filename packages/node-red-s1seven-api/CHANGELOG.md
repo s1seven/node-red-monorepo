@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/s1seven/node-red-monorepo/compare/@s1seven/node-red-s1seven-api@1.1.0...@s1seven/node-red-s1seven-api@1.2.0) (2023-03-13)
+
+### Bug Fixes
+
+- add script tags to load constants in html files ([59b441d](https://github.com/s1seven/node-red-monorepo/commit/59b441d0bff890a72d0d74b120d1d444a1fec476))
+- update path to identity error messages ([22a92ca](https://github.com/s1seven/node-red-monorepo/commit/22a92ca4ef6f42f740d81db9df226d14feaec6c5))
+
+### Features
+
+- update auth flow, add tokens node ([2abb7a8](https://github.com/s1seven/node-red-monorepo/commit/2abb7a8c530ab3d0c5c570e15fd12948ea1aad0e))
+
 # 1.1.0 (2022-11-21)
 
 ### Bug Fixes
