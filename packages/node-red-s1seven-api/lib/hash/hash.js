@@ -2,11 +2,14 @@ module.exports = function (RED) {
   'use strict';
   const path = require('path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const axios = require('axios');
+  const { post } = require('axios');
+  const requestHandler = require('../utils/requestHandler');
   const {
     URL_TO_ENV_MAP,
     ALGORITHM_OPTIONS,
     ENCODING_OPTIONS,
+    DEFAULT_API_VERSION,
+    GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
   const validateCertificate = require('../utils/validateCertificate');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
@@ -21,17 +24,14 @@ module.exports = function (RED) {
     node.on('input', async (msg, send, done) => {
       let certificate = msg.payload || globalContext.get('certificate');
       const accessToken =
-        msg.accessToken ||
-        apiConfig?.accessToken ||
-        globalContext.get('accessToken');
+        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${
-        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
-      }/api/certificates/hash`;
+      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/certificates/hash`;
       const algorithm = msg.algorithm || config.algorithm || 'sha256';
       const encoding = msg.encoding || config.encoding || 'hex';
+      const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!accessToken) {
         node.warn(RED._('hash.errors.accessToken'));
@@ -45,7 +45,14 @@ module.exports = function (RED) {
       } else if (certificate) {
         try {
           certificate = validateCertificate(certificate);
-          const response = await axios.post(
+        } catch (error) {
+          node.error(error);
+          done(error);
+          return;
+        }
+
+        const { success, data } = await requestHandler(
+          post(
             url,
             {
               algorithm,
@@ -56,20 +63,19 @@ module.exports = function (RED) {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
+                'x-version': `${version}`,
               },
             }
-          );
-          msg.payload = response.data;
-          send(msg);
+          ),
+          send,
+          msg
+        );
+
+        if (success) {
           done();
-        } catch (error) {
-          if (error instanceof axios.AxiosError) {
-            node.error(error.response);
-            done(error.response);
-          } else {
-            node.error(error);
-            done(error);
-          }
+        } else {
+          node.error(data);
+          done(data);
         }
       } else {
         node.warn(RED._('hash.errors.validCertificate'));

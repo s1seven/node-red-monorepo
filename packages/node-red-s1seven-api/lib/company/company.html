@@ -1,3 +1,7 @@
+<script
+  type="text/javascript"
+  src="/resources/@s1seven/node-red-s1seven-api/constants.js"
+></script>
 <script type="text/javascript">
   RED.nodes.registerType('get company', {
     category: 'S1Seven',
@@ -7,7 +11,8 @@
       apiConfig: { value: '', type: 'api-config' },
     },
     inputs: 1,
-    outputs: 1,
+    outputs: 2,
+    outputLabels: OUTPUT_LABELS,
     icon: 's_icon_logo.svg',
     label: function () {
       return this.name || 'get company';

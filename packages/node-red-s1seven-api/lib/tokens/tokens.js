@@ -2,43 +2,44 @@ module.exports = function (RED) {
   'use strict';
   const path = require('path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const { get } = require('axios');
+  const { post } = require('axios');
   const requestHandler = require('../utils/requestHandler');
   const {
     URL_TO_ENV_MAP,
     DEFAULT_API_VERSION,
+    GLOBAL_MODE_KEY,
     GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
-  function getCompany(config) {
+  function getAccessToken(config) {
     RED.nodes.createNode(this, config);
     const node = this;
-    const globalContext = this.context().global;
+    const globalContext = node.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
     node.on('input', async (msg, send, done) => {
-      const accessToken =
-        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
+      const clientId = msg.clientId || apiConfig?.credentials.clientId;
+      const clientSecret =
+        msg.clientSecret || apiConfig?.credentials.clientSecret;
       const environment =
         msg.environment || apiConfig?.environment || 'production';
-      const companyId = msg.companyId || apiConfig?.companyId;
       const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/companies/${companyId}`;
+      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/tokens`;
       const version = apiConfig?.version || DEFAULT_API_VERSION;
 
-      if (!accessToken) {
-        node.warn(RED._('company.errors.accessToken'));
+      if (!clientId) {
+        node.warn(RED._('tokens.errors.clientId'));
         done();
-      } else if (!companyId) {
-        node.warn(RED._('company.errors.companyId'));
+      } else if (!clientSecret) {
+        node.warn(RED._('tokens.errors.clientSecret'));
         done();
       } else {
         const { success, data } = await requestHandler(
-          get(url, {
+          post(url, {
+            clientId,
+            clientSecret,
             headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'application/json',
               'x-version': `${version}`,
             },
           }),
@@ -47,6 +48,9 @@ module.exports = function (RED) {
         );
 
         if (success) {
+          globalContext.set(GLOBAL_ACCESS_TOKEN_KEY, data.accessToken);
+          globalContext.set(GLOBAL_MODE_KEY, data.application.mode);
+          node.warn('Access token fetched successfully');
           done();
         } else {
           node.error(data);
@@ -55,5 +59,5 @@ module.exports = function (RED) {
       }
     });
   }
-  RED.nodes.registerType('get company', getCompany);
+  RED.nodes.registerType('get access token', getAccessToken);
 };

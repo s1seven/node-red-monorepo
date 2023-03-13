@@ -1,3 +1,7 @@
+<script
+  type="text/javascript"
+  src="/resources/@s1seven/node-red-s1seven-api/constants.js"
+></script>
 <script type="text/javascript">
   RED.nodes.registerType('verify certificate', {
     category: 'S1Seven',
@@ -5,9 +9,18 @@
     defaults: {
       name: { value: '' },
       apiConfig: { value: '', type: 'api-config' },
+      mode: {
+        value: 'test',
+        required: true,
+        validate: (input) => {
+          if (!input) return true;
+          return MODE.includes(input);
+        },
+      },
     },
     inputs: 1,
-    outputs: 1,
+    outputs: 2,
+    outputLabels: OUTPUT_LABELS,
     icon: 's_icon_logo.svg',
     label: function () {
       return this.name || 'verify certificate';
@@ -16,16 +29,24 @@
 </script>
 
 <script type="text/html" data-template-name="verify certificate">
-  <div class="form-row">
-    <label for="node-input-name"
-      ><i class="fa fa-tag"></i><span data-i18n="verify.label.name"></span
-    ></label>
-    <input type="text" id="node-input-name" placeholder="Name" />
+    <div class="form-row">
+      <label for="node-input-name"
+        ><i class="fa fa-tag"></i><span data-i18n="verify.label.name"></span
+      ></label>
+      <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-mode"><i class="fa fa-bookmark"></i><span data-i18n="verify.label.mode"></label>
+      <select id="node-input-mode">
+          <!-- <option value="">--</option> -->
+          <option selected value="test">test</option>
+          <option value="live">live</option>
+      </select>
   </div>
-  <div class="form-row">
-    <label for="node-input-apiConfig"
-      ><i class="fa fa-tag"></i><span data-i18n="verify.label.apiConfig"></span
-    ></label>
-    <input type="text" id="node-input-apiConfig" placeholder="api-config" />
-  </div>
+    <div class="form-row">
+      <label for="node-input-apiConfig"
+        ><i class="fa fa-tag"></i><span data-i18n="verify.label.apiConfig"></span
+      ></label>
+      <input type="text" id="node-input-apiConfig" placeholder="api-config" />
+    </div>
 </script>

@@ -2,8 +2,14 @@ module.exports = function (RED) {
   'use strict';
   const path = require('path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const axios = require('axios');
-  const { URL_TO_ENV_MAP } = require('../../resources/constants');
+  const { get } = require('axios');
+  const requestHandler = require('../utils/requestHandler');
+  const {
+    URL_TO_ENV_MAP,
+    DEFAULT_API_VERSION,
+    GLOBAL_MODE_KEY,
+    GLOBAL_ACCESS_TOKEN_KEY,
+  } = require('../../resources/constants');
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -15,12 +21,10 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, done) => {
       const accessToken =
-        msg.accessToken ||
-        apiConfig?.accessToken ||
-        globalContext.get('accessToken');
+        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
       const companyId =
         msg.companyId || apiConfig?.companyId || globalContext.get('companyId');
-      const mode = msg.mode || apiConfig?.mode || 'test';
+      const mode = msg.mode || globalContext.get(GLOBAL_MODE_KEY) || 'test';
       const environment =
         msg.environment || apiConfig?.environment || 'production';
       const BASE_URL = URL_TO_ENV_MAP[environment];
@@ -28,23 +32,23 @@ module.exports = function (RED) {
       const status = msg.status || config.status || null;
       const BIP44Account = msg.BIP44Account || config.BIP44Account || null;
       const BIP44Index = msg.BIP44Index || config.BIP44Index || null;
-      const url = `${
-        S1SEVEN_BASE_URL ? S1SEVEN_BASE_URL : BASE_URL
-      }/api/identities`;
+      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/identities`;
+      const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!accessToken) {
-        node.warn(RED._('identity.errors.accessToken'));
+        node.warn(RED._('identities.errors.accessToken'));
         done();
       } else if (!companyId) {
-        node.warn(RED._('identity.errors.companyId'));
+        node.warn(RED._('identities.errors.companyId'));
         done();
       } else {
-        try {
-          const response = await axios.get(url, {
+        const { success, data } = await requestHandler(
+          get(url, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               'Content-Type': 'application/json',
               company: companyId,
+              'x-version': `${version}`,
             },
             params: {
               coinType,
@@ -53,18 +57,16 @@ module.exports = function (RED) {
               index: BIP44Index,
               mode,
             },
-          });
-          msg.payload = response.data;
-          send(msg);
+          }),
+          send,
+          msg
+        );
+
+        if (success) {
           done();
-        } catch (error) {
-          if (error instanceof axios.AxiosError) {
-            node.error(error.response);
-            done(error.response);
-          } else {
-            node.error(error);
-            done(error);
-          }
+        } else {
+          node.error(data);
+          done(data);
         }
       }
     });

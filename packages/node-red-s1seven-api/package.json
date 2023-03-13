@@ -22,6 +22,7 @@
       "notarize": "lib/notarize/notarize.js",
       "identities": "lib/identities/identities.js",
       "company": "lib/company/company.js",
+      "tokens": "lib/tokens/tokens.js",
       "api-config": "lib/config/api-config.js"
     }
   },

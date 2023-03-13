@@ -1,19 +1,19 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
-const companyNode = require('../lib/company/company.js');
+const tokensNode = require('../lib/tokens/tokens.js');
 const axios = require('axios');
 const { URL_TO_ENV_MAP } = require('../resources/constants');
-const fakeAccessToken = 'test';
-const fakeCompanyId = 'test';
+const fakeClientId = 'test';
+const fakeClientSecret = 'test';
 
 jest.mock('axios');
 
 helper.init(require.resolve('node-red'));
 
-describe('get company by id Node', function () {
+describe('get access token by id Node', function () {
   beforeEach(function (done) {
     helper.startServer(done);
-    helper.settings; // take a look at what is expected
+    helper.settings;
   });
 
   afterEach(function (done) {
@@ -22,11 +22,13 @@ describe('get company by id Node', function () {
   });
 
   it('should be loaded', function (done) {
-    const flow = [{ id: 'n1', type: 'get company', name: 'get company' }];
-    helper.load(companyNode, flow, function () {
+    const flow = [
+      { id: 'n1', type: 'get access token', name: 'get access token' },
+    ];
+    helper.load(tokensNode, flow, function () {
       const n1 = helper.getNode('n1');
       try {
-        expect(n1).toHaveProperty('name', 'get company');
+        expect(n1).toHaveProperty('name', 'get access token');
         done();
       } catch (err) {
         done(err);
@@ -36,23 +38,34 @@ describe('get company by id Node', function () {
 
   it('api should be called with the correct url and body', function (done) {
     const flow = [
-      { id: 'n1', type: 'get company', name: 'get company', wires: [] },
+      {
+        id: 'n1',
+        type: 'get access token',
+        name: 'get access token',
+        wires: [],
+      },
     ];
-    axios.get.mockResolvedValue({});
+    axios.post.mockResolvedValueOnce({
+      data: {
+        accessToken: 'fakeAccessToken',
+        application: { mode: 'test' },
+      },
+    });
 
-    helper.load(companyNode, flow, function () {
+    helper.load(tokensNode, flow, function () {
       const n1 = helper.getNode('n1');
+
       n1.receive({
-        accessToken: fakeAccessToken,
-        companyId: fakeCompanyId,
+        clientId: fakeClientId,
+        clientSecret: fakeClientSecret,
       });
       try {
-        expect(axios.get).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['production']}/api/companies/${fakeCompanyId}`,
+        expect(axios.post).toHaveBeenCalledWith(
+          `${URL_TO_ENV_MAP['production']}/api/tokens`,
           {
+            clientId: fakeClientId,
+            clientSecret: fakeClientSecret,
             headers: {
-              Authorization: `Bearer ${fakeAccessToken}`,
-              'Content-Type': 'application/json',
               'x-version': '1',
             },
           }
@@ -64,21 +77,26 @@ describe('get company by id Node', function () {
     });
   });
 
-  it('when no accessToken is present, a warning will be shown', function (done) {
+  it('when no clentId is present, a warning will be shown', function (done) {
     const flow = [
-      { id: 'n1', type: 'get company', name: 'get company', wires: [['n2']] },
+      {
+        id: 'n1',
+        type: 'get access token',
+        name: 'get access token',
+        wires: [['n2']],
+      },
       { id: 'n2', type: 'helper' },
     ];
-    helper.load(companyNode, flow, function () {
+    helper.load(tokensNode, flow, function () {
       const n1 = helper.getNode('n1');
       const spy = jest.spyOn(n1, 'warn');
-      n1.receive({ companyId: fakeCompanyId });
+      n1.receive({ clientSecret: fakeClientSecret });
       try {
         expect(spy).toHaveBeenCalled();
         expect(spy).toHaveBeenCalledTimes(1);
-        // expect(spy).toHaveBeenCalledWith('Please add an access token');
+        // expect(spy).toHaveBeenCalledWith('Please add a clientId');
         // node-test-helper does not resolve messages, adding the path as a fallback
-        expect(spy).toHaveBeenCalledWith('company.errors.accessToken');
+        expect(spy).toHaveBeenCalledWith('tokens.errors.clientId');
         spy.mockRestore();
         done();
       } catch (error) {
@@ -87,24 +105,29 @@ describe('get company by id Node', function () {
     });
   });
 
-  it('when no companyId is present, a warning will be shown', function (done) {
+  it('when no clientSecret is present, a warning will be shown', function (done) {
     const flow = [
-      { id: 'n1', type: 'get company', name: 'get company', wires: [['n2']] },
+      {
+        id: 'n1',
+        type: 'get access token',
+        name: 'get access token',
+        wires: [['n2']],
+      },
       { id: 'n2', type: 'helper' },
     ];
 
-    helper.load(companyNode, flow, function () {
+    helper.load(tokensNode, flow, function () {
       const n1 = helper.getNode('n1');
       const spy = jest.spyOn(n1, 'warn');
       n1.receive({
-        accessToken: fakeAccessToken,
+        clientId: fakeClientId,
       });
       try {
         expect(spy).toHaveBeenCalled();
         expect(spy).toHaveBeenCalledTimes(1);
-        // expect(spy).toHaveBeenCalledWith('Please add a company id');
+        // expect(spy).toHaveBeenCalledWith('Please add a clientSecret');
         // node-test-helper does not resolve messages, adding the path as a fallback
-        expect(spy).toHaveBeenCalledWith('company.errors.companyId');
+        expect(spy).toHaveBeenCalledWith('tokens.errors.clientSecret');
         spy.mockRestore();
         done();
       } catch (error) {

@@ -65,6 +65,7 @@ describe('verify Node', function () {
             headers: {
               'Content-Type': 'application/json',
               Authentication: 'bearer test',
+              'x-version': '1',
             },
           }
         );
@@ -98,6 +99,7 @@ describe('verify Node', function () {
           {
             headers: {
               'Content-Type': 'application/json',
+              'x-version': '1',
             },
           }
         );

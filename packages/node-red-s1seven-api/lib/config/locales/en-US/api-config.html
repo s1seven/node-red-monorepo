@@ -11,21 +11,9 @@
 
   <h2>Details</h2>
   <p>
-    <code>accessToken</code> is used to authenticate the HTTP request. To find
-    out how to generate an access token, look at the documentation at
-    <a>https://manual.s1seven.com</a> under the developers section.
-  </p>
-
-  <p>
     <code>companyId</code> is the id of the company to be associated with the
     notarization. To find out how to get a company id, look at the documentation
     at <a>https://manual.s1seven.com</a> under the developers section.
-  </p>
-
-  <p>
-    <code>mode</code> allows you to select <code>test</code> or
-    <code>live</code> to choose which choose mode you want to use - test mode or
-    live mode. Defaults to <code>test</code>.
   </p>
 
   <p>
@@ -40,6 +28,23 @@
     have multiple configurations.
   </p>
 
+  <p>
+    Client Id is necessary for the token generation process. Learn more about
+    how to find your Client Id here:
+    <a>https://manual.s1seven.com/automation/#create-an-application</a>.
+  </p>
+
+  <p>
+    Client Secret is necessary for the token generation process. Learn more
+    about how to find your Client Secret here:
+    <a>https://manual.s1seven.com/automation/#create-an-application</a>.
+  </p>
+
+  <p>
+    Api Version allows you to select which version of the S1SEVEN you want to
+    use. Currently, only version <code>1</code> is possible.
+  </p>
+
   <h3>Overridding</h3>
   <p>
     The admin ui can be found by double-clicking on any S1Seven API node,
@@ -47,8 +52,8 @@
     Any variables passed in via the <code>msg</code> object will have priority
     over the values found in the admin ui. This allows the values to be
     overridden dynamically if necessary. For example, if both
-    <code>msg.accessToken</code> and an access token added via the admin ui are
-    present, <code>msg.accessToken</code> will be used instead of the admin ui
+    <code>msg.clientId</code> and an access token added via the admin ui are
+    present, <code>msg.clientId</code> will be used instead of the admin ui
     access token.
   </p>
 </script>
