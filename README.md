@@ -21,7 +21,7 @@ npm run bootstrap
 
 ### Releasing the new packages
 
-Once a release has been made on Github and the node has been updated on npm, the Node Red Flow Library needs to be informed of the update. To do so, go to https://flows.nodered.org/add/node and use the form `3 Add your node to the Flow Library`. Submit the package name, e.g. `@s1seven/node-red<package-name>`, and click `add node`. The update should be detected, and should be made available under the `Install` section of the `Palette` within 30 minutes. 
+Once a release has been made on Github and the node has been updated on npm, the Node Red Flow Library needs to be informed of the update. To do so, go to https://flows.nodered.org/add/node and use the form `3 Add your node to the Flow Library`. Submit the package name, e.g. `@s1seven/node-red<package-name>`, and click `add node`. The update should be detected, and should then be made available for use. Please note that it can take up to 30 minutes for the update to be made available under the `Install` tab in the `Palette`.
 
 ## More details
 
