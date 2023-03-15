@@ -26,3 +26,7 @@ Once a release has been made on Github and the node has been updated on npm, the
 ## More details
 
 For more information on each project, see the README.md file in each package.
+
+## Example authentication flows
+
+Access tokens now expire after 24 hours and need to be regenerated, you can find an example of how to automate the access token regeneration [here](https://github.com/s1seven/node-red-monorepo/blob/main/packages/node-red-s1seven-api/README.md#authentication)
