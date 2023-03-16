@@ -10,7 +10,11 @@ module.exports = function (RED) {
   } = require('../utils/async-local-storage');
   const { createAxiosInstance } = require('../utils/axios');
   const requestHandler = require('../utils/requestHandler');
-  const { setAccessToken, setApiMode } = require('../utils/setters');
+  const {
+    setAccessToken,
+    setApiMode,
+    setCurrentCompanyId,
+  } = require('../utils/setters');
 
   function getAccessToken(config) {
     RED.nodes.createNode(this, config);
@@ -50,10 +54,13 @@ module.exports = function (RED) {
       if (success) {
         setAccessToken(globalContext, data.accessToken);
         setApiMode(globalContext, data.application.mode);
-
+        setCurrentCompanyId(globalContext, data.application.owner.id);
         // node.warn('Access token fetched successfully');
         done();
       } else {
+        setAccessToken(globalContext, undefined);
+        setApiMode(globalContext, undefined);
+        setCurrentCompanyId(globalContext, undefined);
         node.error(data);
         done(data);
       }

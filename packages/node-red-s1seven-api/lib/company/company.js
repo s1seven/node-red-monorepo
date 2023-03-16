@@ -23,7 +23,6 @@ module.exports = function (RED) {
         exitContext(cb, err);
       }
       setNewContext(apiConfig, msg);
-
       const companyId = getCurrentCompanyId(globalContext);
       const accessToken = getAccessToken(globalContext);
       if (!accessToken) {

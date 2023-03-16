@@ -24,7 +24,6 @@ module.exports = function (RED) {
         exitContext(cb, err);
       }
       setNewContext(apiConfig, msg);
-
       const mode = getApiMode(globalContext);
 
       let certificate = msg.payload || globalContext.get('certificate');

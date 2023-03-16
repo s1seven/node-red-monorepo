@@ -7,6 +7,7 @@ const {
   GLOBAL_MODE_KEY_PATTERN,
   GLOBAL_ACCESS_TOKEN_KEY_PATTERN,
   DEFAULT_API_MODE,
+  GLOBAL_COMPANY_ID_KEY_PATTERN,
 } = require('../../resources/constants');
 const { getMsg, getApiConfig } = require('./async-local-storage');
 
@@ -16,6 +17,9 @@ const GLOBAL_ACCESS_TOKEN_KEY = (configNode) =>
 
 const GLOBAL_MODE_KEY = (configNode) =>
   format(GLOBAL_MODE_KEY_PATTERN, configNode.name || configNode.id);
+
+const GLOBAL_COMPANY_ID_KEY = (configNode) =>
+  format(GLOBAL_COMPANY_ID_KEY_PATTERN, configNode.name || configNode.id);
 
 /**
  * @returns {'staging' | 'production'} environment
@@ -42,7 +46,7 @@ function getApiUrl() {
  */
 function getApiVersion() {
   const apiConfig = getApiConfig();
-  return apiConfig?.version || DEFAULT_API_VERSION;
+  return apiConfig.apiVersion || DEFAULT_API_VERSION;
 }
 
 /**
@@ -78,9 +82,7 @@ function getAccessToken(globalContext) {
 function getCurrentCompanyId(globalContext) {
   const msg = getMsg();
   const apiConfig = getApiConfig();
-  return (
-    msg.companyId || apiConfig?.companyId || globalContext.get('companyId')
-  );
+  return msg.companyId || globalContext.get(GLOBAL_COMPANY_ID_KEY(apiConfig));
 }
 
 module.exports = {
@@ -91,5 +93,6 @@ module.exports = {
   getAccessToken,
   getCurrentCompanyId,
   GLOBAL_ACCESS_TOKEN_KEY,
+  GLOBAL_COMPANY_ID_KEY,
   GLOBAL_MODE_KEY,
 };

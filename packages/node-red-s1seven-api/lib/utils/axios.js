@@ -6,7 +6,7 @@ const {
   getApiVersion,
   getCurrentCompanyId,
 } = require('./getters');
-const { pkgVersion } = require('../package.json');
+const { pkgVersion } = require('../../package.json');
 /**
  *
  * @param {import('node-red').NodeContext['global']} globalContext
