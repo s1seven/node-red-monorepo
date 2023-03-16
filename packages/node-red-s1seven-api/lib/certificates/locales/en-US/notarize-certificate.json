@@ -1,0 +1,15 @@
+{
+  "certificates": {
+    "label": {
+      "apiConfig": " API config",
+      "name": " Name",
+      "identity": " Identity"
+    },
+    "errors": {
+      "accessToken": "Please add an access token",
+      "validCertificate": "Please add a valid JSON certificate to msg.payload or global.certificate",
+      "companyId": "Please add a company id",
+      "identity": "Please add an identity"
+    }
+  }
+}

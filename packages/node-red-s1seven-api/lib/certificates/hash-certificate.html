@@ -1,0 +1,62 @@
+<script
+  type="text/javascript"
+  src="/resources/@s1seven/node-red-s1seven-api/constants.js"
+></script>
+<script type="text/javascript">
+  RED.nodes.registerType('hash', {
+    category: 'S1Seven',
+    color: '#BAD3FB',
+    defaults: {
+      name: { value: '' },
+      apiConfig: { value: '', type: 'api-config' },
+      algorithm: { value: '', required: false },
+      encoding: { value: '', required: false },
+    },
+    inputs: 1,
+    outputs: 2,
+    outputLabels: OUTPUT_LABELS,
+    icon: 's_icon_logo.svg',
+    label: function () {
+      return this.name || 'hash certificate';
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="hash">
+  <div class="form-row">
+    <label for="node-input-name"
+      ><i class="fa fa-tag"></i><span data-i18n="certificates.label.name"></span
+    ></label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-apiConfig"
+      ><i class="fa fa-tag"></i
+      ><span data-i18n="certificates.label.apiConfig"></span
+    ></label>
+    <input type="text" id="node-input-apiConfig" placeholder="api-config" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-algorithm"
+      ><i class="fa fa-bookmark"></i
+      ><span data-i18n="certificates.label.algorithm"></span
+    ></label>
+    <select id="node-input-algorithm">
+      <option selected value="sha256">sha256</option>
+      <option value="sha512">sha512</option>
+      <option value="sha3-256">sha3-256</option>
+      <option value="sha3-384">sha3-384</option>
+      <option value="sha3-512">sha3-512</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-encoding"
+      ><i class="fa fa-bookmark"></i
+      ><span data-i18n="certificates.label.encoding"></span
+    ></label>
+    <select id="node-input-encoding">
+      <option selected value="hex">hex</option>
+      <option value="base64">base64</option>
+    </select>
+  </div>
+</script>
