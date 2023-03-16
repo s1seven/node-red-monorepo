@@ -7,6 +7,7 @@ module.exports = function (RED) {
   const {
     URL_TO_ENV_MAP,
     DEFAULT_API_VERSION,
+    DEFAULT_API_ENVIRONMENT,
     GLOBAL_MODE_KEY,
     GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
@@ -21,17 +22,22 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, done) => {
       const apiConfig = RED.nodes.getNode(config.apiConfig);
+
       const accessToken =
-        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
+        msg.accessToken ||
+        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
       let certificate = msg.payload || globalContext.get('certificate');
-      const mode = msg.mode || globalContext.get(GLOBAL_MODE_KEY) || 'test';
+      const mode =
+        msg.mode ||
+        globalContext.get(GLOBAL_MODE_KEY(apiConfig)) ||
+        DEFAULT_API_MODE;
       const environment =
-        msg.environment || apiConfig?.environment || 'production';
+        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
+      const version = apiConfig?.version || DEFAULT_API_VERSION;
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${
         S1SEVEN_BASE_URL || BASE_URL
       }/api/certificates/verify/?mode=${mode}`;
-      const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (certificate) {
         try {

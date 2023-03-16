@@ -8,6 +8,7 @@ module.exports = function (RED) {
     URL_TO_ENV_MAP,
     ALGORITHM_OPTIONS,
     ENCODING_OPTIONS,
+    DEFAULT_API_ENVIRONMENT,
     DEFAULT_API_VERSION,
     GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
@@ -24,9 +25,10 @@ module.exports = function (RED) {
     node.on('input', async (msg, send, done) => {
       let certificate = msg.payload || globalContext.get('certificate');
       const accessToken =
-        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
+        msg.accessToken ||
+        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
       const environment =
-        msg.environment || apiConfig?.environment || 'production';
+        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/certificates/hash`;
       const algorithm = msg.algorithm || config.algorithm || 'sha256';

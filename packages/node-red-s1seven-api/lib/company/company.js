@@ -2,13 +2,14 @@ module.exports = function (RED) {
   'use strict';
   const path = require('path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const { get } = require('axios');
   const requestHandler = require('../utils/requestHandler');
   const {
     URL_TO_ENV_MAP,
+    DEFAULT_API_ENVIRONMENT,
     DEFAULT_API_VERSION,
     GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
+
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
   function getCompany(config) {
@@ -19,9 +20,10 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, done) => {
       const accessToken =
-        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
+        msg.accessToken ||
+        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
       const environment =
-        msg.environment || apiConfig?.environment || 'production';
+        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
       const companyId = msg.companyId || apiConfig?.companyId;
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/companies/${companyId}`;
@@ -45,7 +47,6 @@ module.exports = function (RED) {
           send,
           msg
         );
-
         if (success) {
           done();
         } else {

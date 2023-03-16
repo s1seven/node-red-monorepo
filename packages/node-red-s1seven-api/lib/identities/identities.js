@@ -6,6 +6,8 @@ module.exports = function (RED) {
   const requestHandler = require('../utils/requestHandler');
   const {
     URL_TO_ENV_MAP,
+    DEFAULT_API_ENVIRONMENT,
+    DEFAULT_API_MODE,
     DEFAULT_API_VERSION,
     GLOBAL_MODE_KEY,
     GLOBAL_ACCESS_TOKEN_KEY,
@@ -21,12 +23,16 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, done) => {
       const accessToken =
-        msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY);
+        msg.accessToken ||
+        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
       const companyId =
         msg.companyId || apiConfig?.companyId || globalContext.get('companyId');
-      const mode = msg.mode || globalContext.get(GLOBAL_MODE_KEY) || 'test';
+      const mode =
+        msg.mode ||
+        globalContext.get(GLOBAL_MODE_KEY(apiConfig)) ||
+        DEFAULT_API_MODE;
       const environment =
-        msg.environment || apiConfig?.environment || 'production';
+        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const coinType = msg.coinType || config.coinType || null;
       const status = msg.status || config.status || null;

@@ -6,6 +6,7 @@ module.exports = function (RED) {
   const requestHandler = require('../utils/requestHandler');
   const {
     URL_TO_ENV_MAP,
+    DEFAULT_API_ENVIRONMENT,
     DEFAULT_API_VERSION,
     GLOBAL_MODE_KEY,
     GLOBAL_ACCESS_TOKEN_KEY,
@@ -23,10 +24,10 @@ module.exports = function (RED) {
       const clientSecret =
         msg.clientSecret || apiConfig?.credentials.clientSecret;
       const environment =
-        msg.environment || apiConfig?.environment || 'production';
+        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
+      const version = apiConfig?.version || DEFAULT_API_VERSION;
       const BASE_URL = URL_TO_ENV_MAP[environment];
       const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/tokens`;
-      const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!clientId) {
         node.warn(RED._('tokens.errors.clientId'));
@@ -48,8 +49,11 @@ module.exports = function (RED) {
         );
 
         if (success) {
-          globalContext.set(GLOBAL_ACCESS_TOKEN_KEY, data.accessToken);
-          globalContext.set(GLOBAL_MODE_KEY, data.application.mode);
+          globalContext.set(
+            GLOBAL_ACCESS_TOKEN_KEY(apiConfig),
+            data.accessToken
+          );
+          globalContext.set(GLOBAL_MODE_KEY(apiConfig), data.application.mode);
           node.warn('Access token fetched successfully');
           done();
         } else {
