@@ -1,23 +1,47 @@
-const { isAxiosError } = require('axios');
+const { isAxiosError, AxiosResponse } = require('axios');
+
+/**
+ * @typedef {object} NodeMessage
+ * @property {unknown} payload
+ * @property {string} topic
+ * @property {string} _msgid
+ */
+
+/**
+ * @description Send a message to the nodes wired.
+ * @typedef {function} send
+ * @param {NodeMessage | NodeMessage[]} messages
+ * @returns {void}
+ * @throws {Error}
+ */
+
+/**
+ * @typedef {object} Response
+ * @property {boolean} success
+ * @property {object | Error} data
+ */
 
 /**
  * requestHandler - handles the axios request promise and sends the response to the node
- * @param {an axios request promise} request
- * @param {the node send callback} send
- * @param {the node msg object} msg
- * @returns {object} {success: boolean, data: object|error}
+ * @param {Promise<AxiosResponse>} request
+ * @param {send} send
+ * @param {NodeMessage} msg
+ * @resolves {Response}
  */
 const requestHandler = async (request, send, msg) => {
   const newMsg = { ...msg };
 
   try {
     const response = await request;
+    newMsg.headers = response.headers;
     newMsg.payload = response.data;
     send([newMsg, null]);
     return { success: true, data: response.data };
   } catch (error) {
     const ex = isAxiosError(error) ? error.response.data : error;
+    const headers = isAxiosError(error) ? error.response.headers : {};
     newMsg.payload = ex;
+    newMsg.headers = headers;
     send([null, newMsg]);
     return { success: false, data: ex };
   }
