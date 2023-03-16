@@ -21,7 +21,7 @@ function createAxiosInstance(globalContext) {
     baseURL: getApiUrl(),
     headers: {
       'Content-Type': 'application/json',
-      ...(accessToken ? { Authentication: `bearer ${accessToken}` } : {}),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...(companyId ? { company: companyId } : {}),
       'x-version': `${version}`,
       'user-agent': `node-red-s1seven-api/${pkgVersion}/${hostname}`,

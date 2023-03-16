@@ -31,7 +31,6 @@ const { getMsg } = require('./async-local-storage');
  */
 const requestHandler = async (request, send) => {
   const newMsg = { ...getMsg() };
-
   try {
     const response = await request;
     newMsg.headers = response.headers || {};
