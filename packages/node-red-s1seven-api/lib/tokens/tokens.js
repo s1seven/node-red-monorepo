@@ -1,17 +1,16 @@
+'use strict';
+
 module.exports = function (RED) {
-  'use strict';
-  const path = require('path');
+  const path = require('node:path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const { post } = require('axios');
-  const requestHandler = require('../utils/requestHandler');
+
   const {
-    URL_TO_ENV_MAP,
-    DEFAULT_API_ENVIRONMENT,
-    DEFAULT_API_VERSION,
-    GLOBAL_MODE_KEY,
-    GLOBAL_ACCESS_TOKEN_KEY,
-  } = require('../../resources/constants');
-  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
+    exitContext,
+    setNewContext,
+  } = require('../utils/async-local-storage');
+  const { createAxiosInstance } = require('../utils/axios');
+  const requestHandler = require('../utils/requestHandler');
+  const { setAccessToken, setApiMode } = require('../utils/setters');
 
   function getAccessToken(config) {
     RED.nodes.createNode(this, config);
@@ -19,47 +18,44 @@ module.exports = function (RED) {
     const globalContext = node.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
-    node.on('input', async (msg, send, done) => {
+    node.on('input', async (msg, send, cb) => {
+      function done(err) {
+        exitContext(cb, err);
+      }
+      setNewContext(apiConfig, msg);
+
       const clientId = msg.clientId || apiConfig?.credentials.clientId;
       const clientSecret =
         msg.clientSecret || apiConfig?.credentials.clientSecret;
-      const environment =
-        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
-      const version = apiConfig?.version || DEFAULT_API_VERSION;
-      const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/tokens`;
 
       if (!clientId) {
         node.warn(RED._('tokens.errors.clientId'));
         done();
-      } else if (!clientSecret) {
+        return;
+      }
+      if (!clientSecret) {
         node.warn(RED._('tokens.errors.clientSecret'));
         done();
-      } else {
-        const { success, data } = await requestHandler(
-          post(url, {
-            clientId,
-            clientSecret,
-            headers: {
-              'x-version': `${version}`,
-            },
-          }),
-          send,
-          msg
-        );
+        return;
+      }
+      const axios = createAxiosInstance(globalContext);
+      const { success, data } = await requestHandler(
+        axios.post('/tokens', {
+          clientId,
+          clientSecret,
+        }),
+        send
+      );
 
-        if (success) {
-          globalContext.set(
-            GLOBAL_ACCESS_TOKEN_KEY(apiConfig),
-            data.accessToken
-          );
-          globalContext.set(GLOBAL_MODE_KEY(apiConfig), data.application.mode);
-          node.warn('Access token fetched successfully');
-          done();
-        } else {
-          node.error(data);
-          done(data);
-        }
+      if (success) {
+        setAccessToken(globalContext, data.accessToken);
+        setApiMode(globalContext, data.application.mode);
+
+        // node.warn('Access token fetched successfully');
+        done();
+      } else {
+        node.error(data);
+        done(data);
       }
     });
   }

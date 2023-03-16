@@ -1,79 +1,72 @@
-module.exports = function (RED) {
-  'use strict';
-  const path = require('path');
-  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const { get } = require('axios');
-  const requestHandler = require('../utils/requestHandler');
-  const {
-    URL_TO_ENV_MAP,
-    DEFAULT_API_ENVIRONMENT,
-    DEFAULT_API_MODE,
-    DEFAULT_API_VERSION,
-    GLOBAL_MODE_KEY,
-    GLOBAL_ACCESS_TOKEN_KEY,
-  } = require('../../resources/constants');
-  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
+'use strict';
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
+module.exports = function (RED) {
+  const path = require('node:path');
+  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+
+  const {
+    setNewContext,
+    exitContext,
+  } = require('../utils/async-local-storage');
+  const { createAxiosInstance } = require('../utils/axios');
+  const {
+    getApiMode,
+    getCurrentCompanyId,
+    getAccessToken,
+  } = require('../utils/getters');
+  const requestHandler = require('../utils/requestHandler');
+
   function getIdentities(config) {
     RED.nodes.createNode(this, config);
     const node = this;
     const globalContext = this.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
-    node.on('input', async (msg, send, done) => {
-      const accessToken =
-        msg.accessToken ||
-        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
-      const companyId =
-        msg.companyId || apiConfig?.companyId || globalContext.get('companyId');
-      const mode =
-        msg.mode ||
-        globalContext.get(GLOBAL_MODE_KEY(apiConfig)) ||
-        DEFAULT_API_MODE;
-      const environment =
-        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
-      const BASE_URL = URL_TO_ENV_MAP[environment];
+    node.on('input', async (msg, send, cb) => {
+      function done(err) {
+        exitContext(cb, err);
+      }
+      setNewContext(apiConfig, msg);
+
+      const companyId = getCurrentCompanyId(globalContext);
+      const accessToken = getAccessToken(globalContext);
+      const mode = getApiMode(globalContext);
+      // identities request parameters
       const coinType = msg.coinType || config.coinType || null;
       const status = msg.status || config.status || null;
       const BIP44Account = msg.BIP44Account || config.BIP44Account || null;
       const BIP44Index = msg.BIP44Index || config.BIP44Index || null;
-      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/identities`;
-      const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!accessToken) {
         node.warn(RED._('identities.errors.accessToken'));
         done();
-      } else if (!companyId) {
+        return;
+      }
+      if (!companyId) {
         node.warn(RED._('identities.errors.companyId'));
         done();
-      } else {
-        const { success, data } = await requestHandler(
-          get(url, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'application/json',
-              company: companyId,
-              'x-version': `${version}`,
-            },
-            params: {
-              coinType,
-              status,
-              account: BIP44Account,
-              index: BIP44Index,
-              mode,
-            },
-          }),
-          send,
-          msg
-        );
+        return;
+      }
 
-        if (success) {
-          done();
-        } else {
-          node.error(data);
-          done(data);
-        }
+      const axios = createAxiosInstance(globalContext);
+      const { success, data } = await requestHandler(
+        axios.get('/identities', {
+          params: {
+            coinType,
+            status,
+            account: BIP44Account,
+            index: BIP44Index,
+            mode,
+          },
+        }),
+        send
+      );
+
+      if (success) {
+        done();
+      } else {
+        node.error(data);
+        done(data);
       }
     });
   }

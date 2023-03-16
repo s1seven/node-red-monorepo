@@ -1,87 +1,80 @@
+'use strict';
+
 module.exports = function (RED) {
-  'use strict';
-  const path = require('path');
+  const path = require('node:path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const { post } = require('axios');
+
+  const {
+    setNewContext,
+    exitContext,
+  } = require('../utils/async-local-storage');
+  const { createAxiosInstance } = require('../utils/axios');
+  const { getAccessToken } = require('../utils/getters');
+  const validateCertificate = require('../utils/validateCertificate');
   const requestHandler = require('../utils/requestHandler');
   const {
-    URL_TO_ENV_MAP,
     ALGORITHM_OPTIONS,
     ENCODING_OPTIONS,
-    DEFAULT_API_ENVIRONMENT,
-    DEFAULT_API_VERSION,
-    GLOBAL_ACCESS_TOKEN_KEY,
   } = require('../../resources/constants');
-  const validateCertificate = require('../utils/validateCertificate');
-  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   function hashCertificate(config) {
     RED.nodes.createNode(this, config);
     const node = this;
     const globalContext = this.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
-    node.on('input', async (msg, send, done) => {
-      let certificate = msg.payload || globalContext.get('certificate');
-      const accessToken =
-        msg.accessToken ||
-        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
-      const environment =
-        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
-      const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/certificates/hash`;
+    node.on('input', async (msg, send, cb) => {
+      function done(err) {
+        exitContext(cb, err);
+      }
+      setNewContext(apiConfig, msg);
+      const accessToken = getAccessToken(globalContext);
+
+      // request parameters
       const algorithm = msg.algorithm || config.algorithm || 'sha256';
       const encoding = msg.encoding || config.encoding || 'hex';
-      const version = apiConfig?.version || DEFAULT_API_VERSION;
 
       if (!accessToken) {
         node.warn(RED._('hash.errors.accessToken'));
         done();
-      } else if (!ALGORITHM_OPTIONS.includes(algorithm)) {
+        return;
+      }
+      if (!ALGORITHM_OPTIONS.includes(algorithm)) {
         node.warn(RED._('hash.errors.algorithm'));
         done();
-      } else if (!ENCODING_OPTIONS.includes(encoding)) {
+        return;
+      }
+      if (!ENCODING_OPTIONS.includes(encoding)) {
         node.warn(RED._('hash.errors.encoding'));
         done();
-      } else if (certificate) {
-        try {
-          certificate = validateCertificate(certificate);
-        } catch (error) {
-          node.error(error);
-          done(error);
-          return;
-        }
+        return;
+      }
 
-        const { success, data } = await requestHandler(
-          post(
-            url,
-            {
-              algorithm,
-              encoding,
-              source: certificate,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'x-version': `${version}`,
-              },
-            }
-          ),
-          send,
-          msg
-        );
+      let certificate = msg.payload || globalContext.get('certificate');
+      try {
+        certificate = validateCertificate(certificate);
+      } catch (error) {
+        node.error(RED._('hash.errors.validCertificate'));
+        done(error);
+        return;
+      }
 
-        if (success) {
-          done();
-        } else {
-          node.error(data);
-          done(data);
-        }
-      } else {
-        node.warn(RED._('hash.errors.validCertificate'));
+      const axios = createAxiosInstance(globalContext);
+
+      const { success, data } = await requestHandler(
+        axios.post(`/certificates/hash`, {
+          algorithm,
+          encoding,
+          source: certificate,
+        }),
+        send
+      );
+
+      if (success) {
         done();
+      } else {
+        node.error(data);
+        done(data);
       }
     });
   }

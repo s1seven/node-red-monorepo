@@ -1,92 +1,85 @@
+'use strict';
+
 module.exports = function (RED) {
-  'use strict';
-  const path = require('path');
+  const path = require('node:path');
   require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const { post } = require('axios');
-  const requestHandler = require('../utils/requestHandler');
+
   const {
-    URL_TO_ENV_MAP,
-    DEFAULT_API_ENVIRONMENT,
-    DEFAULT_API_VERSION,
-    GLOBAL_MODE_KEY,
-    GLOBAL_ACCESS_TOKEN_KEY,
-  } = require('../../resources/constants');
+    exitContext,
+    setNewContext,
+  } = require('../utils/async-local-storage');
+  const { createAxiosInstance } = require('../utils/axios');
+  const {
+    getApiMode,
+    getAccessToken,
+    getCurrentCompanyId,
+  } = require('../utils/getters');
+  const requestHandler = require('../utils/requestHandler');
   const validateCertificate = require('../utils/validateCertificate');
-  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
-  function notarize(config) {
+  function notarizeCertificate(config) {
     RED.nodes.createNode(this, config);
     const node = this;
     const globalContext = this.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
-    node.on('input', async (msg, send, done) => {
-      const accessToken =
-        msg.accessToken ||
-        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
-      const companyId =
-        msg.companyId || apiConfig?.companyId || globalContext.get('companyId');
-      const mode =
-        msg.mode ||
-        globalContext.get(GLOBAL_MODE_KEY(apiConfig)) ||
-        DEFAULT_API_MODE;
-      const environment =
-        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
-      const version = apiConfig?.version || DEFAULT_API_VERSION;
+    node.on('input', async (msg, send, cb) => {
+      function done(err) {
+        exitContext(cb, err);
+      }
+      setNewContext(apiConfig, msg);
 
+      const companyId = getCurrentCompanyId(globalContext);
+      const accessToken = getAccessToken(globalContext);
+      const mode = getApiMode(globalContext);
+
+      // request parameters
       const identity =
         msg.identity || config.identity || globalContext.get('identity');
-      const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${S1SEVEN_BASE_URL || BASE_URL}/api/certificates/notarize`;
-      let certificate = msg.payload || globalContext.get('certificate');
-
       if (!accessToken) {
         node.warn(RED._('notarize.errors.accessToken'));
         done();
-      } else if (!companyId) {
+        return;
+      }
+      if (!companyId) {
         node.warn(RED._('notarize.errors.companyId'));
         done();
-      } else if (!identity) {
+        return;
+      }
+      if (!identity) {
         node.warn(RED._('notarize.errors.identity'));
         done();
-      } else if (certificate) {
-        try {
-          certificate = validateCertificate(certificate);
-        } catch (error) {
-          node.error(error);
-          done(error);
-          return;
-        }
+        return;
+      }
 
-        const { success, data } = await requestHandler(
-          post(url, certificate, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'application/json',
-              company: companyId,
-              'x-version': `${version}`,
-            },
-            params: {
-              identity,
-              mode,
-            },
-          }),
-          send,
-          msg
-        );
+      let certificate = msg.payload || globalContext.get('certificate');
+      try {
+        certificate = validateCertificate(certificate);
+      } catch (error) {
+        node.error(RED._('notarize.errors.validCertificate'));
+        done(error);
+        return;
+      }
 
-        if (success) {
-          done();
-        } else {
-          node.error(data);
-          done(data);
-        }
-      } else {
-        node.warn(RED._('notarize.errors.validCertificate'));
+      const axios = createAxiosInstance(globalContext);
+      const { success, data } = await requestHandler(
+        axios.post('/certificates/notarize', certificate, {
+          params: {
+            identity,
+            mode,
+          },
+        }),
+        send
+      );
+
+      if (success) {
         done();
+      } else {
+        node.error(data);
+        done(data);
       }
     });
   }
-  RED.nodes.registerType('notarize certificate', notarize);
+  RED.nodes.registerType('notarize certificate', notarizeCertificate);
 };

@@ -1,4 +1,5 @@
 const { isAxiosError, AxiosResponse } = require('axios');
+const { getMsg } = require('./async-local-storage');
 
 /**
  * @typedef {object} NodeMessage
@@ -28,18 +29,18 @@ const { isAxiosError, AxiosResponse } = require('axios');
  * @param {NodeMessage} msg
  * @resolves {Response}
  */
-const requestHandler = async (request, send, msg) => {
-  const newMsg = { ...msg };
+const requestHandler = async (request, send) => {
+  const newMsg = { ...getMsg() };
 
   try {
     const response = await request;
-    newMsg.headers = response.headers;
+    newMsg.headers = response.headers || {};
     newMsg.payload = response.data;
     send([newMsg, null]);
     return { success: true, data: response.data };
   } catch (error) {
-    const ex = isAxiosError(error) ? error.response.data : error;
-    const headers = isAxiosError(error) ? error.response.headers : {};
+    const ex = isAxiosError(error) ? error.response?.data : error;
+    const headers = isAxiosError(error) ? error.response?.headers : {};
     newMsg.payload = ex;
     newMsg.headers = headers;
     send([null, newMsg]);

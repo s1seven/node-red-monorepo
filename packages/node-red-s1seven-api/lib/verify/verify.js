@@ -1,78 +1,56 @@
-module.exports = function (RED) {
-  'use strict';
-  const path = require('path');
-  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-  const { post } = require('axios');
-  const requestHandler = require('../utils/requestHandler');
-  const {
-    URL_TO_ENV_MAP,
-    DEFAULT_API_VERSION,
-    DEFAULT_API_ENVIRONMENT,
-    GLOBAL_MODE_KEY,
-    GLOBAL_ACCESS_TOKEN_KEY,
-  } = require('../../resources/constants');
-  const validateCertificate = require('../utils/validateCertificate');
-  const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
+'use strict';
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-  function verifyCertificateNode(config) {
+module.exports = function (RED) {
+  const path = require('node:path');
+  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+
+  const {
+    setNewContext,
+    exitContext,
+  } = require('../utils/async-local-storage');
+  const { createAxiosInstance } = require('../utils/axios');
+  const { getApiMode } = require('../utils/getters');
+  const requestHandler = require('../utils/requestHandler');
+  const validateCertificate = require('../utils/validateCertificate');
+
+  function verifyCertificate(config) {
     RED.nodes.createNode(this, config);
     const node = this;
     const globalContext = this.context().global;
+    const apiConfig = RED.nodes.getNode(config.apiConfig);
 
-    node.on('input', async (msg, send, done) => {
-      const apiConfig = RED.nodes.getNode(config.apiConfig);
+    node.on('input', async (msg, send, cb) => {
+      function done(err) {
+        exitContext(cb, err);
+      }
+      setNewContext(apiConfig, msg);
 
-      const accessToken =
-        msg.accessToken ||
-        globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig));
+      const mode = getApiMode(globalContext);
+
       let certificate = msg.payload || globalContext.get('certificate');
-      const mode =
-        msg.mode ||
-        globalContext.get(GLOBAL_MODE_KEY(apiConfig)) ||
-        DEFAULT_API_MODE;
-      const environment =
-        msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
-      const version = apiConfig?.version || DEFAULT_API_VERSION;
-      const BASE_URL = URL_TO_ENV_MAP[environment];
-      const url = `${
-        S1SEVEN_BASE_URL || BASE_URL
-      }/api/certificates/verify/?mode=${mode}`;
+      try {
+        certificate = validateCertificate(certificate);
+      } catch (error) {
+        node.error(RED._('verify.errors.validCertificate'));
+        done(error);
+        return;
+      }
 
-      if (certificate) {
-        try {
-          certificate = validateCertificate(certificate);
-        } catch (error) {
-          node.error(error);
-          done(error);
-          return;
-        }
+      const axios = createAxiosInstance(globalContext);
+      const { success, data } = await requestHandler(
+        axios.post('/certificates/verify', certificate, {
+          params: { mode },
+        }),
+        send
+      );
 
-        const { success, data } = await requestHandler(
-          post(url, certificate, {
-            headers: {
-              'Content-Type': 'application/json',
-              'x-version': `${version}`,
-              ...(accessToken
-                ? { Authentication: `bearer ${accessToken}` }
-                : {}),
-            },
-          }),
-          send,
-          msg
-        );
-
-        if (success) {
-          done();
-        } else {
-          node.error(data);
-          done(data);
-        }
-      } else {
-        node.warn(RED._('verify.errors.validCertificate'));
+      if (success) {
         done();
+      } else {
+        node.error(data);
+        done(data);
       }
     });
   }
-  RED.nodes.registerType('verify certificate', verifyCertificateNode);
+  RED.nodes.registerType('verify certificate', verifyCertificate);
 };
