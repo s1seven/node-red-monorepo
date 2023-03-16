@@ -17,12 +17,18 @@ const GLOBAL_ACCESS_TOKEN_KEY = (configNode) =>
 const GLOBAL_MODE_KEY = (configNode) =>
   format(GLOBAL_MODE_KEY_PATTERN, configNode.name || configNode.id);
 
+/**
+ * @returns {'staging' | 'production'} environment
+ */
 function getApiEnvironment() {
   const msg = getMsg();
   const apiConfig = getApiConfig();
   return msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
 }
 
+/**
+ * @returns {string} base url
+ */
 function getApiUrl() {
   const environment = getApiEnvironment();
   const S1SEVEN_BASE_URL = process.env.S1SEVEN_BASE_URL;
@@ -31,11 +37,18 @@ function getApiUrl() {
   return `${S1SEVEN_BASE_URL || BASE_URL}/api`;
 }
 
+/**
+ * @returns {number} version
+ */
 function getApiVersion() {
   const apiConfig = getApiConfig();
   return apiConfig?.version || DEFAULT_API_VERSION;
 }
 
+/**
+ * @param {import('node-red').NodeContext['global']} globalContext
+ * @returns {'test' | 'live'} mode
+ */
 function getApiMode(globalContext) {
   const msg = getMsg();
   const apiConfig = getApiConfig();
@@ -46,6 +59,10 @@ function getApiMode(globalContext) {
   );
 }
 
+/**
+ * @param {import('node-red').NodeContext['global']} globalContext
+ * @returns {string | undefined} access token
+ */
 function getAccessToken(globalContext) {
   const msg = getMsg();
   const apiConfig = getApiConfig();
@@ -54,6 +71,10 @@ function getAccessToken(globalContext) {
   );
 }
 
+/**
+ * @param {import('node-red').NodeContext['global']} globalContext
+ * @returns {string | undefined} company id
+ */
 function getCurrentCompanyId(globalContext) {
   const msg = getMsg();
   const apiConfig = getApiConfig();
