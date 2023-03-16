@@ -1,5 +1,3 @@
-const { format } = require('util');
-
 const URL_TO_ENV_MAP = {
   staging: 'https://app.s1seven.dev',
   production: 'https://app.s1seven.com',
@@ -28,15 +26,10 @@ const IDENTITY_STATUS = ['valid', 'obsolete'];
 
 // storage keys
 const GLOBAL_ACCESS_TOKEN_KEY_PREFIX = 'S1SEVEN_ACCESS_TOKEN';
-const GLOBAL_ACCESS_TOKEN_KEY_PATTERN = `${GLOBAL_MODE_KEY}_%s`;
-// configNodeIdentifier should be either the node name and if undefined the node id
-const GLOBAL_ACCESS_TOKEN_KEY = (configNode) =>
-  format(GLOBAL_ACCESS_TOKEN_KEY_PATTERN, configNode.name || configNode.id);
+const GLOBAL_ACCESS_TOKEN_KEY_PATTERN = `${GLOBAL_ACCESS_TOKEN_KEY_PREFIX}_%s`;
 
 const GLOBAL_MODE_KEY_PREFIX = 'S1SEVEN_MODE';
-const GLOBAL_MODE_KEY_PATTERN = `${GLOBAL_MODE_KEY}_%s`;
-const GLOBAL_MODE_KEY = (configNode) =>
-  format(GLOBAL_MODE_KEY_PATTERN, configNode.name || configNode.id);
+const GLOBAL_MODE_KEY_PATTERN = `${GLOBAL_MODE_KEY_PREFIX}_%s`;
 
 module.exports = {
   ALGORITHM_OPTIONS,
@@ -53,8 +46,6 @@ module.exports = {
   OUTPUT_LABELS,
   GLOBAL_MODE_KEY_PREFIX,
   GLOBAL_MODE_KEY_PATTERN,
-  GLOBAL_MODE_KEY,
   GLOBAL_ACCESS_TOKEN_KEY_PREFIX,
   GLOBAL_ACCESS_TOKEN_KEY_PATTERN,
-  GLOBAL_ACCESS_TOKEN_KEY,
 };
