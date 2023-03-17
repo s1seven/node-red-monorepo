@@ -1,16 +1,11 @@
+/// <reference path="typedefs.js" />
 const { AsyncLocalStorage } = require('node:async_hooks');
 
 const asyncLocalStorage = new AsyncLocalStorage();
 
 /**
- * @typedef {object} NodeMessage
- * @property {unknown} payload
- * @property {string} topic
- * @property {string} _msgid
- */
-
-/**
- * @returns {NodeMessage | object} msg
+ * @returns {NodeMessage}
+ * @see https://nodered.org/docs/creating-nodes/node-js#node-message-object
  */
 function getMsg() {
   return asyncLocalStorage.getStore()?.get('msg') || {};
@@ -25,14 +20,14 @@ function setMsg(msg) {
 }
 
 /**
- * @returns {object} apiConfig
+ * @returns {ApiConfig} apiConfig
  */
 function getApiConfig() {
   return asyncLocalStorage.getStore()?.get('apiConfig') || {};
 }
 
 /**
- * @params {object} apiConfig
+ * @params {ApiConfig} apiConfig
  * @returns {void}
  */
 function setApiConfig(apiConfig) {
@@ -40,7 +35,7 @@ function setApiConfig(apiConfig) {
 }
 
 /**
- * @params {object} apiConfig
+ * @params {ApiConfig} apiConfig
  * @params {NodeMessage} msg
  * @returns {void}
  * @see https://nodejs.org/api/async_hooks.html#async_hooks_asynclocalstorage_enterwith

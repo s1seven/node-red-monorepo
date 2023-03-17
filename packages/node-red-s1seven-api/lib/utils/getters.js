@@ -12,14 +12,18 @@ const {
 const { getMsg, getApiConfig } = require('./async-local-storage');
 
 // configNodeIdentifier should be either the node name and if undefined the node id
+function getConfigNodeIdentifier(configNode) {
+  return configNode.name ? configNode.name.replaceAll(' ', '_') : configNode.id;
+}
+
 const GLOBAL_ACCESS_TOKEN_KEY = (configNode) =>
-  format(GLOBAL_ACCESS_TOKEN_KEY_PATTERN, configNode.name || configNode.id);
+  format(GLOBAL_ACCESS_TOKEN_KEY_PATTERN, getConfigNodeIdentifier(configNode));
 
 const GLOBAL_MODE_KEY = (configNode) =>
-  format(GLOBAL_MODE_KEY_PATTERN, configNode.name || configNode.id);
+  format(GLOBAL_MODE_KEY_PATTERN, getConfigNodeIdentifier(configNode));
 
 const GLOBAL_COMPANY_ID_KEY = (configNode) =>
-  format(GLOBAL_COMPANY_ID_KEY_PATTERN, configNode.name || configNode.id);
+  format(GLOBAL_COMPANY_ID_KEY_PATTERN, getConfigNodeIdentifier(configNode));
 
 /**
  * @returns {'staging' | 'production'} environment
@@ -50,7 +54,7 @@ function getApiVersion() {
 }
 
 /**
- * @param {import('node-red').NodeContext['global']} globalContext
+ * @param {GlobalContext} globalContext
  * @returns {'test' | 'live'} mode
  */
 function getApiMode(globalContext) {
@@ -64,7 +68,7 @@ function getApiMode(globalContext) {
 }
 
 /**
- * @param {import('node-red').NodeContext['global']} globalContext
+ * @param {GlobalContext} globalContext
  * @returns {string | undefined} access token
  */
 function getAccessToken(globalContext) {
@@ -76,7 +80,7 @@ function getAccessToken(globalContext) {
 }
 
 /**
- * @param {import('node-red').NodeContext['global']} globalContext
+ * @param {GlobalContext} globalContext
  * @returns {string | undefined} company id
  */
 function getCurrentCompanyId(globalContext) {
