@@ -1,24 +1,34 @@
 'use strict';
 
-module.exports = function (RED) {
-  const path = require('node:path');
-  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+const { asClass } = require('awilix');
 
-  const {
-    exitContext,
-    setNewContext,
-  } = require('../utils/async-local-storage');
-  const { createAxiosInstance } = require('../utils/axios');
-  const requestHandler = require('../utils/requestHandler');
-  const {
-    setAccessToken,
-    setApiMode,
-    setCurrentCompanyId,
-  } = require('../utils/setters');
+require('dotenv').config({
+  path: require('node:path').resolve(__dirname, '../../.env'),
+});
+// we need to setup the container before requiring the node to allow to override the dependencies in the tests
+require('../utils/container').setupContainer();
+
+/**
+ * @type {RED_JS}
+ */
+module.exports = function (RED) {
+  const { container } = require('../utils/container');
+  const scope = container.createScope();
+  scope.register({
+    setters: asClass(require('../utils/setters')).singleton(),
+  });
+
+  /** @type {import('../utils/async-local-storage')} */
+  const { exitContext, setNewContext } = container.resolve('asyncLocalStorage');
+  /** @type {import('../utils/axios-helpers')} */
+  const axiosHelpers = container.resolve('axiosHelpers');
+  /** @type {import('../utils/setters')} */
+  const setters = scope.resolve('setters');
 
   function getAccessToken(config) {
-    RED.nodes.createNode(this, config);
+    /** @type NodeRedNode */
     const node = this;
+    RED.nodes.createNode(node, config);
     const globalContext = node.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
@@ -42,8 +52,8 @@ module.exports = function (RED) {
         done();
         return;
       }
-      const axios = createAxiosInstance(globalContext);
-      const { success, data } = await requestHandler(
+      const axios = axiosHelpers.createAxiosInstance(globalContext);
+      const { success, data } = await axiosHelpers.requestHandler(
         axios.post('/tokens', {
           clientId,
           clientSecret,
@@ -52,15 +62,15 @@ module.exports = function (RED) {
       );
 
       if (success) {
-        setAccessToken(globalContext, data.accessToken);
-        setApiMode(globalContext, data.application.mode);
-        setCurrentCompanyId(globalContext, data.application.owner.id);
+        setters.setAccessToken(globalContext, data.accessToken);
+        setters.setApiMode(globalContext, data.application.mode);
+        setters.setCurrentCompanyId(globalContext, data.application.owner.id);
         // node.warn('Access token fetched successfully');
         done();
       } else {
-        setAccessToken(globalContext, undefined);
-        setApiMode(globalContext, undefined);
-        setCurrentCompanyId(globalContext, undefined);
+        setters.setAccessToken(globalContext, undefined);
+        setters.setApiMode(globalContext, undefined);
+        setters.setCurrentCompanyId(globalContext, undefined);
         //? those node errors become really noisy, maybe we should add a debug|verbose mode to enable them on purpose ?
         // node.error(data);
         done(data);

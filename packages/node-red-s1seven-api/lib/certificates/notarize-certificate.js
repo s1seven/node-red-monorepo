@@ -1,27 +1,31 @@
 'use strict';
 
-module.exports = function (RED) {
-  const path = require('node:path');
-  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+require('dotenv').config({
+  path: require('node:path').resolve(__dirname, '../../.env'),
+});
+// we need to setup the container before requiring the node to allow to override the dependencies in the tests
+require('../utils/container').setupContainer();
 
-  const {
-    exitContext,
-    setNewContext,
-  } = require('../utils/async-local-storage');
-  const { createAxiosInstance } = require('../utils/axios');
-  const {
-    getApiMode,
-    getAccessToken,
-    getCurrentCompanyId,
-  } = require('../utils/getters');
-  const requestHandler = require('../utils/requestHandler');
+/**
+ * @type {RED_JS}
+ */
+module.exports = function (RED) {
+  const { container } = require('../utils/container');
   const validateCertificate = require('../utils/validateCertificate');
+
+  /** @type {import('../utils/async-local-storage')} */
+  const { exitContext, setNewContext } = container.resolve('asyncLocalStorage');
+  /** @type {import('../utils/getters')} */
+  const getters = container.resolve('getters');
+  /** @type {import('../utils/axios-helpers')} */
+  const axiosHelpers = container.resolve('axiosHelpers');
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   function notarizeCertificate(config) {
-    RED.nodes.createNode(this, config);
+    /** @type NodeRedNode */
     const node = this;
-    const globalContext = this.context().global;
+    RED.nodes.createNode(node, config);
+    const globalContext = node.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
     node.on('input', async (msg, send, cb) => {
@@ -30,9 +34,9 @@ module.exports = function (RED) {
       }
       setNewContext(apiConfig, msg);
 
-      const companyId = getCurrentCompanyId(globalContext);
-      const accessToken = getAccessToken(globalContext);
-      const mode = getApiMode(globalContext);
+      const companyId = getters.getCurrentCompanyId(globalContext);
+      const accessToken = getters.getAccessToken(globalContext);
+      const mode = getters.getApiMode(globalContext);
 
       // request parameters
       const identity =
@@ -62,8 +66,8 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = createAxiosInstance(globalContext);
-      const { success, data } = await requestHandler(
+      const axios = axiosHelpers.createAxiosInstance(globalContext);
+      const { success, data } = await axiosHelpers.requestHandler(
         axios.post('/certificates/notarize', certificate, {
           params: {
             identity,

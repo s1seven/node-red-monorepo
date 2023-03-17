@@ -1,7 +1,8 @@
 module.exports = function (RED) {
   function chartJs(config) {
-    RED.nodes.createNode(this, config);
+    /** @type NodeRedNode */
     const node = this;
+    RED.nodes.createNode(node, config);
     node.on('input', function (msg) {
       node.send(msg);
     });
