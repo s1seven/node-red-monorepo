@@ -1,4 +1,5 @@
 /// <reference path="typedefs.js" />
+
 const { AsyncLocalStorage } = require('node:async_hooks');
 
 const asyncLocalStorage = new AsyncLocalStorage();
@@ -62,12 +63,13 @@ function exitContext(done, err) {
   asyncLocalStorage.exit(done, err);
 }
 
-module.exports = {
-  asyncLocalStorage,
-  getApiConfig,
-  getMsg,
-  setApiConfig,
-  setMsg,
-  setNewContext,
-  exitContext,
-};
+class AsyncLocalStore {
+  getMsg = getMsg;
+  setMsg = setMsg;
+  getApiConfig = getApiConfig;
+  setApiConfig = setApiConfig;
+  setNewContext = setNewContext;
+  exitContext = exitContext;
+}
+
+module.exports = AsyncLocalStore;

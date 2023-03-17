@@ -43,3 +43,18 @@
  * @typedef {import('node-red').NodeContext['global']} GlobalContext
  * @memberof typdefs
  */
+
+/**
+ * @typedef {import('node-red').NodeInitializer} RED_JS
+ * @memberof typdefs
+ */
+
+/**
+ * @typedef {import('@node-red/registry').Node} NodeRedNode
+ * @memberof typdefs
+ */
+
+/**
+ * @typedef {import('node-red').EditorRED} RED_HTML
+ * @memberof typdefs
+ */
