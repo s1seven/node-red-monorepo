@@ -1,5 +1,5 @@
 {
-  "certificates": {
+  "verify": {
     "label": {
       "apiConfig": " API config",
       "name": " Name",

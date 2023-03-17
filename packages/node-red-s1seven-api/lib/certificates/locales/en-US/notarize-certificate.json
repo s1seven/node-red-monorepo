@@ -1,5 +1,5 @@
 {
-  "certificates": {
+  "notarize": {
     "label": {
       "apiConfig": " API config",
       "name": " Name",
