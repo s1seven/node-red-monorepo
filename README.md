@@ -19,6 +19,18 @@ npm run bootstrap
 
 `node-red-s1seven-api` only needs to be updated if the implementation of one of the endpoints changes, or if a dependency has a security vunerability.
 
-## More details
+### Releasing the new packages
+
+Once a release has been made on Github and the node has been updated on npm, the Node Red Flow Library needs to be informed of the update. To do so, go to https://flows.nodered.org/add/node and use the form `3 Add your node to the Flow Library`. Submit the package name, e.g. `@s1seven/node-red<package-name>`, and click `add node`. The update should be detected, and should then be made available for use. Please note that it can take up to 30 minutes for the update to be made available under the `Install` tab in the `Palette`.
+
+## Example authentication flows
+
+Access tokens now expire after 24 hours and need to be regenerated, you can find an example of how to automate the access token regeneration [here](https://github.com/s1seven/node-red-monorepo/blob/main/packages/node-red-s1seven-api/README.md#authentication)
+
+### Packages documentation
 
 For more information on each project, see the README.md file in each package.
+
+- [node-red-chartjs](https://github.com/s1seven/node-red-monorepo/tree/main/packages/node-red-chartjs)
+- [node-red-generate-pdf](https://github.com/s1seven/node-red-monorepo/tree/main/packages/node-red-generate-pdf)
+- [node-red-s1seven-api](https://github.com/s1seven/node-red-monorepo/tree/main/packages/node-red-s1seven-api)
