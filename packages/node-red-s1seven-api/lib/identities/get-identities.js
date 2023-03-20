@@ -66,12 +66,8 @@ module.exports = function (RED) {
         send
       );
 
-      if (success) {
-        done();
-      } else {
-        // node.error(data);
-        done(data);
-      }
+      !success && node.error(data);
+      done();
     });
   }
   RED.nodes.registerType('get identities', getIdentities);

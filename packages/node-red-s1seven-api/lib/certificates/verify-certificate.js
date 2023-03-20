@@ -39,7 +39,7 @@ module.exports = function (RED) {
         certificate = validateCertificate(certificate);
       } catch (error) {
         node.error(RED._('verify.errors.validCertificate'));
-        done(error);
+        done();
         return;
       }
 
@@ -51,12 +51,8 @@ module.exports = function (RED) {
         send
       );
 
-      if (success) {
-        done();
-      } else {
-        // node.error(data);
-        done(data);
-      }
+      !success && node.error(data);
+      done();
     });
   }
   RED.nodes.registerType('verify certificate', verifyCertificate);

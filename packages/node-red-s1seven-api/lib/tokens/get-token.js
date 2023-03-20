@@ -66,15 +66,14 @@ module.exports = function (RED) {
         setters.setApiMode(data.application.mode);
         setters.setCurrentCompanyId(data.application.owner.id);
         // node.warn('Access token fetched successfully');
-        done();
       } else {
         setters.setAccessToken(undefined);
         setters.setApiMode(undefined);
         setters.setCurrentCompanyId(undefined);
         //? those node errors become really noisy, maybe we should add a debug|verbose mode to enable them on purpose ?
-        // node.error(data);
-        done(data);
+        node.error(data);
       }
+      done();
     });
   }
   RED.nodes.registerType('get access token', getAccessToken);

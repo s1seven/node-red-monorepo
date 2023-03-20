@@ -34,10 +34,9 @@ class AxiosHelpers {
    * @returns {import('axios').AxiosInstance}
    */
   createAxiosInstance() {
-    const globalContext = this.asyncLocalStorage.getGlobalContext();
     const apiVersion = this.getters.getApiVersion();
-    const accessToken = this.getters.getAccessToken(globalContext);
-    const companyId = this.getters.getCurrentCompanyId(globalContext);
+    const accessToken = this.getters.getAccessToken();
+    const companyId = this.getters.getCurrentCompanyId();
     const baseURL = this.getters.getApiUrl();
     return axios.create({
       baseURL,
@@ -60,19 +59,19 @@ class AxiosHelpers {
    * @resolves {Response}
    */
   async requestHandler(request, send) {
-    const newMsg = { ...this.asyncLocalStorage.getMsg() };
+    const msg = { ...this.asyncLocalStorage.getMsg() };
     try {
       const response = await request;
-      newMsg.headers = response.headers || {};
-      newMsg.payload = response.data;
-      send([newMsg, null]);
+      msg.headers = response.headers || {};
+      msg.payload = response.data;
+      send([msg, null]);
       return { success: true, data: response.data };
     } catch (error) {
       const ex = isAxiosError(error) ? error.response?.data : error;
       const headers = isAxiosError(error) ? error.response?.headers : {};
-      newMsg.payload = ex;
-      newMsg.headers = headers;
-      send([null, newMsg]);
+      msg.payload = ex;
+      msg.headers = headers;
+      send([null, msg]);
       return { success: false, data: ex };
     }
   }

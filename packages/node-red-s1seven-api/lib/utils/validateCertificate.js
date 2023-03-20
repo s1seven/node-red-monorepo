@@ -1,5 +1,7 @@
 module.exports = function validateCertificate(certificate) {
-  if (Buffer.isBuffer(certificate)) {
+  if (!certificate) {
+    throw new Error('Please add a valid certificate');
+  } else if (Buffer.isBuffer(certificate)) {
     return JSON.parse(certificate);
   } else if (typeof certificate === 'object') {
     return certificate;
