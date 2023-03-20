@@ -1,6 +1,6 @@
 /// <reference path="typedefs.js" />
 
-const axios = require('axios');
+const { default: axios } = require('axios');
 const { isAxiosError, AxiosResponse } = require('axios');
 const { hostname } = require('node:os');
 
