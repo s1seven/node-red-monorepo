@@ -1,6 +1,7 @@
 /// <reference path="typedefs.js" />
 
 const { AsyncLocalStorage } = require('node:async_hooks');
+const { isApiConfig, isGlobalContext, isNodeMessage } = require('./guards');
 
 const asyncLocalStorage = new AsyncLocalStorage();
 
@@ -68,7 +69,19 @@ function setGlobalContext(globalContext) {
 function init(options) {
   const { apiConfig, globalContext, msg } = options;
   asyncLocalStorage.enterWith(new Map());
-
+  if (!isApiConfig(apiConfig)) {
+    throw new TypeError(
+      'apiConfig must be an object with apiVersion and environment'
+    );
+  }
+  if (!isNodeMessage(msg)) {
+    throw new TypeError('msg must be an object');
+  }
+  if (!isGlobalContext(globalContext)) {
+    throw new TypeError(
+      'globalContext must be an object with set(), get(), and keys() methods'
+    );
+  }
   setApiConfig(apiConfig);
   setMsg(msg);
   setGlobalContext(globalContext);
@@ -88,6 +101,7 @@ function exit(done, err) {
 }
 
 class AsyncLocalStore {
+  _asyncLocalStorage = asyncLocalStorage;
   getMsg = getMsg;
   setMsg = setMsg;
   getApiConfig = getApiConfig;

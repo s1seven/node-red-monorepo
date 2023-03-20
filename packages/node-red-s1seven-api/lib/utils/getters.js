@@ -44,9 +44,11 @@ class Getters {
    * @returns {ApiEnvironment} environment
    */
   getApiEnvironment() {
-    const msg = this._getMsg();
-    const apiConfig = this._getApiConfig();
-    return msg.environment || apiConfig?.environment || DEFAULT_API_ENVIRONMENT;
+    return (
+      this._getMsg().environment ||
+      this._getApiConfig()?.environment ||
+      DEFAULT_API_ENVIRONMENT
+    );
   }
 
   /**
@@ -62,20 +64,17 @@ class Getters {
    * @returns {number} version
    */
   getApiVersion() {
-    const apiConfig = this._getApiConfig();
-    return apiConfig.apiVersion || DEFAULT_API_VERSION;
+    return this._getApiConfig().apiVersion || DEFAULT_API_VERSION;
   }
 
   /**
    * @returns {ApiMode} mode
    */
   getApiMode() {
-    const msg = this._getMsg();
     const apiConfig = this._getApiConfig();
-    const globalContext = this._getGlobalContext();
     return (
-      msg.mode ||
-      globalContext.get(GLOBAL_MODE_KEY(apiConfig)) ||
+      this._getMsg().mode ||
+      this._getGlobalContext().get(GLOBAL_MODE_KEY(apiConfig)) ||
       DEFAULT_API_MODE
     );
   }
@@ -84,11 +83,10 @@ class Getters {
    * @returns {string | undefined} access token
    */
   getAccessToken() {
-    const msg = this._getMsg();
     const apiConfig = this._getApiConfig();
-    const globalContext = this._getGlobalContext();
     return (
-      msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig))
+      this._getMsg().accessToken ||
+      this._getGlobalContext().get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig))
     );
   }
 
@@ -96,10 +94,11 @@ class Getters {
    * @returns {string | undefined} company id
    */
   getCurrentCompanyId() {
-    const msg = this._getMsg();
     const apiConfig = this._getApiConfig();
-    const globalContext = this._getGlobalContext();
-    return msg.companyId || globalContext.get(GLOBAL_COMPANY_ID_KEY(apiConfig));
+    return (
+      this._getMsg().companyId ||
+      this._getGlobalContext().get(GLOBAL_COMPANY_ID_KEY(apiConfig))
+    );
   }
 }
 

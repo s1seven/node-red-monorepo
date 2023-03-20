@@ -38,8 +38,10 @@ class Setters {
    */
   setAccessToken(accessToken) {
     const apiConfig = this._getApiConfig();
-    const globalContext = this._getGlobalContext();
-    globalContext.set(GLOBAL_ACCESS_TOKEN_KEY(apiConfig), accessToken);
+    this._getGlobalContext().set(
+      GLOBAL_ACCESS_TOKEN_KEY(apiConfig),
+      accessToken
+    );
   }
 
   /**
@@ -48,8 +50,7 @@ class Setters {
    */
   setApiMode(mode) {
     const apiConfig = this._getApiConfig();
-    const globalContext = this._getGlobalContext();
-    globalContext.set(GLOBAL_MODE_KEY(apiConfig), mode);
+    this._getGlobalContext().set(GLOBAL_MODE_KEY(apiConfig), mode);
   }
 
   /**
@@ -58,8 +59,7 @@ class Setters {
    */
   setCurrentCompanyId(accessToken) {
     const apiConfig = this._getApiConfig();
-    const globalContext = this._getGlobalContext();
-    globalContext.set(GLOBAL_COMPANY_ID_KEY(apiConfig), accessToken);
+    this._getGlobalContext().set(GLOBAL_COMPANY_ID_KEY(apiConfig), accessToken);
   }
 }
 
