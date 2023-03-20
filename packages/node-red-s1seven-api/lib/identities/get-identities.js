@@ -19,6 +19,14 @@ module.exports = function (RED) {
   /** @type {import('../utils/axios-helpers')} */
   const axiosHelpers = container.resolve('axiosHelpers');
 
+  /** @param {object} config
+   * @param {string} config.name
+   * @param {string} config.apiConfig
+   * @param {string} config.coinType
+   * @param {string} config.status
+   * @param {string} config.BIP44Account
+   * @param {string} config.BIP44Index
+   */
   function getIdentities(config) {
     /** @type NodeRedNode */
     const node = this;

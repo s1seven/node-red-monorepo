@@ -1,9 +1,14 @@
 module.exports = function (RED) {
-  function RemoteServerNode(n) {
-    RED.nodes.createNode(this, n);
-    this.environment = n.environment;
-    this.name = n.name;
-    this.apiVersion = n.apiVersion;
+  /** @param {object} config
+   * @param {ApiEnvironment} config.environment
+   * @param {string} config.name
+   * @param {number} config.apiVersion
+   */
+  function RemoteServerNode(config) {
+    RED.nodes.createNode(this, config);
+    this.environment = config.environment;
+    this.name = config.name;
+    this.apiVersion = config.apiVersion;
   }
   RED.nodes.registerType('api-config', RemoteServerNode, {
     credentials: {

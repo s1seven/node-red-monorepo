@@ -24,6 +24,12 @@ module.exports = function (RED) {
   /** @type {import('../utils/axios-helpers')} */
   const axiosHelpers = container.resolve('axiosHelpers');
 
+  /** @param {object} config
+   * @param {string} config.name
+   * @param {string} config.apiConfig
+   * @param {string} config.algorithm
+   * @param {string} config.encoding
+   */
   function hashCertificate(config) {
     /** @type NodeRedNode */
     const node = this;

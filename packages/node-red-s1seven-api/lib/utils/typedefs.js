@@ -32,6 +32,7 @@
  * @typedef {object} ApiConfig
  * @property {string|undefined} name
  * @property {string} id
+ * @property {number} apiVersion
  * @property {string} clientId
  * @property {string} clientSecret
  * @property {ApiEnvironment} environment

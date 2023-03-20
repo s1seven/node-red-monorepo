@@ -25,6 +25,10 @@ module.exports = function (RED) {
   /** @type {import('../utils/setters')} */
   const setters = scope.resolve('setters');
 
+  /** @param {object} config
+   * @param {string} config.name
+   * @param {string} config.apiConfig
+   */
   function getAccessToken(config) {
     /** @type NodeRedNode */
     const node = this;

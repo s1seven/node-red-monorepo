@@ -20,7 +20,11 @@ module.exports = function (RED) {
   /** @type {import('../utils/axios-helpers')} */
   const axiosHelpers = container.resolve('axiosHelpers');
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
+  /** @param {object} config
+   * @param {string} config.name
+   * @param {string} config.apiConfig
+   * @param {string} config.identity
+   */
   function notarizeCertificate(config) {
     /** @type NodeRedNode */
     const node = this;
