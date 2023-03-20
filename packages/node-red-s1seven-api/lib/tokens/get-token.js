@@ -11,8 +11,9 @@ require('../utils/container').setupContainer();
  */
 module.exports = function (RED) {
   const { asClass } = require('awilix');
+
+  const SuperNode = require('../utils/super-node');
   const { container } = require('../utils/container');
-  const { onInputFactory } = require('../utils/on-input');
 
   const scope = container.createScope();
   scope.register({
@@ -22,22 +23,18 @@ module.exports = function (RED) {
   /** @param {object} config
    * @param {string} config.name
    * @param {string} config.apiConfig
+   * @this NodeRedNode
    */
   function getAccessToken(config) {
-    /** @type {import('../utils/axios-helpers')} */
-    const axiosHelpers = container.resolve('axiosHelpers');
+    const node = new SuperNode(RED, config, this);
+
     /** @type {import('../utils/setters')} */
     const setters = scope.resolve('setters');
 
-    /** @type NodeRedNode */
-    const node = this;
-    RED.nodes.createNode(node, config);
-    const apiConfig = RED.nodes.getNode(config.apiConfig);
-
     node.on('msg', async (msg, send, done) => {
-      const clientId = msg.clientId || apiConfig?.credentials.clientId;
+      const clientId = msg.clientId || node.apiConfig?.credentials.clientId;
       const clientSecret =
-        msg.clientSecret || apiConfig?.credentials.clientSecret;
+        msg.clientSecret || node.apiConfig?.credentials.clientSecret;
 
       if (!clientId) {
         node.warn(RED._('tokens.errors.clientId'));
@@ -49,8 +46,8 @@ module.exports = function (RED) {
         done();
         return;
       }
-      const axios = axiosHelpers.createAxiosInstance();
-      const { success, data } = await axiosHelpers.requestHandler(
+      const axios = node.createAxiosInstance();
+      const { success, data } = await node.requestHandler(
         axios.post('/tokens', {
           clientId,
           clientSecret,
@@ -72,9 +69,6 @@ module.exports = function (RED) {
       }
       done();
     });
-
-    const onInput = onInputFactory(apiConfig).bind(node);
-    node.on('input', onInput);
   }
   RED.nodes.registerType('get access token', getAccessToken);
 };

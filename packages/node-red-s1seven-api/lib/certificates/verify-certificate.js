@@ -10,28 +10,19 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
-  const { container } = require('../utils/container');
-  const { onInputFactory } = require('../utils/on-input');
+  const SuperNode = require('../utils/super-node');
   const validateCertificate = require('../utils/validateCertificate');
 
   /** @param {object} config
    * @param {string} config.name
    * @param {string} config.apiConfig
+   * @this NodeRedNode
    */
   function verifyCertificate(config) {
-    /** @type {import('../utils/getters')} */
-    const getters = container.resolve('getters');
-    /** @type {import('../utils/axios-helpers')} */
-    const axiosHelpers = container.resolve('axiosHelpers');
-    /** @type NodeRedNode */
-    const node = this;
-    RED.nodes.createNode(node, config);
-    const globalContext = node.context().global;
-    const apiConfig = RED.nodes.getNode(config.apiConfig);
-
+    const node = new SuperNode(RED, config, this);
     node.on('msg', async (msg, send, done) => {
-      const mode = getters.getApiMode();
-      let certificate = msg.payload || globalContext.get('certificate');
+      const mode = node.getApiMode();
+      let certificate = msg.payload || node.context().global.get('certificate');
       try {
         certificate = validateCertificate(certificate);
       } catch (error) {
@@ -40,8 +31,8 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance();
-      const { success, data } = await axiosHelpers.requestHandler(
+      const axios = node.createAxiosInstance();
+      const { success, data } = await node.requestHandler(
         axios.post('/certificates/verify', certificate, {
           params: { mode },
         }),
@@ -51,9 +42,6 @@ module.exports = function (RED) {
       !success && node.error(data);
       done();
     });
-
-    const onInput = onInputFactory(apiConfig).bind(node);
-    node.on('input', onInput);
   }
   RED.nodes.registerType('verify certificate', verifyCertificate);
 };

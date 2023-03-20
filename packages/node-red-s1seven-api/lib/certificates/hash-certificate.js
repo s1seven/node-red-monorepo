@@ -10,8 +10,7 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
-  const { container } = require('../utils/container');
-  const { onInputFactory } = require('../utils/on-input');
+  const SuperNode = require('../utils/super-node');
   const validateCertificate = require('../utils/validateCertificate');
   const {
     ALGORITHM_OPTIONS,
@@ -23,21 +22,13 @@ module.exports = function (RED) {
    * @param {string} config.apiConfig
    * @param {string} config.algorithm
    * @param {string} config.encoding
+   * @this NodeRedNode
    */
   function hashCertificate(config) {
-    /** @type {import('../utils/getters')} */
-    const getters = container.resolve('getters');
-    /** @type {import('../utils/axios-helpers')} */
-    const axiosHelpers = container.resolve('axiosHelpers');
-    /** @type NodeRedNode */
-    const node = this;
-    RED.nodes.createNode(node, config);
-    const globalContext = node.context().global;
-    const apiConfig = RED.nodes.getNode(config.apiConfig);
+    const node = new SuperNode(RED, config, this);
 
     node.on('msg', async (msg, send, done) => {
-      const accessToken = getters.getAccessToken();
-
+      const accessToken = node.getAccessToken();
       // request parameters
       const algorithm = msg.algorithm || config.algorithm || 'sha256';
       const encoding = msg.encoding || config.encoding || 'hex';
@@ -67,8 +58,8 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance();
-      const { success, data } = await axiosHelpers.requestHandler(
+      const axios = node.createAxiosInstance();
+      const { success, data } = await node.requestHandler(
         axios.post(`/certificates/hash`, {
           algorithm,
           encoding,
@@ -80,9 +71,6 @@ module.exports = function (RED) {
       !success && node.error(data);
       done();
     });
-
-    const onInput = onInputFactory(apiConfig).bind(node);
-    node.on('input', onInput);
   }
   RED.nodes.registerType('hash', hashCertificate);
 };

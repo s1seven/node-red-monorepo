@@ -10,8 +10,7 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
-  const { container } = require('../utils/container');
-  const { onInputFactory } = require('../utils/on-input');
+  const SuperNode = require('../utils/super-node');
 
   /** @param {object} config
    * @param {string} config.name
@@ -20,21 +19,14 @@ module.exports = function (RED) {
    * @param {string} config.status
    * @param {string} config.BIP44Account
    * @param {string} config.BIP44Index
+   * @this NodeRedNode
    */
   function getIdentities(config) {
-    /** @type {import('../utils/getters')} */
-    const getters = container.resolve('getters');
-    /** @type {import('../utils/axios-helpers')} */
-    const axiosHelpers = container.resolve('axiosHelpers');
-    /** @type NodeRedNode */
-    const node = this;
-    RED.nodes.createNode(node, config);
-    const apiConfig = RED.nodes.getNode(config.apiConfig);
-
+    const node = new SuperNode(RED, config, this);
     node.on('msg', async (msg, send, done) => {
-      const companyId = getters.getCurrentCompanyId();
-      const accessToken = getters.getAccessToken();
-      const mode = getters.getApiMode();
+      const companyId = node.getCurrentCompanyId();
+      const accessToken = node.getAccessToken();
+      const mode = node.getApiMode();
       // identities request parameters
       const coinType = msg.coinType || config.coinType || null;
       const status = msg.status || config.status || null;
@@ -52,8 +44,8 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance();
-      const { success, data } = await axiosHelpers.requestHandler(
+      const axios = node.createAxiosInstance();
+      const { success, data } = await node.requestHandler(
         axios.get('/identities', {
           params: {
             coinType,
@@ -69,9 +61,6 @@ module.exports = function (RED) {
       !success && node.error(data);
       done();
     });
-
-    const onInput = onInputFactory(apiConfig).bind(node);
-    node.on('input', onInput);
   }
   RED.nodes.registerType('get identities', getIdentities);
 };

@@ -3,6 +3,7 @@ module.exports = function (RED) {
    * @param {ApiEnvironment} config.environment
    * @param {string} config.name
    * @param {number} config.apiVersion
+   * @this NodeRedNode
    */
   function RemoteServerNode(config) {
     RED.nodes.createNode(this, config);

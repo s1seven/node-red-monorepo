@@ -13,16 +13,15 @@ function onInputFactory(apiConfig) {
    * @param {NodeMessage} msg
    * @param {NodeRedSend} send
    * @param {Done} cb
+   * @this {import('./super-node')}
    */
   return function onInput(msg, send, cb) {
-    /** @type {NodeRedNode} */
-    const node = this;
-    const globalContext = node.context().global;
+    const globalContext = this.context().global;
     function done(err) {
       asyncLocalStorage.exit(cb, err);
     }
     asyncLocalStorage.init({ apiConfig, globalContext, msg });
-    node.emit('msg', msg, send, done);
+    this.emit('msg', msg, send, done);
   };
 }
 

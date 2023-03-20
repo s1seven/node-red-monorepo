@@ -10,34 +10,28 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
-  const { container } = require('../utils/container');
-  const { onInputFactory } = require('../utils/on-input');
+  const SuperNode = require('../utils/super-node');
   const validateCertificate = require('../utils/validateCertificate');
 
   /** @param {object} config
    * @param {string} config.name
    * @param {string} config.apiConfig
    * @param {string} config.identity
+   * @this NodeRedNode
    */
   function notarizeCertificate(config) {
-    /** @type {import('../utils/getters')} */
-    const getters = container.resolve('getters');
-    /** @type {import('../utils/axios-helpers')} */
-    const axiosHelpers = container.resolve('axiosHelpers');
-    /** @type NodeRedNode */
-    const node = this;
-    RED.nodes.createNode(node, config);
-    const globalContext = node.context().global;
-    const apiConfig = RED.nodes.getNode(config.apiConfig);
-
+    const node = new SuperNode(RED, config, this);
     node.on('msg', async (msg, send, done) => {
-      const companyId = getters.getCurrentCompanyId();
-      const accessToken = getters.getAccessToken();
-      const mode = getters.getApiMode();
+      const companyId = node.getCurrentCompanyId();
+      const accessToken = node.getAccessToken();
+      const mode = node.getApiMode();
 
       // request parameters
       const identity =
-        msg.identity || config.identity || globalContext.get('identity');
+        msg.identity ||
+        config.identity ||
+        node.context().global.get('identity');
+
       if (!accessToken) {
         node.warn(RED._('notarize.errors.accessToken'));
         done();
@@ -54,7 +48,7 @@ module.exports = function (RED) {
         return;
       }
 
-      let certificate = msg.payload || globalContext.get('certificate');
+      let certificate = msg.payload || node.context().global.get('certificate');
       try {
         certificate = validateCertificate(certificate);
       } catch (error) {
@@ -63,8 +57,8 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance();
-      const { success, data } = await axiosHelpers.requestHandler(
+      const axios = node.createAxiosInstance();
+      const { success, data } = await node.requestHandler(
         axios.post('/certificates/notarize', certificate, {
           params: {
             identity,
@@ -77,9 +71,6 @@ module.exports = function (RED) {
       !success && node.error(data);
       done();
     });
-
-    const onInput = onInputFactory(apiConfig).bind(node);
-    node.on('input', onInput);
   }
   RED.nodes.registerType('notarize certificate', notarizeCertificate);
 };

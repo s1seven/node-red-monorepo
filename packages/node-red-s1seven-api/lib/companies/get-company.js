@@ -10,27 +10,19 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
-  const { container } = require('../utils/container');
-  const { onInputFactory } = require('../utils/on-input');
+  const SuperNode = require('../utils/super-node');
 
   /** @param {object} config
    * @param {string} config.name
    * @param {string} config.apiConfig
+   * @this NodeRedNode
    */
   function getCompany(config) {
-    /** @type {import('../utils/getters')} */
-    const getters = container.resolve('getters');
-    /** @type {import('../utils/axios-helpers')} */
-    const axiosHelpers = container.resolve('axiosHelpers');
-
-    /** @type NodeRedNode */
-    const node = this;
-    RED.nodes.createNode(node, config);
-    const apiConfig = RED.nodes.getNode(config.apiConfig);
+    const node = new SuperNode(RED, config, this);
 
     node.on('msg', async (_msg, send, done) => {
-      const companyId = getters.getCurrentCompanyId();
-      const accessToken = getters.getAccessToken();
+      const companyId = node.getCurrentCompanyId();
+      const accessToken = node.getAccessToken();
       if (!accessToken) {
         node.warn(RED._('company.errors.accessToken'));
         done();
@@ -42,8 +34,8 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance();
-      const { success, data } = await axiosHelpers.requestHandler(
+      const axios = node.createAxiosInstance();
+      const { success, data } = await node.requestHandler(
         axios.get(`/companies/${companyId}`),
         send
       );
@@ -51,9 +43,6 @@ module.exports = function (RED) {
       !success && node.error(data);
       done();
     });
-
-    const onInput = onInputFactory(apiConfig).bind(node);
-    node.on('input', onInput);
   }
   RED.nodes.registerType('get company', getCompany);
 };
