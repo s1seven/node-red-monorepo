@@ -19,7 +19,7 @@ module.exports = function (RED) {
   });
 
   /** @type {import('../utils/async-local-storage')} */
-  const { exitContext, setNewContext } = container.resolve('asyncLocalStorage');
+  const { exit, init } = container.resolve('asyncLocalStorage');
   /** @type {import('../utils/axios-helpers')} */
   const axiosHelpers = container.resolve('axiosHelpers');
   /** @type {import('../utils/setters')} */
@@ -34,9 +34,9 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, cb) => {
       function done(err) {
-        exitContext(cb, err);
+        exit(cb, err);
       }
-      setNewContext(apiConfig, msg);
+      init({ apiConfig, globalContext, msg });
 
       const clientId = msg.clientId || apiConfig?.credentials.clientId;
       const clientSecret =
@@ -52,7 +52,7 @@ module.exports = function (RED) {
         done();
         return;
       }
-      const axios = axiosHelpers.createAxiosInstance(globalContext);
+      const axios = axiosHelpers.createAxiosInstance();
       const { success, data } = await axiosHelpers.requestHandler(
         axios.post('/tokens', {
           clientId,
@@ -62,15 +62,15 @@ module.exports = function (RED) {
       );
 
       if (success) {
-        setters.setAccessToken(globalContext, data.accessToken);
-        setters.setApiMode(globalContext, data.application.mode);
-        setters.setCurrentCompanyId(globalContext, data.application.owner.id);
+        setters.setAccessToken(data.accessToken);
+        setters.setApiMode(data.application.mode);
+        setters.setCurrentCompanyId(data.application.owner.id);
         // node.warn('Access token fetched successfully');
         done();
       } else {
-        setters.setAccessToken(globalContext, undefined);
-        setters.setApiMode(globalContext, undefined);
-        setters.setCurrentCompanyId(globalContext, undefined);
+        setters.setAccessToken(undefined);
+        setters.setApiMode(undefined);
+        setters.setCurrentCompanyId(undefined);
         //? those node errors become really noisy, maybe we should add a debug|verbose mode to enable them on purpose ?
         // node.error(data);
         done(data);

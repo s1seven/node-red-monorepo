@@ -14,7 +14,7 @@ module.exports = function (RED) {
   const validateCertificate = require('../utils/validateCertificate');
 
   /** @type {import('../utils/async-local-storage')} */
-  const { exitContext, setNewContext } = container.resolve('asyncLocalStorage');
+  const { exit, init } = container.resolve('asyncLocalStorage');
   /** @type {import('../utils/getters')} */
   const getters = container.resolve('getters');
   /** @type {import('../utils/axios-helpers')} */
@@ -29,10 +29,10 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, cb) => {
       function done(err) {
-        exitContext(cb, err);
+        exit(cb, err);
       }
-      setNewContext(apiConfig, msg);
-      const mode = getters.getApiMode(globalContext);
+      init({ apiConfig, globalContext, msg });
+      const mode = getters.getApiMode();
 
       let certificate = msg.payload || globalContext.get('certificate');
       try {
@@ -43,7 +43,7 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance(globalContext);
+      const axios = axiosHelpers.createAxiosInstance();
       const { success, data } = await axiosHelpers.requestHandler(
         axios.post('/certificates/verify', certificate, {
           params: { mode },

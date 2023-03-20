@@ -36,6 +36,10 @@ class Getters {
     return this.asyncLocalStorage.getApiConfig();
   }
 
+  _getGlobalContext() {
+    return this.asyncLocalStorage.getGlobalContext();
+  }
+
   /**
    * @returns {ApiEnvironment} environment
    */
@@ -63,12 +67,12 @@ class Getters {
   }
 
   /**
-   * @param {GlobalContext} globalContext
    * @returns {ApiMode} mode
    */
-  getApiMode(globalContext) {
+  getApiMode() {
     const msg = this._getMsg();
     const apiConfig = this._getApiConfig();
+    const globalContext = this._getGlobalContext();
     return (
       msg.mode ||
       globalContext.get(GLOBAL_MODE_KEY(apiConfig)) ||
@@ -77,24 +81,24 @@ class Getters {
   }
 
   /**
-   * @param {GlobalContext} globalContext
    * @returns {string | undefined} access token
    */
-  getAccessToken(globalContext) {
+  getAccessToken() {
     const msg = this._getMsg();
     const apiConfig = this._getApiConfig();
+    const globalContext = this._getGlobalContext();
     return (
       msg.accessToken || globalContext.get(GLOBAL_ACCESS_TOKEN_KEY(apiConfig))
     );
   }
 
   /**
-   * @param {GlobalContext} globalContext
    * @returns {string | undefined} company id
    */
-  getCurrentCompanyId(globalContext) {
+  getCurrentCompanyId() {
     const msg = this._getMsg();
     const apiConfig = this._getApiConfig();
+    const globalContext = this._getGlobalContext();
     return msg.companyId || globalContext.get(GLOBAL_COMPANY_ID_KEY(apiConfig));
   }
 }

@@ -13,7 +13,7 @@ module.exports = function (RED) {
   const { container } = require('../utils/container');
 
   /** @type {import('../utils/async-local-storage')} */
-  const { exitContext, setNewContext } = container.resolve('asyncLocalStorage');
+  const { exit, init } = container.resolve('asyncLocalStorage');
   /** @type {import('../utils/getters')} */
   const getters = container.resolve('getters');
   /** @type {import('../utils/axios-helpers')} */
@@ -28,13 +28,13 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, cb) => {
       function done(err) {
-        exitContext(cb, err);
+        exit(cb, err);
       }
-      setNewContext(apiConfig, msg);
+      init({ apiConfig, globalContext, msg });
 
-      const companyId = getters.getCurrentCompanyId(globalContext);
-      const accessToken = getters.getAccessToken(globalContext);
-      const mode = getters.getApiMode(globalContext);
+      const companyId = getters.getCurrentCompanyId();
+      const accessToken = getters.getAccessToken();
+      const mode = getters.getApiMode();
       // identities request parameters
       const coinType = msg.coinType || config.coinType || null;
       const status = msg.status || config.status || null;
@@ -52,7 +52,7 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance(globalContext);
+      const axios = axiosHelpers.createAxiosInstance();
       const { success, data } = await axiosHelpers.requestHandler(
         axios.get('/identities', {
           params: {

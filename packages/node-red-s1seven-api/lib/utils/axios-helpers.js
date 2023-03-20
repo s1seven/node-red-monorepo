@@ -31,11 +31,10 @@ class AxiosHelpers {
   }
 
   /**
-   *
-   * @param {GlobalContext} globalContext
    * @returns {import('axios').AxiosInstance}
    */
-  createAxiosInstance(globalContext) {
+  createAxiosInstance() {
+    const globalContext = this.asyncLocalStorage.getGlobalContext();
     const apiVersion = this.getters.getApiVersion();
     const accessToken = this.getters.getAccessToken(globalContext);
     const companyId = this.getters.getCurrentCompanyId(globalContext);

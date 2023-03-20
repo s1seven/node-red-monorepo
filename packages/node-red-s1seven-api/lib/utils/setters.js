@@ -2,7 +2,7 @@ const {
   GLOBAL_ACCESS_TOKEN_KEY,
   GLOBAL_COMPANY_ID_KEY,
   GLOBAL_MODE_KEY,
-} = require('./getters');
+} = require('./keys');
 
 /**
  * @typedef {object} SettersConstructor
@@ -28,33 +28,37 @@ class Setters {
     return this.asyncLocalStorage.getApiConfig();
   }
 
+  _getGlobalContext() {
+    return this.asyncLocalStorage.getGlobalContext();
+  }
+
   /**
-   * @param {import('node-red').NodeContext['global']} globalContext
    * @param {string} access token
    * @returns {void}
    */
-  setAccessToken(globalContext, accessToken) {
+  setAccessToken(accessToken) {
     const apiConfig = this._getApiConfig();
+    const globalContext = this._getGlobalContext();
     globalContext.set(GLOBAL_ACCESS_TOKEN_KEY(apiConfig), accessToken);
   }
 
   /**
-   * @param {import('node-red').NodeContext['global']} globalContext
    * @param {'test' | 'live'} mode
    * @returns {void}
    */
-  setApiMode(globalContext, mode) {
+  setApiMode(mode) {
     const apiConfig = this._getApiConfig();
+    const globalContext = this._getGlobalContext();
     globalContext.set(GLOBAL_MODE_KEY(apiConfig), mode);
   }
 
   /**
-   * @param {import('node-red').NodeContext['global']} globalContext
    * @param {string} company id
    * @returns {void}
    */
-  setCurrentCompanyId(globalContext, accessToken) {
+  setCurrentCompanyId(accessToken) {
     const apiConfig = this._getApiConfig();
+    const globalContext = this._getGlobalContext();
     globalContext.set(GLOBAL_COMPANY_ID_KEY(apiConfig), accessToken);
   }
 }

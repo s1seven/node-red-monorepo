@@ -13,7 +13,7 @@ function getMsg() {
 }
 
 /**
- * @params {NodeMessage} msg
+ * @param {NodeMessage} msg
  * @returns {void}
  */
 function setMsg(msg) {
@@ -28,7 +28,7 @@ function getApiConfig() {
 }
 
 /**
- * @params {ApiConfig} apiConfig
+ * @param {ApiConfig} apiConfig
  * @returns {void}
  */
 function setApiConfig(apiConfig) {
@@ -36,17 +36,42 @@ function setApiConfig(apiConfig) {
 }
 
 /**
- * @params {ApiConfig} apiConfig
- * @params {NodeMessage} msg
+ * @returns {GlobalContext}
+ * @see https://nodered.org/docs/creating-nodes/context
+ */
+function getGlobalContext() {
+  return asyncLocalStorage.getStore()?.get('globalContext') || {};
+}
+
+/**
+ * @param {GlobalContext} globalContext
+ * @returns {void}
+ */
+function setGlobalContext(globalContext) {
+  asyncLocalStorage.getStore()?.set('globalContext', globalContext);
+}
+
+/**
+ * @typedef {object} InitOptions
+ * @property {ApiConfig} apiConfig
+ * @property {NodeMessage} msg
+ * @property {GlobalContext} globalContext
+ */
+
+/**
+ * @param {InitOptions} options
  * @returns {void}
  * @see https://nodejs.org/api/async_hooks.html#async_hooks_asynclocalstorage_enterwith
  * @see https://nodejs.org/api/async_hooks.html#async_hooks_asynclocalstorage_getstore
  *
  */
-function setNewContext(apiConfig, msg) {
+function init(options) {
+  const { apiConfig, globalContext, msg } = options;
   asyncLocalStorage.enterWith(new Map());
+
   setApiConfig(apiConfig);
   setMsg(msg);
+  setGlobalContext(globalContext);
   asyncLocalStorage
     .getStore()
     ?.set('S1SEVEN_BASE_URL', process.env.S1SEVEN_BASE_URL);
@@ -56,10 +81,9 @@ function setNewContext(apiConfig, msg) {
  * @param {function} done
  * @param {Error | undefined} err
  * @returns {void}
- *
  * @see https://nodejs.org/api/async_hooks.html#async_hooks_asynclocalstorage_exit
  */
-function exitContext(done, err) {
+function exit(done, err) {
   asyncLocalStorage.exit(done, err);
 }
 
@@ -68,8 +92,10 @@ class AsyncLocalStore {
   setMsg = setMsg;
   getApiConfig = getApiConfig;
   setApiConfig = setApiConfig;
-  setNewContext = setNewContext;
-  exitContext = exitContext;
+  getGlobalContext = getGlobalContext;
+  setGlobalContext = setGlobalContext;
+  init = init;
+  exit = exit;
 }
 
 module.exports = AsyncLocalStore;

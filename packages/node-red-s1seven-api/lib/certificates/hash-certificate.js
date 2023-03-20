@@ -18,7 +18,7 @@ module.exports = function (RED) {
   } = require('../../resources/constants');
 
   /** @type {import('../utils/async-local-storage')} */
-  const { exitContext, setNewContext } = container.resolve('asyncLocalStorage');
+  const { exit, init } = container.resolve('asyncLocalStorage');
   /** @type {import('../utils/getters')} */
   const getters = container.resolve('getters');
   /** @type {import('../utils/axios-helpers')} */
@@ -33,10 +33,10 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, cb) => {
       function done(err) {
-        exitContext(cb, err);
+        exit(cb, err);
       }
-      setNewContext(apiConfig, msg);
-      const accessToken = getters.getAccessToken(globalContext);
+      init({ apiConfig, globalContext, msg });
+      const accessToken = getters.getAccessToken();
 
       // request parameters
       const algorithm = msg.algorithm || config.algorithm || 'sha256';
@@ -67,7 +67,7 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance(globalContext);
+      const axios = axiosHelpers.createAxiosInstance();
       const { success, data } = await axiosHelpers.requestHandler(
         axios.post(`/certificates/hash`, {
           algorithm,
