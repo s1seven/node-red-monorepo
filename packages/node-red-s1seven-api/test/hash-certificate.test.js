@@ -1,16 +1,42 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+const { asClass, asValue, Lifetime } = require('awilix');
 const helper = require('node-red-node-test-helper');
-const hash = require('../lib/certificates/hash-certificate.js');
-const certificate = require('../fixtures/cert.json');
-const axios = require('axios');
-const { URL_TO_ENV_MAP } = require('../resources/constants');
-const fakeAccessToken = 'test';
 
-jest.mock('axios');
+const configNode = require('../lib/config/api-config.js');
+const hash = require('../lib/certificates/hash-certificate');
+const { container } = require('../lib/utils/container');
+const {
+  axiosInstance,
+  createAxiosInstance,
+  requestHandler,
+} = require('./axios-helpers');
+const certificate = require('../fixtures/cert.json');
+
+container.register({
+  getters: asClass(require('../lib/utils/getters'), {
+    lifetime: Lifetime.SINGLETON,
+  }),
+  asyncLocalStorage: asClass(require('../lib/utils/async-local-storage'), {
+    lifetime: Lifetime.SINGLETON,
+  }),
+  axiosHelpers: asValue({
+    createAxiosInstance,
+    requestHandler,
+  }),
+});
 
 helper.init(require.resolve('node-red'));
 
-describe('hashing Node', function () {
+const fakeAccessToken = 'test';
+const configNodeFlow = {
+  id: 'n2',
+  type: 'api-config',
+  name: 'api-config',
+  apiVersion: 1,
+  environment: 'production',
+};
+
+describe('hash certificate Node', function () {
   beforeEach(function (done) {
     helper.startServer(done);
   });
@@ -20,92 +46,68 @@ describe('hashing Node', function () {
     helper.stopServer(done);
   });
 
-  it('should be loaded', function (done) {
-    const flow = [{ id: 'n1', type: 'hash', name: 'hash' }];
-    helper.load(hash, flow, function () {
-      const n1 = helper.getNode('n1');
-      try {
-        expect(n1).toHaveProperty('name', 'hash');
-        done();
-      } catch (err) {
-        done(err);
-      }
+  it('should be loaded', async () => {
+    const flow = [
+      { id: 'n1', type: 'hash', name: 'hash', apiConfig: 'n2' },
+      configNodeFlow,
+    ];
+    //
+    await helper.load([hash, configNode], flow);
+    const n1 = helper.getNode('n1');
+    const n2 = helper.getNode('n2');
+    expect(n1).toHaveProperty('name', 'hash');
+    expect(n2).toHaveProperty('name', 'api-config');
+  });
+
+  it('api should be called with the correct url and body', async () => {
+    const flow = [
+      { id: 'n1', type: 'hash', name: 'hash', apiConfig: 'n2', wires: [] },
+      configNodeFlow,
+    ];
+    axiosInstance.post = jest
+      .fn()
+      .mockResolvedValueOnce({ data: { value: 'hashValue' } });
+    //
+    await helper.load([hash, configNode], flow);
+    const n1 = helper.getNode('n1');
+    n1.receive({
+      payload: certificate,
+      accessToken: fakeAccessToken,
+    });
+    expect(axiosInstance.post).toHaveBeenCalledWith('/certificates/hash', {
+      algorithm: 'sha256',
+      encoding: 'hex',
+      source: certificate,
     });
   });
 
-  it('api should be called with the correct url and body', function (done) {
-    const flow = [{ id: 'n1', type: 'hash', name: 'hash', wires: [] }];
-    axios.post.mockResolvedValue({ data: { value: 'hashValue' } });
-
-    helper.load(hash, flow, function () {
-      const n1 = helper.getNode('n1');
-
-      n1.receive({
-        payload: certificate,
-        accessToken: fakeAccessToken,
-      });
-
-      expect(axios.post).toHaveBeenCalledWith(
-        `${URL_TO_ENV_MAP['production']}/api/certificates/hash`,
-        {
-          algorithm: 'sha256',
-          encoding: 'hex',
-          source: certificate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${fakeAccessToken}`,
-            'Content-Type': 'application/json',
-            'x-version': '1',
-          },
-        }
-      );
-
-      done();
-    });
-  });
-
-  it('algorithm and encoding can be overridden via the msg object', function (done) {
-    const flow = [{ id: 'n1', type: 'hash', name: 'hash', wires: [] }];
-    axios.post.mockResolvedValue({ data: { value: 'hashValue' } });
+  it('algorithm and encoding can be overridden via the msg object', async () => {
+    const flow = [
+      { id: 'n1', type: 'hash', name: 'hash', wires: [], apiConfig: 'n2' },
+      configNodeFlow,
+    ];
+    axiosInstance.post = jest
+      .fn()
+      .mockResolvedValueOnce({ data: { value: 'hashValue' } });
     const algorithm = 'sha512';
     const encoding = 'base64';
-
-    helper.load(hash, flow, function () {
-      const n1 = helper.getNode('n1');
-
-      n1.receive({
-        payload: certificate,
-        accessToken: fakeAccessToken,
-        algorithm,
-        encoding,
-      });
-
-      try {
-        expect(axios.post).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['production']}/api/certificates/hash`,
-          {
-            algorithm,
-            encoding,
-            source: certificate,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${fakeAccessToken}`,
-              'Content-Type': 'application/json',
-              'x-version': '1',
-            },
-          }
-        );
-
-        done();
-      } catch (error) {
-        done(error);
-      }
+    //
+    await helper.load([hash, configNode], flow);
+    const n1 = helper.getNode('n1');
+    n1.receive({
+      payload: certificate,
+      accessToken: fakeAccessToken,
+      algorithm,
+      encoding,
+    });
+    expect(axiosInstance.post).toHaveBeenCalledWith('/certificates/hash', {
+      algorithm,
+      encoding,
+      source: certificate,
     });
   });
 
-  it('algorithm and encoding can be set via the ui', function (done) {
+  it('algorithm and encoding can be set via the ui', async () => {
     const algorithm = 'sha3-256';
     const encoding = 'base64';
     const flow = [
@@ -114,89 +116,72 @@ describe('hashing Node', function () {
         type: 'hash',
         name: 'hash',
         wires: [],
-        algorithm: algorithm,
-        encoding: encoding,
+        algorithm,
+        encoding,
+        apiConfig: 'n2',
       },
+      configNodeFlow,
     ];
-    axios.post.mockResolvedValue({ data: { value: 'hashValue' } });
-
-    helper.load(hash, flow, function () {
-      const n1 = helper.getNode('n1');
-
-      n1.receive({
-        payload: certificate,
-        accessToken: fakeAccessToken,
-      });
-
-      try {
-        expect(axios.post).toHaveBeenCalledWith(
-          `${URL_TO_ENV_MAP['production']}/api/certificates/hash`,
-          {
-            algorithm: algorithm,
-            encoding: encoding,
-            source: certificate,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${fakeAccessToken}`,
-              'Content-Type': 'application/json',
-              'x-version': '1',
-            },
-          }
-        );
-
-        done();
-      } catch (error) {
-        done(error);
-      }
+    axiosInstance.post = jest
+      .fn()
+      .mockResolvedValueOnce({ data: { value: 'hashValue' } });
+    //
+    await helper.load([hash, configNode], flow);
+    const n1 = helper.getNode('n1');
+    n1.receive({
+      payload: certificate,
+      accessToken: fakeAccessToken,
+    });
+    expect(axiosInstance.post).toHaveBeenCalledWith('/certificates/hash', {
+      algorithm,
+      encoding,
+      source: certificate,
     });
   });
 
-  it('when no accessToken is present, a warning will be shown', function (done) {
+  it('when no accessToken is present, a warning will be shown', async () => {
     const flow = [
-      { id: 'n1', type: 'hash', name: 'hash', wires: [['n2']] },
-      { id: 'n2', type: 'helper' },
+      {
+        id: 'n1',
+        type: 'hash',
+        name: 'hash',
+        wires: [],
+        apiConfig: 'n2',
+      },
+      configNodeFlow,
     ];
-    helper.load(hash, flow, function () {
-      const n1 = helper.getNode('n1');
-      const spy = jest.spyOn(n1, 'warn');
-      n1.receive({ payload: certificate });
-      try {
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledTimes(1);
-        // expect(spy).toHaveBeenCalledWith('Please add an access token'); // this does not resolve, hash.errors.accessToken
-        // expect(spy).toHaveBeenCalledWith('hash.errors.accessToken');
-        done();
-      } catch (error) {
-        done(error);
-      }
-      spy.mockRestore();
-    });
+    //
+    await helper.load([hash, configNode], flow);
+    const n1 = helper.getNode('n1');
+    n1.warn = jest.fn();
+    n1.receive({ payload: {} });
+    expect(n1.warn).toHaveBeenCalledTimes(1);
+    expect(n1.warn).toHaveBeenCalledWith('hash.errors.accessToken');
+    // expect(n1.warn).toHaveBeenCalledWith('Please add an access token'); // this does not resolve, hash.errors.accessToken
   });
 
-  it('when no certificate is present, a warning will be shown', function (done) {
+  it('when no certificate is present, an error will be shown', async () => {
     const flow = [
-      { id: 'n1', type: 'hash', name: 'hash', wires: [['n2']] },
-      { id: 'n2', type: 'helper' },
+      {
+        id: 'n1',
+        type: 'hash',
+        name: 'hash',
+        wires: [],
+        apiConfig: 'n2',
+      },
+      configNodeFlow,
     ];
-
-    helper.load(hash, flow, function () {
-      const n1 = helper.getNode('n1');
-      const spy = jest.spyOn(n1, 'warn');
-      n1.receive({ accessToken: fakeAccessToken });
-      try {
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledTimes(1);
-        // expect(spy).toHaveBeenCalledWith(
-        //     'Please add a valid JSON certificate to global.certificate or msg.payload'
-        // );
-        // node-test-helper does not resolve messages, adding the path as a fallback
-        expect(spy).toHaveBeenCalledWith('hash.errors.validCertificate');
-        done();
-      } catch (error) {
-        done(error);
-      }
-      spy.mockRestore();
-    });
+    //
+    await helper.load([hash, configNode], flow);
+    const n1 = helper.getNode('n1');
+    n1.error = jest.fn();
+    n1.context().global.set('certificate', null);
+    n1.receive({ accessToken: fakeAccessToken });
+    expect(n1.error).toHaveBeenCalledTimes(1);
+    // expect(n1.error).toHaveBeenCalledWith(
+    //     'Please add a valid JSON certificate to global.certificate or msg.payload'
+    // );
+    // node-test-helper does not resolve messages, adding the path as a fallback
+    expect(n1.error).toHaveBeenCalledWith('hash.errors.validCertificate');
   });
 });
