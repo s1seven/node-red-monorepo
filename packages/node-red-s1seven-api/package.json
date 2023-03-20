@@ -22,6 +22,7 @@
     "nodes": {
       "hash-certificate": "lib/certificates/hash-certificate.js",
       "verify-certificate": "lib/certificates/verify-certificate.js",
+      "validate-certificate": "lib/certificates/validate-certificate.js",
       "notarize-certificate": "lib/certificates/notarize-certificate.js",
       "get-identities": "lib/identities/get-identities.js",
       "get-company": "lib/companies/get-company.js",
