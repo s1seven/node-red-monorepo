@@ -60,6 +60,19 @@
         <dd>the headers from the HTTP response.</dd>
       </dl>
     </li>
+    <li>
+      Event output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>
+          an event object. This object contains 2 properties,
+          <code>event</code> and <code>value</code>. The <code>event</code> is
+          <code>has-changed</code> and the value is a boolean. This event can be
+          used to automate flows that depend on the access token, for example,
+          only restarting a node if the access token has changed.
+        </dd>
+      </dl>
+    </li>
   </ol>
 
   <h3>Details</h3>
