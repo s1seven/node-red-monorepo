@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
-const configNode = require('../lib/config/api-config.js');
+const configNode = require('../lib/config/api-config');
 
 helper.init(require.resolve('node-red'));
 

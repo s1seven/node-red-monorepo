@@ -1,16 +1,22 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 const helper = require('node-red-node-test-helper');
 
-const configNode = require('../lib/config/api-config.js');
-const hash = require('../lib/certificates/hash-certificate');
-const { dispose, register } = require('./container');
-const { axiosInstance } = require('./axios-helpers');
+const configNode = require('../lib/config/api-config');
+const hashCertificateNode = require('../lib/certificates/hash-certificate');
+const container = require('./container');
+const { axiosInstance } = require('./axios-helpers.mock');
 const certificate = require('../fixtures/cert.json');
 
-// require('./container').register();
 helper.init(require.resolve('node-red'));
 
 const fakeAccessToken = 'test';
+const hashCertificateFlow = {
+  id: 'n1',
+  type: 'hash',
+  name: 'hash',
+  apiConfig: 'n2',
+  wires: [],
+};
 const configNodeFlow = {
   id: 'n2',
   type: 'api-config',
@@ -21,24 +27,21 @@ const configNodeFlow = {
 
 describe('hash certificate Node', function () {
   beforeEach(function (done) {
-    register();
+    container.register();
     helper.startServer(done);
   });
 
   afterEach(function (done) {
-    dispose().finally(() => {
+    container.dispose().finally(() => {
       helper.unload();
       helper.stopServer(done);
     });
   });
 
   it('should be loaded', async () => {
-    const flow = [
-      { id: 'n1', type: 'hash', name: 'hash', apiConfig: 'n2' },
-      configNodeFlow,
-    ];
+    const flow = [hashCertificateFlow, configNodeFlow];
     //
-    await helper.load([hash, configNode], flow);
+    await helper.load([hashCertificateNode, configNode], flow);
     const n1 = helper.getNode('n1');
     const n2 = helper.getNode('n2');
     expect(n1).toHaveProperty('name', 'hash');
@@ -46,15 +49,12 @@ describe('hash certificate Node', function () {
   });
 
   it('api should be called with the correct url and body', async () => {
-    const flow = [
-      { id: 'n1', type: 'hash', name: 'hash', apiConfig: 'n2', wires: [] },
-      configNodeFlow,
-    ];
+    const flow = [hashCertificateFlow, configNodeFlow];
     axiosInstance.post = jest
       .fn()
       .mockResolvedValueOnce({ data: { value: 'hashValue' } });
     //
-    await helper.load([hash, configNode], flow);
+    await helper.load([hashCertificateNode, configNode], flow);
     const n1 = helper.getNode('n1');
     n1.receive({
       payload: certificate,
@@ -68,17 +68,14 @@ describe('hash certificate Node', function () {
   });
 
   it('algorithm and encoding can be overridden via the msg object', async () => {
-    const flow = [
-      { id: 'n1', type: 'hash', name: 'hash', wires: [], apiConfig: 'n2' },
-      configNodeFlow,
-    ];
+    const flow = [hashCertificateFlow, configNodeFlow];
     axiosInstance.post = jest
       .fn()
       .mockResolvedValueOnce({ data: { value: 'hashValue' } });
     const algorithm = 'sha512';
     const encoding = 'base64';
     //
-    await helper.load([hash, configNode], flow);
+    await helper.load([hashCertificateNode, configNode], flow);
     const n1 = helper.getNode('n1');
     n1.receive({
       payload: certificate,
@@ -97,22 +94,14 @@ describe('hash certificate Node', function () {
     const algorithm = 'sha3-256';
     const encoding = 'base64';
     const flow = [
-      {
-        id: 'n1',
-        type: 'hash',
-        name: 'hash',
-        wires: [],
-        algorithm,
-        encoding,
-        apiConfig: 'n2',
-      },
+      { ...hashCertificateFlow, algorithm, encoding },
       configNodeFlow,
     ];
     axiosInstance.post = jest
       .fn()
       .mockResolvedValueOnce({ data: { value: 'hashValue' } });
     //
-    await helper.load([hash, configNode], flow);
+    await helper.load([hashCertificateNode, configNode], flow);
     const n1 = helper.getNode('n1');
     n1.receive({
       payload: certificate,
@@ -126,18 +115,9 @@ describe('hash certificate Node', function () {
   });
 
   it('when no accessToken is present, a warning will be shown', async () => {
-    const flow = [
-      {
-        id: 'n1',
-        type: 'hash',
-        name: 'hash',
-        wires: [],
-        apiConfig: 'n2',
-      },
-      configNodeFlow,
-    ];
+    const flow = [hashCertificateFlow, configNodeFlow];
     //
-    await helper.load([hash, configNode], flow);
+    await helper.load([hashCertificateNode, configNode], flow);
     const n1 = helper.getNode('n1');
     n1.warn = jest.fn();
     n1.receive({ payload: {} });
@@ -147,18 +127,9 @@ describe('hash certificate Node', function () {
   });
 
   it('when no certificate is present, an error will be shown', async () => {
-    const flow = [
-      {
-        id: 'n1',
-        type: 'hash',
-        name: 'hash',
-        wires: [],
-        apiConfig: 'n2',
-      },
-      configNodeFlow,
-    ];
+    const flow = [hashCertificateFlow, configNodeFlow];
     //
-    await helper.load([hash, configNode], flow);
+    await helper.load([hashCertificateNode, configNode], flow);
     const n1 = helper.getNode('n1');
     n1.error = jest.fn();
     n1.context().global.set('certificate', null);

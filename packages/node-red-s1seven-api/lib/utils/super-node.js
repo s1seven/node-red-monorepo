@@ -77,8 +77,8 @@ class SuperNode extends EventEmitter {
     this._node.warn(msg);
   }
 
-  error(logMessage, msg) {
-    this._node.error(logMessage, msg);
+  error(msg) {
+    this._node.error(msg);
   }
 
   debug(msg) {
