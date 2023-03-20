@@ -49,7 +49,7 @@ module.exports = function (RED) {
         return;
       }
 
-      let certificate = msg.payload || globalContext.get('certificate');
+      let certificate = msg.payload || node.context().global.get('certificate');
       try {
         certificate = validateCertificate(certificate);
       } catch (error) {
