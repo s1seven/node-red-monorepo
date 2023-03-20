@@ -13,7 +13,7 @@ module.exports = function (RED) {
   const { container } = require('../utils/container');
 
   /** @type {import('../utils/async-local-storage')} */
-  const { exit, init } = container.resolve('asyncLocalStorage');
+  const asyncLocalStorage = container.resolve('asyncLocalStorage');
   /** @type {import('../utils/getters')} */
   const getters = container.resolve('getters');
   /** @type {import('../utils/axios-helpers')} */
@@ -28,9 +28,9 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, cb) => {
       function done(err) {
-        exit(cb, err);
+        asyncLocalStorage.exit(cb, err);
       }
-      init({ apiConfig, globalContext, msg });
+      asyncLocalStorage.init({ apiConfig, globalContext, msg });
       const companyId = getters.getCurrentCompanyId();
       const accessToken = getters.getAccessToken();
       if (!accessToken) {

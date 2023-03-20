@@ -19,7 +19,7 @@ module.exports = function (RED) {
   });
 
   /** @type {import('../utils/async-local-storage')} */
-  const { exit, init } = container.resolve('asyncLocalStorage');
+  const asyncLocalStorage = container.resolve('asyncLocalStorage');
   /** @type {import('../utils/axios-helpers')} */
   const axiosHelpers = container.resolve('axiosHelpers');
   /** @type {import('../utils/setters')} */
@@ -34,9 +34,9 @@ module.exports = function (RED) {
 
     node.on('input', async (msg, send, cb) => {
       function done(err) {
-        exit(cb, err);
+        asyncLocalStorage.exit(cb, err);
       }
-      init({ apiConfig, globalContext, msg });
+      asyncLocalStorage.init({ apiConfig, globalContext, msg });
 
       const clientId = msg.clientId || apiConfig?.credentials.clientId;
       const clientSecret =
