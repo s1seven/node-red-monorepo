@@ -1,30 +1,13 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-const { asClass, asValue, Lifetime } = require('awilix');
 const helper = require('node-red-node-test-helper');
 
 const configNode = require('../lib/config/api-config.js');
 const hash = require('../lib/certificates/hash-certificate');
-const { container } = require('../lib/utils/container');
-const {
-  axiosInstance,
-  createAxiosInstance,
-  requestHandler,
-} = require('./axios-helpers');
+const { dispose, register } = require('./container');
+const { axiosInstance } = require('./axios-helpers');
 const certificate = require('../fixtures/cert.json');
 
-container.register({
-  getters: asClass(require('../lib/utils/getters'), {
-    lifetime: Lifetime.SINGLETON,
-  }),
-  asyncLocalStorage: asClass(require('../lib/utils/async-local-storage'), {
-    lifetime: Lifetime.SINGLETON,
-  }),
-  axiosHelpers: asValue({
-    createAxiosInstance,
-    requestHandler,
-  }),
-});
-
+// require('./container').register();
 helper.init(require.resolve('node-red'));
 
 const fakeAccessToken = 'test';
@@ -38,12 +21,15 @@ const configNodeFlow = {
 
 describe('hash certificate Node', function () {
   beforeEach(function (done) {
+    register();
     helper.startServer(done);
   });
 
   afterEach(function (done) {
-    helper.unload();
-    helper.stopServer(done);
+    dispose().finally(() => {
+      helper.unload();
+      helper.stopServer(done);
+    });
   });
 
   it('should be loaded', async () => {
