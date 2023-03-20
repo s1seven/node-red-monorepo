@@ -1,7 +1,5 @@
 'use strict';
 
-const { asClass } = require('awilix');
-
 require('dotenv').config({
   path: require('node:path').resolve(__dirname, '../../.env'),
 });
@@ -12,36 +10,31 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
+  const { asClass } = require('awilix');
   const { container } = require('../utils/container');
+  const { onInputFactory } = require('../utils/on-input');
+
   const scope = container.createScope();
   scope.register({
     setters: asClass(require('../utils/setters')).singleton(),
   });
-
-  /** @type {import('../utils/async-local-storage')} */
-  const asyncLocalStorage = container.resolve('asyncLocalStorage');
-  /** @type {import('../utils/axios-helpers')} */
-  const axiosHelpers = container.resolve('axiosHelpers');
-  /** @type {import('../utils/setters')} */
-  const setters = scope.resolve('setters');
 
   /** @param {object} config
    * @param {string} config.name
    * @param {string} config.apiConfig
    */
   function getAccessToken(config) {
+    /** @type {import('../utils/axios-helpers')} */
+    const axiosHelpers = container.resolve('axiosHelpers');
+    /** @type {import('../utils/setters')} */
+    const setters = scope.resolve('setters');
+
     /** @type NodeRedNode */
     const node = this;
     RED.nodes.createNode(node, config);
-    const globalContext = node.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
-    node.on('input', async (msg, send, cb) => {
-      function done(err) {
-        asyncLocalStorage.exit(cb, err);
-      }
-      asyncLocalStorage.init({ apiConfig, globalContext, msg });
-
+    node.on('msg', async (msg, send, done) => {
       const clientId = msg.clientId || apiConfig?.credentials.clientId;
       const clientSecret =
         msg.clientSecret || apiConfig?.credentials.clientSecret;
@@ -79,6 +72,9 @@ module.exports = function (RED) {
       }
       done();
     });
+
+    const onInput = onInputFactory(apiConfig).bind(node);
+    node.on('input', onInput);
   }
   RED.nodes.registerType('get access token', getAccessToken);
 };

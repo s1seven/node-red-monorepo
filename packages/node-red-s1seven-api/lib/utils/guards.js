@@ -9,10 +9,13 @@ function isApiConfig(apiConfig) {
     apiConfig &&
     typeof apiConfig === 'object' &&
     typeof apiConfig.id === 'string' &&
-    // typeof apiConfig.clientId === 'string' &&
-    // typeof apiConfig.clientSecret === 'string' &&
+    typeof apiConfig.credentials === 'object' &&
+    typeof apiConfig.credentials.clientId === 'string' &&
+    typeof apiConfig.credentials.clientSecret === 'string' &&
     typeof apiConfig.environment === 'string' &&
-    typeof apiConfig.apiVersion === 'number'
+    (typeof apiConfig.apiVersion === 'number' ||
+      (typeof apiConfig.apiVersion === 'string' &&
+        !isNaN(Number(apiConfig.apiVersion))))
   );
 }
 

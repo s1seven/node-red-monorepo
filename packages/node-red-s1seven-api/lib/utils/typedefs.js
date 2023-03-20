@@ -11,11 +11,22 @@
  */
 
 /**
- * @typedef {function} Send
- * @param {NodeMessage | NodeMessage[]} messages
+ * @typedef { (msg: NodeMessage | Array<NodeMessage | NodeMessage[] | null>) => void } NodeRedSend
  * @returns {void}
  * @throws {Error}
- *  @memberof typdefs
+ * @memberof typdefs
+ */
+
+/**
+ * @typedef { (e: Error | undefined) => void } Done
+ * @returns {void}
+ * @memberof typdefs
+ * */
+
+/**
+ * @typedef { (msg: NodeMessage | Array<NodeMessage | NodeMessage[] | null>, send: NodeRedSend, cd: Done) => void } NodeInputHandler
+ * @returns {void}
+ * @memberof typdefs
  */
 
 /**
@@ -32,16 +43,21 @@
  * @typedef {object} ApiConfig
  * @property {string|undefined} name
  * @property {string} id
- * @property {number} apiVersion
- * @property {string} clientId
- * @property {string} clientSecret
+ * @property {number|string} apiVersion
+ * @property {object} credentials
+ * @property {string} credentials.clientId
+ * @property {string} credentials.clientSecret
  * @property {ApiEnvironment} environment
- * @property {string} clientSecret
  * @memberof typdefs
  */
 
 /**
  * @typedef {import('node-red').NodeContext['global']} GlobalContext
+ * @memberof typdefs
+ */
+
+/**
+ * @typedef {import('node-red').NodeRedNode} GlobalContext
  * @memberof typdefs
  */
 

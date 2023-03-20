@@ -11,14 +11,8 @@ require('../utils/container').setupContainer();
  */
 module.exports = function (RED) {
   const { container } = require('../utils/container');
+  const { onInputFactory } = require('../utils/on-input');
   const validateCertificate = require('../utils/validateCertificate');
-
-  /** @type {import('../utils/async-local-storage')} */
-  const asyncLocalStorage = container.resolve('asyncLocalStorage');
-  /** @type {import('../utils/getters')} */
-  const getters = container.resolve('getters');
-  /** @type {import('../utils/axios-helpers')} */
-  const axiosHelpers = container.resolve('axiosHelpers');
 
   /** @param {object} config
    * @param {string} config.name
@@ -26,18 +20,17 @@ module.exports = function (RED) {
    * @param {string} config.identity
    */
   function notarizeCertificate(config) {
+    /** @type {import('../utils/getters')} */
+    const getters = container.resolve('getters');
+    /** @type {import('../utils/axios-helpers')} */
+    const axiosHelpers = container.resolve('axiosHelpers');
     /** @type NodeRedNode */
     const node = this;
     RED.nodes.createNode(node, config);
     const globalContext = node.context().global;
     const apiConfig = RED.nodes.getNode(config.apiConfig);
 
-    node.on('input', async (msg, send, cb) => {
-      function done(err) {
-        asyncLocalStorage.exit(cb, err);
-      }
-      asyncLocalStorage.init({ apiConfig, globalContext, msg });
-
+    node.on('msg', async (msg, send, done) => {
       const companyId = getters.getCurrentCompanyId();
       const accessToken = getters.getAccessToken();
       const mode = getters.getApiMode();
@@ -84,6 +77,9 @@ module.exports = function (RED) {
       !success && node.error(data);
       done();
     });
+
+    const onInput = onInputFactory(apiConfig).bind(node);
+    node.on('input', onInput);
   }
   RED.nodes.registerType('notarize certificate', notarizeCertificate);
 };

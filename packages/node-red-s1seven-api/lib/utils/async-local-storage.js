@@ -91,7 +91,7 @@ function init(options) {
 }
 
 /**
- * @param {function} done
+ * @param {Done} done
  * @param {Error | undefined} err
  * @returns {void}
  * @see https://nodejs.org/api/async_hooks.html#async_hooks_asynclocalstorage_exit

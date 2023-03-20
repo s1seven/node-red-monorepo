@@ -55,7 +55,7 @@ class AxiosHelpers {
   /**
    * requestHandler - handles the axios request promise and sends the response to the node
    * @param {Promise<AxiosResponse>} request
-   * @param {Send} send
+   * @param {NodeRedSend} send
    * @resolves {Response}
    */
   async requestHandler(request, send) {
