@@ -10,31 +10,31 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
+  const { asClass } = require('awilix');
+  const SuperNode = require('../utils/super-node');
   const { container } = require('../utils/container');
   const validateCertificate = require('../utils/validateCertificate');
 
-  /** @type {import('../utils/async-local-storage')} */
-  const asyncLocalStorage = container.resolve('asyncLocalStorage');
-  /** @type {import('../utils/getters')} */
-  const getters = container.resolve('getters');
+  const scope = container.createScope();
+  scope.register({
+    setters: asClass(require('../utils/setters')).singleton(),
+    getters: asClass(require('../utils/getters')).singleton(),
+  });
+
   /** @type {import('../utils/axios-helpers')} */
   const axiosHelpers = container.resolve('axiosHelpers');
 
+  /** @param {object} config
+   * @param {string} config.name
+   * @param {string} config.apiConfig
+   * @this NodeRedNode
+   */
   function validateCertificateNode(config) {
-    /** @type NodeRedNode */
-    const node = this;
-    RED.nodes.createNode(node, config);
-    const globalContext = node.context().global;
-    const apiConfig = RED.nodes.getNode(config.apiConfig);
+    const node = new SuperNode(RED, config, this);
 
-    node.on('input', async (msg, send, cb) => {
-      function done(err) {
-        asyncLocalStorage.exit(cb, err);
-      }
-      asyncLocalStorage.init({ apiConfig, globalContext, msg });
-
-      let certificate = msg.payload || globalContext.get('certificate');
-      const accessToken = getters.getAccessToken();
+    node.on('msg', async (msg, send, done) => {
+      let certificate = msg.payload || node.context().global.get('certificate');
+      const accessToken = node.getAccessToken();
       try {
         certificate = validateCertificate(certificate);
       } catch (error) {
@@ -48,7 +48,7 @@ module.exports = function (RED) {
         return;
       }
 
-      const axios = axiosHelpers.createAxiosInstance();
+      const axios = node.createAxiosInstance();
       const { success, data } = await axiosHelpers.requestHandler(
         axios.post('/certificates/validate', certificate),
         send
