@@ -1,0 +1,111 @@
+<script type="text/html" data-help-name="get access token">
+  <p>A simple node that returns an access token from S1Seven's servers</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="message-properties">
+      clientId <span class="property-type">string</span>
+    </dt>
+    <dd>
+      Client Id is necessary for the token generation process. Learn more about
+      how to find your Client Id here:
+      <a>https://manual.s1seven.com/automation/#create-an-application</a>. It
+      can be set in the config node.
+    </dd>
+    <dt class="message-properties">
+      clientSecret <span class="property-type">string</span>
+    </dt>
+    <dd>
+      Client Secret is necessary for the token generation process. Learn more
+      about how to find your Client Secret here:
+      <a>https://manual.s1seven.com/automation/#create-an-application</a>. It
+      can be set in the config node.
+    </dd>
+    <dt class="optional">
+      environment <span class="property-type">staging | production</span>
+    </dt>
+    <dd>
+      choose the environment that you want to use - app.s1seven.dev or
+      app.s1seven.com. Defaults to production (app.s1seven.com).
+    </dd>
+    <dt class="optional">version <span class="property-type">1</span></dt>
+    <dd>
+      choose the version of the api to use. It can be set in the config node.
+      Defaults to <code>1</code>
+    </dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+    <li>
+      Success output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>
+          the response from the HTTP request containing an access token. The
+          access token is stored automatically in the global context, and is
+          used automatically by the other api nodes. The mode is also extracted
+          from the response and stored in the global context.
+        </dd>
+        <dt>headers <span class="property-type">object</span></dt>
+        <dd>the headers from the HTTP response.</dd>
+      </dl>
+    </li>
+    <li>
+      Failure output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>the error response from the HTTP request.</dd>
+        <dt>headers <span class="property-type">object</span></dt>
+        <dd>the headers from the HTTP response.</dd>
+      </dl>
+    </li>
+  </ol>
+
+  <h3>Details</h3>
+  <p>
+    The following properties can be added via the config node, found by
+    double-clicking on the tokens node, or by passing them in using the
+    <code>msg</code> object. If they are passed in via the
+    <code>msg</code> object, they will have priority over the values found in
+    the config node. This allows the values to be overridden dynamically if
+    necessary. For example, if both <code>msg.clientSecret</code> and a client
+    secret added via the config node are present,
+    <code>msg.clientSecret</code> will be used instead of the config node access
+    token.
+  </p>
+
+  <p>
+    <code>clientId</code> is used to generate an access token, look at the
+    documentation at
+    <a>https://manual.s1seven.com/automation/#create-an-application</a> to learn
+    more. It can be input via <code>msg.clientId</code>, or via the ui for the
+    config node which can be found by double-clicking on the
+    <code>tokens</code> node, in that order of priority.
+  </p>
+
+  <p>
+    <code>clientSecret</code> is used to generate an access token, look at the
+    documentation at
+    <a>https://manual.s1seven.com/automation/#create-an-application</a> to learn
+    more. It can be input via <code>msg.clientSecret</code>, or via the ui for
+    the config node which can be found by double-clicking on the
+    <code>tokens</code> node, in that order of priority.
+  </p>
+
+  <p>
+    <code>msg.environment</code> allows you to pass in the string value
+    <code>staging</code> or <code>production</code> to choose which server you
+    wish to use. Learn more about our environments here:
+    <a>https://developers.s1seven.com/docs/environments/</a>.
+  </p>
+
+  <p>
+    NOTE: Access tokens now expire after 24 hours and need to be regenerated,
+    you can find an example of how to automate the access token regeneration
+    here:
+    <a
+      >https://github.com/s1seven/node-red-monorepo/blob/main/packages/node-red-s1seven-api/README.md#authentication</a
+    >
+  </p>
+</script>

@@ -15,10 +15,9 @@
           return Object.keys(URL_TO_ENV_MAP).includes(input);
         },
       },
-      companyId: { value: '', required: false },
       name: { value: '', required: false },
       apiVersion: {
-        value: '',
+        value: DEFAULT_API_VERSION,
         required: false,
       },
     },
@@ -41,10 +40,6 @@
             <option value="staging">staging</option>
             <option selected value="production">production</option>
         </select>
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-companyId"><i class="fa fa-bookmark"></i><span data-i18n="config.label.companyId"></label>
-        <input type="text" id="node-config-input-companyId" />
     </div>
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-bookmark"></i><span data-i18n="config.label.name"></label>

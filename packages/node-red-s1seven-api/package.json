@@ -2,6 +2,9 @@
   "name": "@s1seven/node-red-s1seven-api",
   "version": "1.2.0",
   "description": "Nodes that interact with S1Seven's API",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "test": "jest",
     "test:cov": "rimraf -rf ./coverage && jest --ci --coverage",
@@ -17,16 +20,17 @@
   "node-red": {
     "version": ">=2.0.0",
     "nodes": {
-      "hash": "lib/hash/hash.js",
-      "verify": "lib/verify/verify.js",
-      "notarize": "lib/notarize/notarize.js",
-      "identities": "lib/identities/identities.js",
-      "company": "lib/company/company.js",
-      "tokens": "lib/tokens/tokens.js",
+      "hash-certificate": "lib/certificates/hash-certificate.js",
+      "verify-certificate": "lib/certificates/verify-certificate.js",
+      "notarize-certificate": "lib/certificates/notarize-certificate.js",
+      "get-identities": "lib/identities/get-identities.js",
+      "get-company": "lib/companies/get-company.js",
+      "get-token": "lib/tokens/get-token.js",
       "api-config": "lib/config/api-config.js"
     }
   },
   "dependencies": {
+    "awilix": "^8.0.0",
     "axios": "^1.3.4",
     "dotenv": "^16.0.3"
   },
