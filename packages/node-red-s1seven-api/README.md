@@ -28,166 +28,136 @@ A minimal example of the above workflow can be imported using the following JSON
 
 ```json
 [
-    {
-        "id": "e2b2aaef3e997b7b",
-        "type": "hash",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "algorithm": "sha256",
-        "encoding": "hex",
-        "x": 290,
-        "y": 380,
-        "wires": [
-            [
-                "6befa51db92df9f8"
-            ],
-            [
-                "290656f39a923100"
-            ]
-        ]
-    },
-    {
-        "id": "1f69af6a87ecfb24",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "{}",
-        "payloadType": "json",
-        "x": 110,
-        "y": 380,
-        "wires": [
-            [
-                "e2b2aaef3e997b7b"
-            ]
-        ]
-    },
-    {
-        "id": "6befa51db92df9f8",
-        "type": "debug",
-        "z": "155da1287ae6504d",
-        "name": "debug",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 730,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "290656f39a923100",
-        "type": "switch",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "property": "payload.statusCode",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "401",
-                "vt": "num"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 470,
-        "y": 460,
-        "wires": [
-            [
-                "fd323fdf31455b44"
-            ]
-        ],
-        "outputLabels": [
-            "401"
-        ]
-    },
-    {
-        "id": "fd323fdf31455b44",
-        "type": "get access token",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "apiConfig": "16bd3e4db46db980",
-        "x": 630,
-        "y": 280,
-        "wires": [
-            [
-                "6befa51db92df9f8"
-            ],
-            [
-                "6befa51db92df9f8"
-            ]
-        ]
-    },
-    {
-        "id": "7ff5a6d4faf5af58",
-        "type": "catch",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "scope": null,
-        "uncaught": false,
-        "x": 100,
-        "y": 440,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "68825bef95c36270",
-        "type": "inject",
-        "z": "155da1287ae6504d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 280,
-        "wires": [
-            [
-                "fd323fdf31455b44"
-            ]
-        ]
-    },
-    {
-        "id": "16bd3e4db46db980",
-        "type": "api-config",
-        "environment": "staging",
-        "companyId": "",
-        "name": "Staging",
-        "apiVersion": "1"
-    }
+  {
+    "id": "e2b2aaef3e997b7b",
+    "type": "hash",
+    "z": "155da1287ae6504d",
+    "name": "",
+    "apiConfig": "16bd3e4db46db980",
+    "algorithm": "sha256",
+    "encoding": "hex",
+    "x": 290,
+    "y": 380,
+    "wires": [["6befa51db92df9f8"], ["290656f39a923100"]]
+  },
+  {
+    "id": "1f69af6a87ecfb24",
+    "type": "inject",
+    "z": "155da1287ae6504d",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{}",
+    "payloadType": "json",
+    "x": 110,
+    "y": 380,
+    "wires": [["e2b2aaef3e997b7b"]]
+  },
+  {
+    "id": "6befa51db92df9f8",
+    "type": "debug",
+    "z": "155da1287ae6504d",
+    "name": "debug",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 730,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "290656f39a923100",
+    "type": "switch",
+    "z": "155da1287ae6504d",
+    "name": "",
+    "property": "payload.statusCode",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "401",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 470,
+    "y": 460,
+    "wires": [["fd323fdf31455b44"]],
+    "outputLabels": ["401"]
+  },
+  {
+    "id": "fd323fdf31455b44",
+    "type": "get access token",
+    "z": "155da1287ae6504d",
+    "name": "",
+    "apiConfig": "16bd3e4db46db980",
+    "x": 630,
+    "y": 280,
+    "wires": [["6befa51db92df9f8"], ["6befa51db92df9f8"]]
+  },
+  {
+    "id": "7ff5a6d4faf5af58",
+    "type": "catch",
+    "z": "155da1287ae6504d",
+    "name": "",
+    "scope": null,
+    "uncaught": false,
+    "x": 100,
+    "y": 440,
+    "wires": [[]]
+  },
+  {
+    "id": "68825bef95c36270",
+    "type": "inject",
+    "z": "155da1287ae6504d",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 280,
+    "wires": [["fd323fdf31455b44"]]
+  },
+  {
+    "id": "16bd3e4db46db980",
+    "type": "api-config",
+    "environment": "staging",
+    "companyId": "",
+    "name": "Staging",
+    "apiVersion": "1"
+  }
 ]
 ```
 
@@ -197,3 +167,73 @@ For development and testing purposes, the URL can be overridden by adding a `.en
 NOTE: If `S1SEVEN_BASE_URL` is present in the `.env` file, the tests will fail. Remove the property if necessary so the tests will pass.
 
 The `constants.js` file can be found in the `resources` folder, as that allows the variables to be shared with the frontend using Node-Red.
+
+## Creating new nodes
+
+When adding new nodes, the following steps should be followed:
+
+- If it doesn't exist create a folder with the name of the API resource in the `lib` folder. For example, if the API resource is `users`, create a folder called `users` in the `lib` folder.
+- Create a file called `<action>-<resource>.js` in the folder created in the previous step. For example, if the action is `get` and the resource is `users`, create a file called `get-users.js` in the `users` folder.
+- Follow the steps in the [Node-RED documentation](https://nodered.org/docs/creating-nodes/first-node) to create a new node.
+- Text displayed to the user should be added to the locales, see the [Internationalisation section](https://nodered.org/docs/creating-nodes/i18n) for more information.
+- The node should be added to the `package.json` file in the `nodes` property.
+- A new tests suite should be added to the `test` folder. The tests should be named `<action>-<resource>.test.js`. For example, if the action is `get` and the resource is `users`, create a file called `get-users.test.js` in the `test` folder.
+
+## Node Abstraction
+
+The []`super-node.js`](./lib/utils/super-node.js) file contains the common logic for the nodes. It is used to abstract the logic for the nodes, so that the nodes themselves are as simple as possible.
+It provides the following functions:
+
+- retrieve dependencies from DI container ([AsyncLocalStorage](./lib/utils/async-local-storage.js), [Getters](./lib/utils/getters.js), [AxiosHelpers](./lib/utils/axios-helpers.js)) that makes interacting with the Node-RED runtime and S1SEVEN API easier.
+- initialize AsyncLocalStore context and ensure it is cleaned up when the node event has been handled.
+- retrieve the node configuration and credentials
+- provide various getters to access node configuration
+- provide an [axios](https://github.com/axios/axios) factory that configures default headers and base URL
+- forward NodeRed node `input` event to the SuperNode `msg` event.
+
+### Usage example
+
+```javascript
+/* This file is used to setup the DI container,
+ * due to our tests setup we need to ensure that the container is set up before we require the node
+ */
+require('../utils/container').setupContainer();
+
+module.exports = function (RED) {
+  const { SuperNode } = require('../utils/super-node');
+
+  function MyNode(config) {
+    const node = new SuperNode(RED, config, this);
+    node.on('msg', async (msg, send, done) => {
+      const accessToken = node.getAccessToken();
+      const mode = node.getApiMode();
+      if (!accessToken) {
+        node.warn('Bearer token not found');
+        done();
+        return;
+      }
+
+      const axios = node.createAxiosInstance();
+      /* the requestHandler function is a wrapper around axios that handles the response and error cases
+       * it will return an object with the following properties:
+       * success: boolean
+       * data: the response data if the request was successful, otherwise the error message
+       *
+       * It will also the send the msg to the first output if the request was successful, otherwise it will send it to the second output
+       * The msg contains the following properties:
+       * payload: the response data if the request was successful, otherwise the error response
+       * headers: the response headers
+       */
+      const { success, data } = await node.requestHandler(
+        axios.get('/applications'),
+        send
+      );
+
+      !success && node.error(data);
+      done();
+    });
+  }
+
+  RED.nodes.registerType('my-node', MyNode);
+};
+```
