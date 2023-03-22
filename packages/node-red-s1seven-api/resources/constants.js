@@ -20,7 +20,7 @@ const DEFAULT_API_ENVIRONMENT = 'production';
 const DEFAULT_API_MODE = 'test';
 
 // node rendering
-const OUTPUT_LABELS = ['success', 'failure'];
+const OUTPUT_LABELS = ['success', 'failure', 'event'];
 const COIN_TYPES = [822, 100000000];
 const IDENTITY_STATUS = ['valid', 'obsolete'];
 
