@@ -43,10 +43,19 @@
   <h3>Outputs</h3>
   <ol class="node-ports">
     <li>
-      Standard output
+      Success output
       <dl class="message-properties">
         <dt>payload <span class="property-type">object</span></dt>
         <dd>the response from the HTTP request.</dd>
+      </dl>
+    </li>
+    <li>
+      Failure output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>the error response from the HTTP request.</dd>
+        <dt>headers <span class="property-type">object</span></dt>
+        <dd>the headers from the HTTP response.</dd>
       </dl>
     </li>
   </ol>

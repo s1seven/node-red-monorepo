@@ -25,14 +25,25 @@
   <h3>Outputs</h3>
   <ol class="node-ports">
     <li>
-      Standard output
+      Success output
       <dl class="message-properties">
         <dt>payload <span class="property-type">object</span></dt>
         <dd>
           the response from the HTTP request. If the request is successful, the
-          response the certificate. If the certificate is not valid, the
-          response will contain the status code <code>400</code>.
+          response will return the certificate.
         </dd>
+      </dl>
+    </li>
+    <li>
+      Failure output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>
+          the error response from the HTTP request which will contain the status
+          code <code>400</code>.
+        </dd>
+        <dt>headers <span class="property-type">object</span></dt>
+        <dd>the headers from the HTTP response.</dd>
       </dl>
     </li>
   </ol>
