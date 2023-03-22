@@ -161,70 +161,24 @@ A minimal example of the above workflow can be imported using the following JSON
 ]
 ```
 
-## Dynamic MQTT authentication
+## MQTT connection
 
-You can connect to MQTT dynamically by passing in messages, a simple example can be seen below:
-
-![example](./images/dynamic_mqtt.png)
-
-First, you must inject the `dynamically set topic` node, then the `get access token` node. The `get access token` node has a `switch` node connected to its third output, labeled `event`. The `switch` node checks to see if the property `value` is `true`, meaning that the access token has changed and the MQTT node should be restarted.
-
-Then, the `change` node sets the property `action` to `connect`, passes the following object to `broker`: 
-```js
-{   "credentials": { "user": "", "password": "" },   "force": true,   "clientid": "" }
-```
-And the `vhost` to the property `vhost`. Note: you must contact S1SEVEN to get access to the `vhost`.
-The following function node sets the `user`, `password` and `clientid` values dynamically based on the values that have been passed to it and the values stored in the global context.
-
-When the message reaches the MQTT node, it will restart with the updated values. This is just an example, feel free to adapt it to your needs.
-
-
-You can import this example flow:
+You can connect to S1SEVEN Async API (via MQTT) dynamically by using the [mqtt-connect node](./lib/mqtt/connect.js), a simple example can be seen below:
 
 ```json
 [
   {
-    "id": "e8ee392a67a85bbc",
-    "type": "debug",
-    "z": "155da1287ae6504d",
-    "name": "debug",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 610,
-    "y": 640,
-    "wires": []
-  },
-  {
-    "id": "2f865f1cbe2da7a6",
-    "type": "mqtt in",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "topic": "",
-    "qos": "1",
-    "datatype": "json",
-    "broker": "a8c451b01c36c58a",
-    "nl": false,
-    "rap": true,
-    "rh": 0,
-    "inputs": 1,
-    "x": 490,
-    "y": 640,
-    "wires": [["e8ee392a67a85bbc"]]
-  },
-  {
-    "id": "416926352fcf0263",
+    "id": "bb21c1cece6a1708",
     "type": "inject",
-    "z": "155da1287ae6504d",
+    "z": "19e657388eeb9f83",
     "name": "",
     "props": [
       {
         "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
       }
     ],
     "repeat": "",
@@ -234,169 +188,30 @@ You can import this example flow:
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 100,
-    "y": 580,
-    "wires": [["8d4b2a81aac3257e"]]
+    "x": 180,
+    "y": 720,
+    "wires": [["78e2c6fad8a07d6e"]]
   },
   {
-    "id": "f9087dfd752dc996",
-    "type": "change",
-    "z": "155da1287ae6504d",
+    "id": "78e2c6fad8a07d6e",
+    "type": "s1seven-mqtt-connect",
+    "z": "19e657388eeb9f83",
     "name": "",
-    "rules": [
-      {
-        "t": "set",
-        "p": "action",
-        "pt": "msg",
-        "to": "connect",
-        "tot": "str"
-      },
-      {
-        "t": "set",
-        "p": "broker",
-        "pt": "msg",
-        "to": "{   \"credentials\": { \"user\": \"\", \"password\": \"\" },   \"force\": true,   \"clientid\": \"\" }",
-        "tot": "json"
-      },
-      {
-        "t": "set",
-        "p": "vhost",
-        "pt": "msg",
-        "to": "jbjwikqf",
-        "tot": "str"
-      }
-    ],
-    "action": "",
-    "property": "",
-    "from": "",
-    "to": "",
-    "reg": false,
-    "x": 660,
-    "y": 580,
-    "wires": [["7e6bf0caea59e270"]]
-  },
-  {
-    "id": "7e6bf0caea59e270",
-    "type": "function",
-    "z": "155da1287ae6504d",
-    "name": "dynamically set credentials",
-    "func": "// Set this to the name of the current Config node\nconst environmentName = 'Staging';\nconst companyId = global.get(`S1SEVEN_COMPANY_ID_${environmentName}`);\nconst accessToken = global.get(`S1SEVEN_ACCESS_TOKEN_${environmentName}`);\n// vhost should be injected to msg.vhost\nmsg.broker.credentials.user = `${msg.vhost}:${companyId}`;\nmsg.broker.credentials.password = accessToken;\nmsg.broker.clientid = `company_${companyId}_node-red`;\nreturn msg;\n",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 260,
-    "y": 640,
-    "wires": [["2f865f1cbe2da7a6"]]
-  },
-  {
-    "id": "1cfc3e145a7167c4",
-    "type": "inject",
-    "z": "155da1287ae6504d",
-    "name": "sub to notarize_one",
-    "props": [
-      {
-        "p": "action",
-        "v": "subscribe",
-        "vt": "str"
-      },
-      {
-        "p": "topic",
-        "v": "{\"topic\":\"\",\"qos\":1}",
-        "vt": "json"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": "1",
-    "topic": "",
-    "x": 130,
-    "y": 520,
-    "wires": [["e2d687811ecc840d"]]
-  },
-  {
-    "id": "e2d687811ecc840d",
-    "type": "function",
-    "z": "155da1287ae6504d",
-    "name": "dynamically set topic",
-    "func": "const companyId = global.get('S1SEVEN_COMPANY_ID_Staging');\nmsg.topic.topic = `company/${companyId}/test/certificates/notarize_one`;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 360,
-    "y": 520,
-    "wires": [["7e6bf0caea59e270", "2f865f1cbe2da7a6"]]
-  },
-  {
-    "id": "b3fde71d8ca1bb78",
-    "type": "switch",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "property": "value",
-    "propertyType": "msg",
-    "rules": [
-      {
-        "t": "true"
-      }
-    ],
-    "checkall": "true",
-    "repair": false,
-    "outputs": 1,
-    "x": 490,
-    "y": 580,
-    "wires": [["f9087dfd752dc996"]]
-  },
-  {
-    "id": "8d4b2a81aac3257e",
-    "type": "get access token",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "apiConfig": "16bd3e4db46db980",
-    "x": 290,
-    "y": 580,
-    "wires": [[], [], ["b3fde71d8ca1bb78"]]
-  },
-  {
-    "id": "a8c451b01c36c58a",
-    "type": "mqtt-broker",
-    "name": "app.s1seven.dev",
-    "broker": "mqtts://broker.s1seven.dev:8883",
-    "port": "1883",
-    "clientid": "company_<company_id>_node-red",
-    "autoConnect": true,
-    "usetls": false,
-    "protocolVersion": "4",
-    "keepalive": "60",
-    "cleansession": true,
-    "birthTopic": "",
-    "birthQos": "0",
-    "birthPayload": "",
-    "birthMsg": {},
-    "closeTopic": "",
-    "closeQos": "0",
-    "closePayload": "",
-    "closeMsg": {},
-    "willTopic": "",
-    "willQos": "0",
-    "willPayload": "",
-    "willMsg": {},
-    "userProps": "",
-    "sessionExpiry": ""
-  },
-  {
-    "id": "16bd3e4db46db980",
-    "type": "api-config",
-    "environment": "staging",
-    "name": "Staging",
-    "apiVersion": "1"
+    "ApiConfigName": "test_1",
+    "Vhost": "jbjwikqf",
+    "credentials": {},
+    "x": 370,
+    "y": 720,
+    "wires": []
   }
 ]
 ```
 
+For this example to work you need to create an API config by using any of the methods described in the [API config](#api-config) section.
+Then you need to configure the following properties :
+
+- `ApiConfigName` to the name of the API config you which to reuse.
+- `Vhost` which is mandatory field to authenticate to our broker. Note: you must contact S1SEVEN to get access to the `Vhost`.
 
 ## Development
 

@@ -2,7 +2,7 @@
   "id": "3a077bd68754120e",
   "type": "subflow",
   "name": "MQTT connect",
-  "info": "",
+  "info": "<h1>S1SEVEN MQTT API </h1>\n<p>\n You can easily connect to S1SEVEN Async API (via MQTT) dynamically by integrating this node into your workflow.\n It will handle the authentication with the credentials associated with a given API Config node as described     <a href=\"https://developers.s1seven.com/docs/information/#authentication-1\"> in the developers documentation</a>. \n It will also take care of regenerating an access token if needed.\n</p>\n<p>\n Once this node is connected (you can see the status below it), you can start receiving events with some <b>mqtt in</b> node(s).\n First you will need to assign the <code>S1SEVEN MQTT</code> config (under the <b>Server</b> field) to those nodes.\n</p>\n\n<h2>Config</h2>\n\n<p>\nApiConfigName is needed to retrieve values set internally by the S1SEVEN nodes.\nIt is located under the <b>name</b> field of the <b>API config</b> node. \n</p>\n\n<p>\nVhost is a mandatory credentials parameter.\nYou must contact S1SEVEN to get access to the `vhost`.\n</p>\n\n\n",
   "category": "S1Seven",
   "in": [
     {
