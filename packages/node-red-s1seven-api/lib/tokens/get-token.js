@@ -18,7 +18,6 @@ module.exports = function (RED) {
   const scope = container.createScope();
   scope.register({
     setters: asClass(require('../utils/setters')).singleton(),
-    getters: asClass(require('../utils/getters')).singleton(),
   });
 
   /** @param {object} config
@@ -31,22 +30,8 @@ module.exports = function (RED) {
 
     /** @type {import('../utils/setters')} */
     const setters = scope.resolve('setters');
-    /** @type {import('../utils/getters')} */
-    const getters = scope.resolve('getters');
 
-    node.on('msg', async (msg, sendCb, done) => {
-      /**
-       * @param {[NodeMessage, null] | [null, NodeMessage]} inputArr
-       */
-      function send(inputArr) {
-        const oldAccessToken = getters.getAccessToken();
-        const newAccessToken = inputArr[0]?.payload.accessToken;
-        const eventObj = {
-          event: 'has-changed',
-          value: Boolean(newAccessToken) && oldAccessToken !== newAccessToken,
-        };
-        sendCb([...inputArr, eventObj]);
-      }
+    node.on('msg', async (msg, send, done) => {
       const clientId = msg.clientId || node.apiConfig?.credentials.clientId;
       const clientSecret =
         msg.clientSecret || node.apiConfig?.credentials.clientSecret;
@@ -71,6 +56,14 @@ module.exports = function (RED) {
       );
 
       if (success) {
+        send([
+          null,
+          null,
+          {
+            event: 'has-changed',
+            value: node.getAccessToken() !== data.accessToken,
+          },
+        ]);
         setters.setAccessToken(data.accessToken);
         setters.setApiMode(data.application.mode);
         setters.setCurrentCompanyId(data.application.owner.id);
