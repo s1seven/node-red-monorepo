@@ -3,9 +3,10 @@
 const { format } = require('node:util');
 
 const {
-  GLOBAL_MODE_KEY_PATTERN,
   GLOBAL_ACCESS_TOKEN_KEY_PATTERN,
+  GLOBAL_BASE_URL_KEY_PATTERN,
   GLOBAL_COMPANY_ID_KEY_PATTERN,
+  GLOBAL_MODE_KEY_PATTERN,
 } = require('../../resources/constants');
 
 /**
@@ -28,8 +29,8 @@ const GLOBAL_ACCESS_TOKEN_KEY = (configNode) =>
  * @param {ApiConfig} configNode
  * @returns {string}
  */
-const GLOBAL_MODE_KEY = (configNode) =>
-  format(GLOBAL_MODE_KEY_PATTERN, getConfigNodeIdentifier(configNode));
+const GLOBAL_BASE_URL_KEY = (configNode) =>
+  format(GLOBAL_BASE_URL_KEY_PATTERN, getConfigNodeIdentifier(configNode));
 
 /**
  * @param {ApiConfig} configNode
@@ -38,8 +39,16 @@ const GLOBAL_MODE_KEY = (configNode) =>
 const GLOBAL_COMPANY_ID_KEY = (configNode) =>
   format(GLOBAL_COMPANY_ID_KEY_PATTERN, getConfigNodeIdentifier(configNode));
 
+/**
+ * @param {ApiConfig} configNode
+ * @returns {string}
+ */
+const GLOBAL_MODE_KEY = (configNode) =>
+  format(GLOBAL_MODE_KEY_PATTERN, getConfigNodeIdentifier(configNode));
+
 module.exports = {
   GLOBAL_ACCESS_TOKEN_KEY,
+  GLOBAL_BASE_URL_KEY,
   GLOBAL_COMPANY_ID_KEY,
   GLOBAL_MODE_KEY,
 };

@@ -48,6 +48,7 @@
  * @property {string} credentials.clientId
  * @property {string} credentials.clientSecret
  * @property {ApiEnvironment} environment
+ * @property {string} baseUrl
  * @memberof typdefs
  */
 
