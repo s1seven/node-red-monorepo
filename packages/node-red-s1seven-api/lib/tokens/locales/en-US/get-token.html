@@ -9,8 +9,10 @@
     <dd>
       Client Id is necessary for the token generation process. Learn more about
       how to find your Client Id here:
-      <a>https://manual.s1seven.com/automation/#create-an-application</a>. It
-      can be set in the config node.
+      <a href="https://manual.s1seven.com/automation/#create-an-application"
+        >https://manual.s1seven.com</a
+      >
+      . It can be set in the config node.
     </dd>
     <dt class="message-properties">
       clientSecret <span class="property-type">string</span>
@@ -18,8 +20,10 @@
     <dd>
       Client Secret is necessary for the token generation process. Learn more
       about how to find your Client Secret here:
-      <a>https://manual.s1seven.com/automation/#create-an-application</a>. It
-      can be set in the config node.
+      <a href="https://manual.s1seven.com/automation/#create-an-application"
+        >https://manual.s1seven.com</a
+      >
+      . It can be set in the config node.
     </dd>
     <dt class="optional">
       environment <span class="property-type">staging | production</span>
@@ -91,34 +95,38 @@
   <p>
     <code>clientId</code> is used to generate an access token, look at the
     documentation at
-    <a>https://manual.s1seven.com/automation/#create-an-application</a> to learn
-    more. It can be input via <code>msg.clientId</code>, or via the ui for the
-    config node which can be found by double-clicking on the
+    <a href="https://manual.s1seven.com/automation/#create-an-application"
+      >https://manual.s1seven.com</a
+    >
+    to learn more. It can be input via <code>msg.clientId</code>, or via the ui
+    for the config node which can be found by double-clicking on the
     <code>tokens</code> node, in that order of priority.
   </p>
 
   <p>
     <code>clientSecret</code> is used to generate an access token, look at the
     documentation at
-    <a>https://manual.s1seven.com/automation/#create-an-application</a> to learn
-    more. It can be input via <code>msg.clientSecret</code>, or via the ui for
-    the config node which can be found by double-clicking on the
+    <a href="https://manual.s1seven.com/automation/#create-an-application"
+      >https://manual.s1seven.com</a
+    >
+    to learn more. It can be input via <code>msg.clientSecret</code>, or via the
+    ui for the config node which can be found by double-clicking on the
     <code>tokens</code> node, in that order of priority.
   </p>
 
   <p>
     <code>msg.environment</code> allows you to pass in the string value
     <code>staging</code> or <code>production</code> to choose which server you
-    wish to use. Learn more about our environments here:
-    <a>https://developers.s1seven.com/docs/environments/</a>.
+    wish to use. Learn more about our environments
+    <a href="https://developers.s1seven.com/docs/environments/">here</a>.
   </p>
 
   <p>
     NOTE: Access tokens now expire after 24 hours and need to be regenerated,
     you can find an example of how to automate the access token regeneration
-    here:
     <a
-      >https://github.com/s1seven/node-red-monorepo/blob/main/packages/node-red-s1seven-api/README.md#authentication</a
-    >
+      href="https://github.com/s1seven/node-red-monorepo/blob/main/packages/node-red-s1seven-api/README.md#authentication"
+      >here</a
+    >.
   </p>
 </script>
