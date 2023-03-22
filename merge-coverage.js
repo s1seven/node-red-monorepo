@@ -16,7 +16,13 @@ async function main() {
       desc: 'Path to json coverage report file(s)',
       default: readdirSync(path.resolve('./packages'), { withFileTypes: true })
         .filter((dirent) => dirent.isDirectory())
-        .map((dirent) => path.resolve('./packages', dirent.name, `${COVERAGE_FOLDER}/coverage-final.json`)),
+        .map((dirent) =>
+          path.resolve(
+            './packages',
+            dirent.name,
+            `${COVERAGE_FOLDER}/coverage-final.json`
+          )
+        ),
     },
     reporters: {
       type: 'array',

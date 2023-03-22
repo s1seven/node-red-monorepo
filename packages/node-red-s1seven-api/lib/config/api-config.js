@@ -1,10 +1,10 @@
+const { URL_TO_ENV_MAP } = require('../../resources/constants');
+const { GLOBAL_BASE_URL_KEY } = require('../utils/keys');
+
 /**
  * @type {RED_JS}
  */
 module.exports = function (RED) {
-  const { URL_TO_ENV_MAP } = require('../../resources/constants');
-  const { GLOBAL_BASE_URL_KEY } = require('../utils/keys');
-
   /** @param {object} config
    * @param {ApiEnvironment} config.environment
    * @param {string} config.name
