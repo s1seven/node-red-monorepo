@@ -10,16 +10,9 @@ require('../utils/container').setupContainer();
  * @type {RED_JS}
  */
 module.exports = function (RED) {
-  const { asClass } = require('awilix');
   const SuperNode = require('../utils/super-node');
   const { container } = require('../utils/container');
   const validateCertificate = require('../utils/validateCertificate');
-
-  const scope = container.createScope();
-  scope.register({
-    setters: asClass(require('../utils/setters')).singleton(),
-    getters: asClass(require('../utils/getters')).singleton(),
-  });
 
   /** @type {import('../utils/axios-helpers')} */
   const axiosHelpers = container.resolve('axiosHelpers');
@@ -49,7 +42,7 @@ module.exports = function (RED) {
       }
 
       const axios = node.createAxiosInstance();
-      const { success, data } = await axiosHelpers.requestHandler(
+      const { success, data } = await node.requestHandler(
         axios.post('/certificates/validate', certificate),
         send
       );
