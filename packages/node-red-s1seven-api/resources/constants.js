@@ -23,6 +23,8 @@ const DEFAULT_API_MODE = 'test';
 const OUTPUT_LABELS = ['success', 'failure', 'event'];
 const COIN_TYPES = [822, 100000000];
 const IDENTITY_STATUS = ['valid', 'obsolete'];
+const CATEGORY_NAME = 'S1Seven';
+const NODE_COLOR = '#BAD3FB';
 
 // storage keys
 const GLOBAL_ACCESS_TOKEN_KEY_PREFIX = 'S1SEVEN_ACCESS_TOKEN';
@@ -40,6 +42,7 @@ module.exports = {
   ENCODING_OPTIONS,
   MODE,
   COIN_TYPES,
+  CATEGORY_NAME,
   IDENTITY_STATUS,
   ACCOUNT_INDEX_MIN,
   ACCOUNT_INDEX_MAX,
@@ -53,4 +56,5 @@ module.exports = {
   GLOBAL_ACCESS_TOKEN_KEY_PATTERN,
   GLOBAL_COMPANY_ID_KEY_PREFIX,
   GLOBAL_COMPANY_ID_KEY_PATTERN,
+  NODE_COLOR,
 };
