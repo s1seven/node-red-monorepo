@@ -27,8 +27,7 @@
       "get-identities": "lib/identities/get-identities.js",
       "get-company": "lib/companies/get-company.js",
       "get-token": "lib/tokens/get-token.js",
-      "api-config": "lib/config/api-config.js",
-      "mqtt-connect": "lib/mqtt/connect.js"
+      "api-config": "lib/config/api-config.js"
     }
   },
   "dependencies": {
