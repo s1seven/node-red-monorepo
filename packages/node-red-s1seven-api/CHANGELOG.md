@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/s1seven/node-red-monorepo/compare/@s1seven/node-red-s1seven-api@1.2.0...@s1seven/node-red-s1seven-api@1.3.0) (2023-03-23)
+
+### Bug Fixes
+
+- **node-red-s1seven-api:** add validators when initializing async local store ([67df69f](https://github.com/s1seven/node-red-monorepo/commit/67df69f800d22b195971215811beca8b0ac0e7ce))
+- **node-red-s1seven-api:** allow space in config node name ([94c110a](https://github.com/s1seven/node-red-monorepo/commit/94c110a73c7ac30a5c4f8e8cf6f98990d9ad300a))
+- **node-red-s1seven-api:** disable mqtt connect node and only provide reusable subflow ([b9f0239](https://github.com/s1seven/node-red-monorepo/commit/b9f0239077ae3465565c256ce28edfe408c2570c))
+- **node-red-s1seven-api:** increase node configs type safety ([a4431d1](https://github.com/s1seven/node-red-monorepo/commit/a4431d10a5c3b5af6d6acb2a981cb7cca9574d08))
+- **node-red-s1seven-api:** make storage keys dynamic ([79f8902](https://github.com/s1seven/node-red-monorepo/commit/79f89028bb14894ea4d3b161a3d74a7453d25a37))
+- **node-red-s1seven-api:** refine axios instance creation ([aec1f90](https://github.com/s1seven/node-red-monorepo/commit/aec1f90dc88bc69f3d4479afd403e7360df1500c))
+- **node-red-s1seven-api:** rename hash node type ([4a45d80](https://github.com/s1seven/node-red-monorepo/commit/4a45d80832d3598197e5550c36e3353b1958bdd2))
+- **node-red-s1seven-api:** replace undefined globalContext ([c08a243](https://github.com/s1seven/node-red-monorepo/commit/c08a2436439ae54db47860994d93fe8e57519be9))
+- **node-red-s1seven-api:** solve translations path ([f05d716](https://github.com/s1seven/node-red-monorepo/commit/f05d716ac59cf18eef430339ea09a998591fa25f))
+- **node-red-s1seven-api:** try improving subflow loading ([1c83467](https://github.com/s1seven/node-red-monorepo/commit/1c83467724d27f0a4dd30f18338702dbc7695c74))
+
+### Features
+
+- add has-changed event to get-token node ([c94d92f](https://github.com/s1seven/node-red-monorepo/commit/c94d92f88d0274d7746f72763c072bf62fb02ac8))
+- add validate endpoint node ([96a3d86](https://github.com/s1seven/node-red-monorepo/commit/96a3d86b381096f7adce793b49495cea21c50783))
+- **node-red-s1seven-api:** add response headers in `requestHandler` and improve doc ([7e3ad3d](https://github.com/s1seven/node-red-monorepo/commit/7e3ad3dd44792862ce9f89f1e6c4e9f371a13b70))
+- **node-red-s1seven-api:** add type definitions ([324f23f](https://github.com/s1seven/node-red-monorepo/commit/324f23fd3dcf7c6fbf9fbfa12ca32190a5b4360d))
+- **node-red-s1seven-api:** check mqtt connection status ([2d1ed00](https://github.com/s1seven/node-red-monorepo/commit/2d1ed002fb405f90efa642d5dceabe7df8f261b2))
+- **node-red-s1seven-api:** create axios instance creation helper ([d96fb19](https://github.com/s1seven/node-red-monorepo/commit/d96fb193af40a9703143b386c6d25c10e444091f))
+- **node-red-s1seven-api:** create functions to get/set values in async local storage ([963ccdf](https://github.com/s1seven/node-red-monorepo/commit/963ccdfe4a40dafe9fb26ecb4e3958008ca6f0a8))
+- **node-red-s1seven-api:** create shared container ([4cd48be](https://github.com/s1seven/node-red-monorepo/commit/4cd48be64104951772f2496c57a3b7ae3abc74cd))
+- **node-red-s1seven-api:** create subflow module to connect to MQTT ([4340c1f](https://github.com/s1seven/node-red-monorepo/commit/4340c1fa7509ad6339116d8b66e8a15e32c77eb7))
+- **node-red-s1seven-api:** store base URL in global context ([de7f909](https://github.com/s1seven/node-red-monorepo/commit/de7f9090d7102256163e8bd367571cdcf6b53e08))
+
 # [1.2.0](https://github.com/s1seven/node-red-monorepo/compare/@s1seven/node-red-s1seven-api@1.1.0...@s1seven/node-red-s1seven-api@1.2.0) (2023-03-13)
 
 ### Bug Fixes
