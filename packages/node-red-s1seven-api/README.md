@@ -8,7 +8,7 @@ The endpoints that are currently available are `POST certificates/hash`, `POST c
 
 ## API config
 
-This node must be declared at least once in your flow when you drop and configure a node from the `S1Seven` pallette. It is used to store the `clientId`, `clientSecret` and `environment` that are required to authenticate with the S1Seven API. The `environment` property can be set to either `production` or `staging`. The `clientId` and `clientSecret` are the credentials generated in your application, you can learn more about these credentials in the [user-manual](https://manual.s1seven.com/automation/#applications-and-access-tokens).
+This node must be declared at least once in your flow when you drop and configure a node from the `S1Seven` palette. It is used to store the `clientId`, `clientSecret` and `environment` that are required to authenticate with the S1Seven API. The `environment` property can be set to either `production` or `staging`. The `clientId` and `clientSecret` are the credentials generated in your application, you can learn more about these credentials in the [user-manual](https://manual.s1seven.com/automation/#applications-and-access-tokens).
 You can create as many API config as the number of applications you have. The `name` property is used to identify the properties store under the global context.
 Here's a list of the properties stored in the global context:
 
