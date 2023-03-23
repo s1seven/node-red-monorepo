@@ -72,5 +72,5 @@ module.exports = function (RED) {
       done();
     });
   }
-  RED.nodes.registerType('hash', hashCertificate);
+  RED.nodes.registerType('hash certificate', hashCertificate);
 };
