@@ -5,6 +5,9 @@
   "engines": {
     "node": ">=14.0.0"
   },
+  "bugs": {
+    "url": "https://github.com/s1seven/node-red-monorepo/issues"
+  },
   "scripts": {
     "test": "jest",
     "test:cov": "rimraf -rf ./coverage && jest --ci --coverage",

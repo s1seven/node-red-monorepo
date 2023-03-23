@@ -3,6 +3,13 @@
   "version": "0.0.9",
   "description": "A simple node-red module that wraps the S1Seven generatePdf module and allows it to be used in node-red.",
   "main": "generate-pdf-node.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/s1seven/node-red-monorepo/issues"
+  },
+
   "scripts": {
     "test": "jest",
     "test:cov": "rimraf -rf ./coverage && jest --ci --coverage",
@@ -10,6 +17,7 @@
     "lint": "eslint -c ../../.eslintrc.json \"**/*.js\" --fix"
   },
   "node-red": {
+    "version": ">=2.0.0",
     "nodes": {
       "generate pdf": "generate-pdf-node.js"
     }
