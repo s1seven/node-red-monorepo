@@ -1,13 +1,5 @@
 [
   {
-    "id": "97952d42668ec760",
-    "type": "tab",
-    "label": "Flow 3",
-    "disabled": false,
-    "info": "",
-    "env": []
-  },
-  {
     "id": "3a077bd68754120e",
     "type": "subflow",
     "name": "MQTT connect",
@@ -24,7 +16,18 @@
         ]
       }
     ],
-    "out": [],
+    "out": [
+      {
+        "x": 800,
+        "y": 640,
+        "wires": [
+          {
+            "id": "89d837552edceeed",
+            "port": 0
+          }
+        ]
+      }
+    ],
     "env": [
       {
         "name": "ApiConfigName",
@@ -48,7 +51,7 @@
     "color": "#BAD3FB",
     "icon": "@s1seven/node-red-s1seven-api/s_icon_logo.svg",
     "status": {
-      "x": 880,
+      "x": 800,
       "y": 520,
       "wires": [
         {
@@ -59,71 +62,22 @@
     }
   },
   {
-    "id": "8a6608112e0505f3",
-    "type": "tls-config",
-    "z": "3a077bd68754120e",
-    "name": "",
-    "cert": "",
-    "key": "",
-    "ca": "",
-    "certname": "",
-    "keyname": "",
-    "caname": "",
-    "servername": "",
-    "verifyservercert": false,
-    "alpnprotocol": ""
-  },
-  {
-    "id": "316e510501255bb2",
-    "type": "mqtt-broker",
-    "name": "S1SEVEN MQTT",
-    "broker": "localhost",
-    "port": "1883",
-    "clientid": "",
-    "autoConnect": false,
-    "usetls": false,
-    "protocolVersion": "4",
-    "keepalive": "60",
-    "cleansession": true,
-    "birthTopic": "",
-    "birthQos": "0",
-    "birthPayload": "",
-    "birthMsg": {},
-    "closeTopic": "",
-    "closeQos": "0",
-    "closePayload": "",
-    "closeMsg": {},
-    "willTopic": "",
-    "willQos": "0",
-    "willPayload": "",
-    "willMsg": {},
-    "userProps": "",
-    "sessionExpiry": ""
-  },
-  {
-    "id": "73927e1639e0359d",
-    "type": "api-config",
-    "environment": "staging",
-    "name": "S1SEVEN API",
-    "apiVersion": "1"
-  },
-  {
     "id": "7e6bf0caea59e270",
     "type": "function",
     "z": "3a077bd68754120e",
     "name": "connect to the broker",
-    "func": "const apiConfigNodeName = flow.get('apiConfigNodeName');\nconst vhost = flow.get('vhost');\nconst s1sevenDomain = flow.get('s1sevenDomain');\n\n/** these variables are stored internally by the S1SEVEN get access token node*/\nconst companyId = global.get(`S1SEVEN_COMPANY_ID_${apiConfigNodeName}`);\nconst accessToken = global.get(`S1SEVEN_ACCESS_TOKEN_${apiConfigNodeName}`);\n\nmsg.action = 'connect';\n\n/**\n * configure the MQTT node connection\n * following guidelines to access S1SEVEN Async API\n * @see https://developers.s1seven.com/docs/information#authentication-1\n * @see https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/network/10-mqtt.js\n **/\n\nconst defaultBrokerConfig = {  \n    credentials: { \n        username: '', \n        password: '', \n    },  \n    clientid: 'company_$',\n    url: `mqtts://broker.${s1sevenDomain}:8883`,\n    // broker: `wss://broker.s1seven.dev/ws/mqtt`,\n    usetls: true,\n    verifyservercert: false,\n    force: true,  \n    autoConnect: false,\n    keepalive: 60,\n    cleansession: false\n};\nmsg.broker = { ...defaultBrokerConfig, ...(msg.broker || {}) };\nmsg.broker.credentials = { \n    username: `${vhost}:${companyId}`,\n    password: accessToken\n};\n// const clientIdSuffix = Math.random().toString(16).substr(2, 8);\nconst clientIdSuffix = `(${os.hostname()})-(${os.platform()})-(${os.arch()})`;\nmsg.broker.clientid = `company_${companyId}_node-red-${clientIdSuffix}`;\n\n// allow override of defaultBrokerConfig.url to work with local env\nconst localhosts = ['localhost', '0.0.0.0', '127.0.0.1']\nif (localhosts.includes(s1sevenDomain)) {\n   msg.broker.usetls = false;\n   msg.broker.url = `mqtt://${s1sevenDomain}:1883`;\n} \n/** \n * for some reason credentials are needed at the root of msg.broker \n * to make the connection work\n * @see https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/network/10-mqtt.js#L566\n **/\nmsg.broker = {\n    ...msg.broker,\n    ...msg.broker.credentials,\n}\nreturn msg\n",
+    "func": "node.status({\n    fill: \"yellow\",\n    shape: \"dot\",\n    text: \"connecting\"\n});\n\nconst apiConfigNodeName = flow.get('apiConfigNodeName');\nconst vhost = flow.get('vhost');\nconst s1sevenDomain = flow.get('s1sevenDomain');\n\n/** these variables are stored internally by the S1SEVEN get access token node*/\nconst companyId = global.get(`S1SEVEN_COMPANY_ID_${apiConfigNodeName}`);\nconst accessToken = global.get(`S1SEVEN_ACCESS_TOKEN_${apiConfigNodeName}`);\n\nmsg.action = 'connect';\n\n/**\n * configure the MQTT node connection\n * following guidelines to access S1SEVEN Async API\n * @see https://developers.s1seven.com/docs/information#authentication-1\n * @see https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/network/10-mqtt.js\n **/\n\nconst defaultBrokerConfig = {  \n    credentials: { \n        username: '', \n        password: '', \n    },  \n    clientid: 'company_$',\n    url: `mqtts://broker.${s1sevenDomain}:8883`,\n    // broker: `wss://broker.s1seven.dev/ws/mqtt`,\n    usetls: true,\n    verifyservercert: false,\n    force: true,  \n    autoConnect: false,\n    keepalive: 60,\n    cleansession: false\n};\nmsg.broker = { ...defaultBrokerConfig, ...(msg.broker || {}) };\nmsg.broker.credentials = { \n    username: `${vhost}:${companyId}`,\n    password: accessToken\n};\n// const clientIdSuffix = Math.random().toString(16).substr(2, 8);\nconst clientIdSuffix = `(${os.hostname()})-(${os.platform()})-(${os.arch()})`;\nmsg.broker.clientid = `company_${companyId}_node-red-${clientIdSuffix}`;\n\n// allow override of defaultBrokerConfig.url to work with local env\nconst localhosts = ['localhost', '0.0.0.0', '127.0.0.1']\nif (localhosts.includes(s1sevenDomain)) {\n   msg.broker.usetls = false;\n   msg.broker.url = `mqtt://${s1sevenDomain}:1883`;\n} \n/** \n * for some reason credentials are needed at the root of msg.broker \n * to make the connection work\n * @see https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/network/10-mqtt.js#L566\n **/\nmsg.broker = {\n    ...msg.broker,\n    ...msg.broker.credentials,\n}\nreturn msg\n",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
-    "finalize": "",
+    "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nmsg.action = 'disconnect';\nreturn msg;",
     "libs": [
       {
         "var": "os",
         "module": "os"
       }
     ],
-    "x": 300,
+    "x": 280,
     "y": 420,
     "wires": [["3c3e70c09e7914f9"]]
   },
@@ -142,10 +96,10 @@
     "type": "function",
     "z": "3a077bd68754120e",
     "name": "init",
-    "func": "const apiConfigNodeName = flow.get('apiConfigNodeName');\n\nconst accessToken = global.get(`S1SEVEN_ACCESS_TOKEN_${apiConfigNodeName}`);\n\n/** \n * check if an access token is present in the store\n * if yes, directly try to connect\n * otherwise fetch one from the REST API\n **/\n// if (accessToken) {\n//     return [msg, null];\n// }\nreturn [null, msg];\n",
+    "func": "const apiConfigNodeName = flow.get('apiConfigNodeName');\nconst accessToken = global.get(`S1SEVEN_ACCESS_TOKEN_${apiConfigNodeName}`);\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"dot\",\n    text: \"authenticating\"\n});\n\n/** \n * check if an access token is present in the store\n * if yes, directly try to connect\n * otherwise fetch one from the REST API\n **/\nif (accessToken) {\n    return [msg, null];\n}\nreturn [null, msg];\n",
     "outputs": 2,
     "noerr": 0,
-    "initialize": "// Code added here will be run once\n// whenever the node is started.\n\n/* get and validate environment variables / subflow configuration */\nif (!env.get('ApiConfigName')) {\n    throw new Error('ApiConfigName is required');\n}\nif (!env.get('Vhost')) {\n    throw new Error('Vhost is required');\n}\nconst apiConfigNodeName = env.get('ApiConfigName').replace(/ /g, \"_\");\nconst vhost = env.get('Vhost');\n\n/** \n * store variables that would only change \n * by updating the subflow configuration\n **/\nflow.set('apiConfigNodeName', apiConfigNodeName);\nflow.set('vhost', vhost);\nflow.set('action', env.get('Action'));\nflow.set('resource', env.get('Resource'));\n//\n//\nconst getDomainWithoutSubdomain = (url = 'https://app.s1seven.com') => {\n  const urlParts = URL.parse(url).hostname.split('.');\n  return urlParts\n    .slice(0)\n    .slice(-(urlParts.length === 4 ? 3 : 2))\n    .join('.');\n}\n\nconst S1SEVEN_BASE_URL = global.get(`S1SEVEN_BASE_URL_${apiConfigNodeName}`);\nconst s1sevenDomain = getDomainWithoutSubdomain(S1SEVEN_BASE_URL);\nflow.set('s1sevenDomain', s1sevenDomain);\n",
+    "initialize": "// Code added here will be run once\n// whenever the node is started.\n\n/* get and validate environment variables / subflow configuration */\nif (!env.get('ApiConfigName')) {\n    node.status({\n      fill: \"red\",\n      shape: \"dot\",\n      text: \"missing ApiConfigName\"\n    });\n    throw new Error('ApiConfigName is required');\n}\nif (!env.get('Vhost')) {\n    node.status({\n      fill: \"red\",\n      shape: \"dot\",\n      text: \"missing Vhost\"\n    });    \n    throw new Error('Vhost is required');\n}\nconst apiConfigNodeName = env.get('ApiConfigName').replace(/ /g, \"_\");\nconst vhost = env.get('Vhost');\n\n/** \n * store variables that would only change \n * by updating the subflow configuration\n **/\nflow.set('apiConfigNodeName', apiConfigNodeName);\nflow.set('vhost', vhost);\nflow.set('action', env.get('Action'));\nflow.set('resource', env.get('Resource'));\n//\n//\nconst getDomainWithoutSubdomain = (url = 'https://app.s1seven.com') => {\n  const urlParts = URL.parse(url).hostname.split('.');\n  return urlParts\n    .slice(0)\n    .slice(-(urlParts.length === 4 ? 3 : 2))\n    .join('.');\n}\n\nconst S1SEVEN_BASE_URL = global.get(`S1SEVEN_BASE_URL_${apiConfigNodeName}`);\nconst s1sevenDomain = getDomainWithoutSubdomain(S1SEVEN_BASE_URL);\nflow.set('s1sevenDomain', s1sevenDomain);\n",
     "finalize": "",
     "libs": [
       {
@@ -217,10 +171,10 @@
     "type": "status",
     "z": "3a077bd68754120e",
     "name": "",
-    "scope": ["3c3e70c09e7914f9"],
-    "x": 680,
+    "scope": ["3c3e70c09e7914f9", "7e6bf0caea59e270", "788e91a94bb30617"],
+    "x": 140,
     "y": 520,
-    "wires": [[]]
+    "wires": [["89d837552edceeed"]]
   },
   {
     "id": "863bca702b482c3d",
@@ -307,97 +261,53 @@
     "wires": []
   },
   {
-    "id": "1adabd3c4b63f029",
-    "type": "subflow:3a077bd68754120e",
-    "z": "97952d42668ec760",
-    "name": "",
-    "env": [
-      {
-        "name": "ApiConfigName",
-        "value": "S1SEVEN API",
-        "type": "str"
-      },
-      {
-        "name": "Vhost",
-        "value": "jbjwikqf",
-        "type": "str"
-      }
-    ],
-    "x": 400,
-    "y": 560,
-    "wires": []
-  },
-  {
-    "id": "b168818075581a65",
-    "type": "inject",
-    "z": "97952d42668ec760",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 180,
-    "y": 560,
-    "wires": [["1adabd3c4b63f029", "bd5f6c6f15e05e35"]]
-  },
-  {
-    "id": "430b94a8f90190cd",
-    "type": "mqtt in",
-    "z": "97952d42668ec760",
-    "name": "",
-    "topic": "",
-    "qos": "2",
-    "datatype": "auto-detect",
-    "broker": "316e510501255bb2",
-    "nl": false,
-    "rap": true,
-    "rh": 0,
-    "inputs": 1,
-    "x": 410,
-    "y": 640,
-    "wires": [["6a3b361da595054d"]]
-  },
-  {
-    "id": "bd5f6c6f15e05e35",
+    "id": "89d837552edceeed",
     "type": "function",
-    "z": "97952d42668ec760",
-    "name": "create subscription",
-    "func": "/** customize to your ownd API config node name */\nconst apiConfigNodeName = 'S1SEVEN API';\nconst companyId = global.get(`S1SEVEN_COMPANY_ID_${apiConfigNodeName}`);\n\n/** apply S1SEVEN specs to construct a topic\n * @see https://developers.s1seven.com/docs/information/#events\n **/\nmsg.topicResource ??= 'certificates';\nmsg.topicAction ??= 'receive_one';\nmsg.topic = {\n    topic: `company/${companyId}/*/${msg.topicResource}/${msg.topicAction}`,\n    qos: 1\n}\nmsg.action = 'subscribe';\nreturn msg;",
+    "z": "3a077bd68754120e",
+    "name": "create event",
+    "func": "const { fill, text } = msg.status;\nmsg.event = text.replace('node-red:common.status.', '');\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 210,
+    "x": 450,
     "y": 640,
-    "wires": [["430b94a8f90190cd"]]
+    "wires": [[]]
   },
   {
-    "id": "6a3b361da595054d",
-    "type": "debug",
-    "z": "97952d42668ec760",
-    "name": "debug 1",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 580,
-    "y": 640,
-    "wires": []
+    "id": "73927e1639e0359d",
+    "type": "api-config",
+    "environment": "staging",
+    "name": "S1SEVEN API",
+    "apiVersion": "1"
+  },
+  {
+    "id": "316e510501255bb2",
+    "type": "mqtt-broker",
+    "name": "S1SEVEN MQTT",
+    "broker": "localhost",
+    "port": "1883",
+    "tls": "",
+    "clientid": "",
+    "autoConnect": false,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
   }
 ]
