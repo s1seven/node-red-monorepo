@@ -4,7 +4,18 @@
 
 This is a custom node that wraps the S1Seven [API](https://developers.s1seven.com/docs/openapi/) in several custom nodes that can be used in Node-Red. There is a separate node available for each endpoint which can be found in the S1Seven category in the Palette on the left-hand side of the screen.
 
-The endpoints that are currently available are `hash`, `validate`, `notarize`, `get a company by id` and `get identities`. All of these nodes share a single `config` node, which allows you to easily set the `access token`, `company id`, `mode` and `environment`.
+The endpoints that are currently available are `POST certificates/hash`, `POST certificates/validate`, `POST certificates/notarize`, `GET companies/:id`, `GET identities` and `POST tokens` All of these nodes share a common [`API config`](#api-config) node.
+
+## API config
+
+This node must be declared at least once in your flow when you drop and configure a node from the `S1Seven` pallette. It is used to store the `clientId`, `clientSecret` and `environment` that are required to authenticate with the S1Seven API. The `environment` property can be set to either `production` or `staging`. The `clientId` and `clientSecret` are the credentials generated in your application, you can learn more about these credentials in the [user-manual](https://manual.s1seven.com/automation/#applications-and-access-tokens).
+You can create as many API config as the number of applications you have. The `name` property is used to identify the properties store under the global context.
+Here's a list of the properties stored in the global context:
+
+- `S1SEVEN_ACCESS_TOKEN_${API_config_name}` - The access token used to authenticate to the S1Seven API.
+- `S1SEVEN_BASE_URL_${API_config_name}` - The base URL of the API where the requests will be sent.
+- `S1SEVEN_COMPANY_ID_${API_config_name}` - The company id attached to the application from which the credentials originate.
+- `S1SEVEN_MODE_${API_config_name}` - The mode under which the application is scopes (`test` or `live`).
 
 ## Usage
 
@@ -14,7 +25,7 @@ Each node simply takes the required input via the config ui or the `msg` object,
 
 ## Authentication
 
-To authenticate a request, the api nodes look for an access token in the `msg.accessToken` property or in the global context `s1sevenAccessToken` property. The access token is automatically set in the global context when a request is made from the `get access token` node. To use the `get access token` node, simply add your application `clientId` and `clientSecret` to the config node, and send a request. To learn more, click [here](https://manual.s1seven.com/automation/#applications-and-access-tokens).
+To authenticate a request, the nodes look for an access token in the `msg.accessToken` property or in the global context property bound to the config node. The access token is automatically set in the global context when a request is made from the `get access token` node. To use the `get access token` node, declare an [API config](#api-config) node, and send a request.
 
 Access tokens expire after 24 hours. There are several ways to automate the renewal of access tokens, one example can be seen below:
 
