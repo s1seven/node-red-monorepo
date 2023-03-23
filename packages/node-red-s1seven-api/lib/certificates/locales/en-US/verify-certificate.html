@@ -34,7 +34,7 @@
   <h3>Outputs</h3>
   <ol class="node-ports">
     <li>
-      Standard output
+      Success output
       <dl class="message-properties">
         <dt>payload <span class="property-type">object</span></dt>
         <dd>
@@ -43,6 +43,15 @@
           will contain either <code>true</code> if the certificate is valid or
           <code>false</code> if not.
         </dd>
+      </dl>
+    </li>
+    <li>
+      Failure output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>the error response from the HTTP request.</dd>
+        <dt>headers <span class="property-type">object</span></dt>
+        <dd>the headers from the HTTP response.</dd>
       </dl>
     </li>
   </ol>
@@ -71,8 +80,8 @@
   <p>
     <code>msg.environment</code> allows you to pass in the string value
     <code>staging</code> or <code>production</code> to choose which server you
-    wish to use. Learn more about our environments here:
-    <a>https://developers.s1seven.com/docs/environments/</a>.
+    wish to use. Learn more about our environments
+    <a href="https://developers.s1seven.com/docs/environments/">here</a>.
   </p>
   <p>
     It can also be passed in using the api-config node, found by double-clicking

@@ -4,7 +4,18 @@
 
 This is a custom node that wraps the S1Seven [API](https://developers.s1seven.com/docs/openapi/) in several custom nodes that can be used in Node-Red. There is a separate node available for each endpoint which can be found in the S1Seven category in the Palette on the left-hand side of the screen.
 
-The endpoints that are currently available are `hash`, `validate`, `notarize`, `get a company by id` and `get identities`. All of these nodes share a single `config` node, which allows you to easily set the `access token`, `company id`, `mode` and `environment`.
+The endpoints that are currently available are `POST certificates/hash`, `POST certificates/validate`, `POST certificates/notarize`, `GET companies/:id`, `GET identities` and `POST tokens` All of these nodes share a common [`API config`](#api-config) node.
+
+## API config
+
+This node must be declared at least once in your flow when you drop and configure a node from the `S1Seven` palette. It is used to store the `clientId`, `clientSecret` and `environment` that are required to authenticate with the S1Seven API. The `environment` property can be set to either `production` or `staging`. The `clientId` and `clientSecret` are the credentials generated in your application, you can learn more about these credentials in the [user-manual](https://manual.s1seven.com/automation/#applications-and-access-tokens).
+You can create as many API config as the number of applications you have. The `name` property is used to identify the properties store under the global context.
+Here's a list of the properties stored in the global context:
+
+- `S1SEVEN_ACCESS_TOKEN_${API_config_name}` - The access token used to authenticate to the S1Seven API.
+- `S1SEVEN_BASE_URL_${API_config_name}` - The base URL of the API where the requests will be sent.
+- `S1SEVEN_COMPANY_ID_${API_config_name}` - The company id attached to the application from which the credentials originate.
+- `S1SEVEN_MODE_${API_config_name}` - The mode under which the application is scopes (`test` or `live`).
 
 ## Usage
 
@@ -14,7 +25,7 @@ Each node simply takes the required input via the config ui or the `msg` object,
 
 ## Authentication
 
-To authenticate a request, the api nodes look for an access token in the `msg.accessToken` property or in the global context `s1sevenAccessToken` property. The access token is automatically set in the global context when a request is made from the `get access token` node. To use the `get access token` node, simply add your application `clientId` and `clientSecret` to the config node, and send a request. To learn more, click [here](https://manual.s1seven.com/automation/#applications-and-access-tokens).
+To authenticate a request, the nodes look for an access token in the `msg.accessToken` property or in the global context property bound to the config node. The access token is automatically set in the global context when a request is made from the `get access token` node. To use the `get access token` node, declare an [API config](#api-config) node, and send a request.
 
 Access tokens expire after 24 hours. There are several ways to automate the renewal of access tokens, one example can be seen below:
 
@@ -24,142 +35,17 @@ In the screenshot, the `hash` node has 2 outputs, the first labeled `success`, a
 
 ![example](./images/switch.png)
 
-A minimal example of the above workflow can be imported using the following JSON file:
+A minimal example of the above workflow can be imported [here](./examples/auth-flow.json).
 
-```json
-[
-  {
-    "id": "e2b2aaef3e997b7b",
-    "type": "hash",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "apiConfig": "16bd3e4db46db980",
-    "algorithm": "sha256",
-    "encoding": "hex",
-    "x": 290,
-    "y": 380,
-    "wires": [["6befa51db92df9f8"], ["290656f39a923100"]]
-  },
-  {
-    "id": "1f69af6a87ecfb24",
-    "type": "inject",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "{}",
-    "payloadType": "json",
-    "x": 110,
-    "y": 380,
-    "wires": [["e2b2aaef3e997b7b"]]
-  },
-  {
-    "id": "6befa51db92df9f8",
-    "type": "debug",
-    "z": "155da1287ae6504d",
-    "name": "debug",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "targetType": "full",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 730,
-    "y": 380,
-    "wires": []
-  },
-  {
-    "id": "290656f39a923100",
-    "type": "switch",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "property": "payload.statusCode",
-    "propertyType": "msg",
-    "rules": [
-      {
-        "t": "eq",
-        "v": "401",
-        "vt": "num"
-      }
-    ],
-    "checkall": "true",
-    "repair": false,
-    "outputs": 1,
-    "x": 470,
-    "y": 460,
-    "wires": [["fd323fdf31455b44"]],
-    "outputLabels": ["401"]
-  },
-  {
-    "id": "fd323fdf31455b44",
-    "type": "get access token",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "apiConfig": "16bd3e4db46db980",
-    "x": 630,
-    "y": 280,
-    "wires": [["6befa51db92df9f8"], ["6befa51db92df9f8"]]
-  },
-  {
-    "id": "7ff5a6d4faf5af58",
-    "type": "catch",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "scope": null,
-    "uncaught": false,
-    "x": 100,
-    "y": 440,
-    "wires": [[]]
-  },
-  {
-    "id": "68825bef95c36270",
-    "type": "inject",
-    "z": "155da1287ae6504d",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 120,
-    "y": 280,
-    "wires": [["fd323fdf31455b44"]]
-  },
-  {
-    "id": "16bd3e4db46db980",
-    "type": "api-config",
-    "environment": "staging",
-    "companyId": "",
-    "name": "Staging",
-    "apiVersion": "1"
-  }
-]
-```
+## MQTT connection
+
+You can connect to S1SEVEN Async API (via MQTT) dynamically by using the [mqtt-connect subflow](./lib/mqtt/connect-flow.json), a simple example can be copy pasted [here](./examples/mqtt-flow.json)
+
+For this example to work you need to create an API config by using any of the methods described in the [API config](#api-config) section.
+Then you need to configure the following properties :
+
+- `ApiConfigName` to the name of the API config you which to reuse.
+- `Vhost` which is mandatory field to authenticate to our broker. Note: you must contact S1SEVEN to get access to the `Vhost`.
 
 ## Development
 

@@ -1,0 +1,37 @@
+<script
+  type="text/javascript"
+  src="/resources/@s1seven/node-red-s1seven-api/constants.js"
+></script>
+<script type="text/javascript">
+  RED.nodes.registerType('validate certificate', {
+    category: CATEGORY_NAME,
+    color: NODE_COLOR,
+    defaults: {
+      name: { value: '' },
+      apiConfig: { value: '', type: 'api-config' },
+    },
+    inputs: 1,
+    outputs: 2,
+    outputLabels: OUTPUT_LABELS,
+    icon: 's_icon_logo.svg',
+    label: function () {
+      return this.name || 'validate certificate';
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="validate certificate">
+    <div class="form-row">
+      <label for="node-input-name"
+        ><i class="fa fa-tag"></i><span data-i18n="validate.label.name"></span
+      ></label>
+      <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+  </div>
+    <div class="form-row">
+      <label for="node-input-apiConfig"
+        ><i class="fa fa-tag"></i><span data-i18n="validate.label.apiConfig"></span
+      ></label>
+      <input type="text" id="node-input-apiConfig" placeholder="api-config" />
+    </div>
+</script>

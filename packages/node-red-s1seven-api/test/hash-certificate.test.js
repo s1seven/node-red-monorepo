@@ -12,7 +12,7 @@ helper.init(require.resolve('node-red'));
 const fakeAccessToken = 'test';
 const hashCertificateFlow = {
   id: 'n1',
-  type: 'hash',
+  type: 'hash certificate',
   name: 'hash',
   apiConfig: 'n2',
   wires: [],

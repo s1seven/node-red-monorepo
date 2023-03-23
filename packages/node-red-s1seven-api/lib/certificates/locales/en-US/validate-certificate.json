@@ -1,0 +1,12 @@
+{
+  "validate": {
+    "label": {
+      "apiConfig": " API config",
+      "name": " Name"
+    },
+    "errors": {
+      "accessToken": "Please add an access token",
+      "validCertificate": "Please add a valid JSON certificate to msg.payload or global.certificate"
+    }
+  }
+}

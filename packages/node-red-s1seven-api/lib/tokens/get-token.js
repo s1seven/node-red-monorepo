@@ -56,6 +56,14 @@ module.exports = function (RED) {
       );
 
       if (success) {
+        send([
+          null,
+          null,
+          {
+            event: 'has-changed',
+            value: node.getAccessToken() !== data.accessToken,
+          },
+        ]);
         setters.setAccessToken(data.accessToken);
         setters.setApiMode(data.application.mode);
         setters.setCurrentCompanyId(data.application.owner.id);

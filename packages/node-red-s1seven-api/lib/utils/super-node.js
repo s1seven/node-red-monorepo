@@ -4,6 +4,7 @@ const EventEmitter = require('events');
 const { container } = require('./container');
 const { onInputFactory } = require('./on-input');
 
+//? maybe direcly extend https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/runtime/lib/nodes/Node.js
 class SuperNode extends EventEmitter {
   /**
    * @param {RED_JS} RED
@@ -19,6 +20,7 @@ class SuperNode extends EventEmitter {
     RED.nodes.createNode(node, config);
     /** @type {ApiConfig} */
     this.apiConfig = RED.nodes.getNode(config.apiConfig);
+    // TODO: this.broker = RED.nodes.getNode(config.broker);
     /** @type {import('./getters')} */
     this.getters = container.resolve('getters');
     /** @type {import('./axios-helpers')} */

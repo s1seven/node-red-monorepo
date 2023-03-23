@@ -1,5 +1,5 @@
-<script type="text/html" data-help-name="hash certificate">
-  <p>Hashes a certificate using S1Seven's servers.</p>
+<script type="text/html" data-help-name="validate certificate">
+  <p>Validates a certificate using S1Seven's servers.</p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
@@ -7,14 +7,7 @@
       payload
       <span class="property-type">string | buffer | object</span>
     </dt>
-    <dd>the certificate to hash.</dd>
-    <dt class="message-properties">
-      accessToken <span class="property-type">string</span>
-    </dt>
-    <dd>
-      the access token to use to authenticate the request. This must be
-      generated using the <code>get access token</code> node.
-    </dd>
+    <dd>the certificate to validate.</dd>
     <dt class="optional">
       environment <span class="property-type">staging | production</span>
     </dt>
@@ -22,17 +15,6 @@
       choose the environment that you want to use - app.s1seven.dev or
       app.s1seven.com. Defaults to production (app.s1seven.com).
     </dd>
-    <dt class="optional">
-      algorithm
-      <span class="property-type"
-        >sha256 | sha512 | sha3-256 | sha3-384 | sha3-512</span
-      >
-    </dt>
-    <dd>choose the hashing algorithm. Defaults to <code>sha256</code></dd>
-    <dt class="optional">
-      encoding <span class="property-type">base64 | hex</span>
-    </dt>
-    <dd>choose the encoding. Defaults to <code>hex</code></dd>
     <dt class="optional">version <span class="property-type">1</span></dt>
     <dd>
       choose the version of the api to use. It can be set in the config node.
@@ -46,14 +28,20 @@
       Success output
       <dl class="message-properties">
         <dt>payload <span class="property-type">object</span></dt>
-        <dd>the response from the HTTP request.</dd>
+        <dd>
+          the response from the HTTP request. If the request is successful, the
+          response will return the certificate.
+        </dd>
       </dl>
     </li>
     <li>
       Failure output
       <dl class="message-properties">
         <dt>payload <span class="property-type">object</span></dt>
-        <dd>the error response from the HTTP request.</dd>
+        <dd>
+          the error response from the HTTP request which will contain the status
+          code <code>400</code>.
+        </dd>
         <dt>headers <span class="property-type">object</span></dt>
         <dd>the headers from the HTTP response.</dd>
       </dl>
@@ -72,14 +60,6 @@
     <code>global.certificate</code>.
   </p>
   <p>
-    <code>msg.algorithm</code> is optional and is used to specify the hashing
-    algorithm. If not specified, it defaults to <code>sha256</code>.
-  </p>
-  <p>
-    <code>msg.encoding</code> is optional and is used to specify the encoding
-    type. If not specified, it defaults to <code>hex</code>.
-  </p>
-  <p>
     The following properties can be added via the admin ui, found by
     double-clicking on the hash node, or by passing them in using the
     <code>msg</code> object. If they are passed in via the
@@ -90,18 +70,13 @@
     instead of the admin ui access token.
   </p>
   <p>
-    <code>accessToken</code> is used to authenticate the HTTP request. To find
-    out how to generate an access token, look at the documentation at
-    <a href="https://manual.s1seven.com">https://manual.s1seven.com</a> under
-    the developers section. It can be input via <code>msg.accessToken</code>, or
-    via <code>global.s1sevenAccessToken</code>, in that order of priority.
-  </p>
-
-  <p>
     <code>msg.environment</code> allows you to pass in the string value
     <code>staging</code> or <code>production</code> to choose which server you
-    wish to use. Learn more about our environments
+    wish to use. Learn more about our environments here:
     <a href="https://developers.s1seven.com/docs/environments/">here</a>.
   </p>
-  <p>This can also be set via the config node.</p>
+  <p>
+    It can also be passed in using the api-config node, found by double-clicking
+    on the hash node.
+  </p>
 </script>
