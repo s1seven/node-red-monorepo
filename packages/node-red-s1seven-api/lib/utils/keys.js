@@ -15,7 +15,7 @@ const {
  * @returns {string}
  */
 function getConfigNodeIdentifier(configNode) {
-  return configNode.name ? configNode.name.replaceAll(' ', '_') : configNode.id;
+  return configNode.name ? configNode.name.replace(/ /g, '_') : configNode.id;
 }
 
 /**
